@@ -1,0 +1,54 @@
+package com.pard.pard_backend.project.entity;
+
+import com.pard.pard_backend.user.entity.User;
+import jakarta.persistence.*;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
+
+import java.util.List;
+
+@Entity
+@Getter
+@SuperBuilder
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class Project {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "PROJECT_ID")
+    private Long projectId;
+
+    private String teamName;
+
+    private String generation;
+
+    private String deviceType;
+
+    private String serviceName;
+
+    private String title;
+
+    private String contents;
+
+    private String batch;
+
+    private String link;
+
+    @Embedded
+    private Tool tool;
+
+    @OneToMany(mappedBy = "project")
+    private List<User> user;
+
+    private String mobileBackImg;
+
+    private String backImg;
+
+    private String mobTitle;
+
+    private String mobContents;
+
+
+
+}
