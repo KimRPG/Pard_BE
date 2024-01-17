@@ -38,7 +38,7 @@ public class Project {
     @Embedded
     private Tool tool;
 
-    @OneToMany(mappedBy = "project")
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<User> user;
 
     private String mobileBackImg;

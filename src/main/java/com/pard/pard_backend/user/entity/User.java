@@ -32,7 +32,7 @@ public class User {
 
     @JsonIgnore
     @JoinColumn(name = "PROJECT_ID")
-    @ManyToOne (fetch = FetchType.LAZY)
+    @ManyToOne (fetch = FetchType.LAZY,cascade=CascadeType.ALL)
     private Project project;
 
     public static User toEntity(final @NotNull UserRequestDTO.Create request) {
