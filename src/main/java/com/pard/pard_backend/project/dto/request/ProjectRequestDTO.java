@@ -30,7 +30,6 @@ public class ProjectRequestDTO {
         private String backImg;
         private String mobTitle;
         private String mobContents;
-
         private Map<String,List<String>> tool;
     }
 }

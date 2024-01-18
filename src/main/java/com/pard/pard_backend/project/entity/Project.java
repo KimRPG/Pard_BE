@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 import java.util.List;
+import java.util.Map;
 
 @Entity
 @Getter
@@ -35,8 +36,10 @@ public class Project {
 
     private String link;
 
-    @Embedded
-    private Tool tool;
+    @ElementCollection
+    @CollectionTable(name = "TOOL", joinColumns = @JoinColumn(name = "PROJECT_ID"))
+    @MapKeyColumn(name = "tool_id")
+    private Map<String,Tool> tool;
 
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<User> user;
