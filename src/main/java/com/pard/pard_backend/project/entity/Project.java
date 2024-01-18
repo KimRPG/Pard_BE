@@ -1,5 +1,6 @@
 package com.pard.pard_backend.project.entity;
 
+import com.pard.pard_backend.project.dto.request.ProjectRequestDTO;
 import com.pard.pard_backend.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -52,6 +53,24 @@ public class Project {
 
     private String mobContents;
 
+    public static Project toEntity(final ProjectRequestDTO.Create request,  Map<String,Tool> tool){
+
+        return Project.builder()
+                .generation(request.getGeneration())
+                .serviceName(request.getServiceName())
+                .deviceType(request.getDeviceType())
+                .backImg(request.getBackImg())
+                .batch(request.getBatch())
+                .contents(request.getContents())
+                .link(request.getLink())
+                .mobContents(request.getMobContents())
+                .mobileBackImg(request.getMobileBackImg())
+                .mobTitle(request.getMobTitle())
+                .teamName(request.getTeamName())
+                .title(request.getTitle())
+                .tool(tool)
+                .build();
+    }
 
 
 }
