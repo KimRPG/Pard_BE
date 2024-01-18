@@ -1,10 +1,14 @@
 package com.pard.pard_backend.project.dto.response;
 
 import com.pard.pard_backend.project.entity.Project;
+import com.pard.pard_backend.project.entity.Tool;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import org.antlr.v4.runtime.misc.NotNull;
+
+import java.util.List;
+import java.util.Map;
 
 public class ProjectResponseDTO {
 
@@ -27,6 +31,45 @@ public class ProjectResponseDTO {
                     .deviceType(project.getDeviceType())
                     .title(project.getTitle())
                     .mobileBackImg(project.getMobileBackImg())
+                    .build();
+        }
+    }
+    @Getter
+    @Setter
+    @Builder
+    public static class Detail{
+
+        private Long projectId;
+        private String teamName;
+        private String generation;
+        private String deviceType;
+        private String serviceName;
+        private String title;
+        private String contents;
+        private String batch;
+        private String link;
+        private String mobileBackImg;
+        private String backImg;
+        private String mobTitle;
+        private String mobContents;
+        private Map<String, Tool> tool;
+
+        public static Detail toDTO(final Project project) {
+            return Detail.builder()
+                    .projectId(project.getProjectId())
+                    .teamName(project.getTeamName())
+                    .generation(project.getGeneration())
+                    .deviceType(project.getDeviceType())
+                    .serviceName(project.getServiceName())
+                    .title(project.getTitle())
+                    .contents(project.getContents())
+                    .batch(project.getBatch())
+                    .link(project.getLink())
+                    .mobileBackImg(project.getMobileBackImg())
+                    .mobTitle(project.getMobTitle())
+                    .backImg(project.getBackImg())
+                    .mobContents(project.getMobContents())
+                    .tool(project.getTool())
                     .build();
         }
     }

@@ -1,5 +1,6 @@
 package com.pard.pard_backend.project.dto.request;
 
+import com.pard.pard_backend.project.entity.Project;
 import com.pard.pard_backend.project.entity.Tool;
 import com.pard.pard_backend.user.entity.User;
 import jakarta.persistence.Embedded;
@@ -32,4 +33,5 @@ public class ProjectRequestDTO {
         private String mobContents;
         private Map<String,List<String>> tool;
     }
+
 }
