@@ -23,7 +23,8 @@ public class UserController {
     }
 
     @DeleteMapping("")
-    public ResponseEntity<Boolean> delete(@RequestParam Long userId){
-        return ResponseEntity.ok(userService.deleteById(userId));
+    public ResponseEntity<?> delete(@RequestParam Long userId){
+        userService.deleteById(userId);
+        return ResponseEntity.ok().build();
     }
 }

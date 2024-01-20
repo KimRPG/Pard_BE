@@ -23,8 +23,7 @@ public class UserService {
 
     }
 
-    public boolean deleteById(Long userId){
+    public void deleteById(Long userId){
         userRepository.deleteById(userId);
-        return true;
     };
 }
