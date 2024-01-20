@@ -22,4 +22,8 @@ public class UserService {
         return UserResponseDTO.Create.toDto(userRepository.save(user));
 
     }
+
+    public void deleteById(Long userId){
+        userRepository.deleteById(userId);
+    };
 }
