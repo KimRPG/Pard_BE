@@ -47,13 +47,7 @@ public class ProjectService {
         List<ProjectResponseDTO.Home> retDto = new ArrayList<>();
 
         for (Project project : pagedProjects) {
-            ProjectResponseDTO.Home ret = ProjectResponseDTO.Home.builder()
-                    .generation(project.getGeneration())
-                    .serviceName(project.getServiceName())
-                    .deviceType(project.getDeviceType())
-                    .title(project.getTitle())
-                    .mobileBackImg(project.getMobileBackImg())
-                    .build();
+            ProjectResponseDTO.Home ret = ProjectResponseDTO.Home.toDTO(project);
             retDto.add(ret);
 //            log.info(String.valueOf(project.getProjectId()));     //내림차순으로 잘 부루는지 log확인
         }

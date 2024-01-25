@@ -18,13 +18,11 @@ public class ProjectController {
 
     @PostMapping("")
     public ResponseEntity<String> createProject(@RequestBody ProjectRequestDTO.Create requestDTO) {
-        String hi=projectService.createProject(requestDTO);
-        return ResponseEntity.ok(hi);
+        return ResponseEntity.ok(projectService.createProject(requestDTO));
     }
     //프로젝트 9개 부르는 api /projects?page= 몇번째 페이지인지
     @GetMapping("/projects")
     public ResponseEntity<List<ProjectResponseDTO.Home>> getProjectPages(@RequestParam(value = "page") int pageNumber){
-        List<ProjectResponseDTO.Home> ret = projectService.getList(pageNumber);
-        return new ResponseEntity<>(ret, HttpStatus.OK);
+        return ResponseEntity.ok(projectService.getList(pageNumber));
     }
 }
