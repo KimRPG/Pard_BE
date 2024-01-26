@@ -25,4 +25,10 @@ public class ProjectController {
     public ResponseEntity<List<ProjectResponseDTO.Home>> getProjectPages(@RequestParam(value = "page") int pageNumber){
         return ResponseEntity.ok(projectService.getList(pageNumber));
     }
+    //프로젝트 디테일 부른느 api
+    @GetMapping("/{projectId}")
+    public ResponseEntity<ProjectResponseDTO.Detail> getProjectDetail(@PathVariable Long projectId){
+        ProjectResponseDTO.Detail ret = projectService.getDetail(projectId);
+        return new ResponseEntity<>(ret, HttpStatus.OK);
+    }
 }
