@@ -13,10 +13,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Page;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 @Slf4j
@@ -56,4 +53,13 @@ public class ProjectService {
     }
 
 
+    public ProjectResponseDTO.Detail getDetail(Long projectId) {
+        Optional<Project> p = projectRepository.findById(projectId);
+        if(p.isPresent()){
+            Project project = p.get();
+            return ProjectResponseDTO.Detail.toDTO(project);
+        } else {
+            return null;
+        }
+    }
 }
