@@ -1,10 +1,12 @@
-package com.pard.pard_backend.project.service;
+package com.pard.pard_backend.domain.project.service;
 
-import com.pard.pard_backend.project.dto.request.ProjectRequestDTO;
-import com.pard.pard_backend.project.dto.response.ProjectResponseDTO;
-import com.pard.pard_backend.project.entity.Project;
-import com.pard.pard_backend.project.entity.Tool;
-import com.pard.pard_backend.project.repository.ProjectRepository;
+import com.pard.pard_backend.domain.project.repository.ProjectRepository;
+import com.pard.pard_backend.domain.project.dto.request.ProjectRequestDTO;
+import com.pard.pard_backend.domain.project.dto.response.ProjectResponseDTO;
+import com.pard.pard_backend.domain.project.entity.Project;
+import com.pard.pard_backend.domain.project.entity.Tool;
+import com.pard.pard_backend.global.responses.errors.code.ProjectErrorCode;
+import com.pard.pard_backend.global.responses.errors.exceptions.ProjectException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
@@ -54,12 +56,7 @@ public class ProjectService {
 
 
     public ProjectResponseDTO.Detail getDetail(Long projectId) {
-        Optional<Project> p = projectRepository.findById(projectId);
-        if(p.isPresent()){
-            Project project = p.get();
-            return ProjectResponseDTO.Detail.toDTO(project);
-        } else {
-            return null;
+        return ProjectResponseDTO.Detail.toDTO(projectRepository.findById(projectId)
+            .orElseThrow(() -> new ProjectException.NotFound(ProjectErrorCode.NOT_FOUND)));
         }
-    }
 }

@@ -1,10 +1,5 @@
-package com.pard.pard_backend.project.dto.request;
+package com.pard.pard_backend.domain.project.dto.request;
 
-import com.pard.pard_backend.project.entity.Project;
-import com.pard.pard_backend.project.entity.Tool;
-import com.pard.pard_backend.user.entity.User;
-import jakarta.persistence.Embedded;
-import jakarta.persistence.OneToMany;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;

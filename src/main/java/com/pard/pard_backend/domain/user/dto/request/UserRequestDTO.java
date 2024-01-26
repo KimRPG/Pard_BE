@@ -1,4 +1,4 @@
-package com.pard.pard_backend.user.dto.request;
+package com.pard.pard_backend.domain.user.dto.request;
 
 import jakarta.persistence.Column;
 import lombok.Builder;

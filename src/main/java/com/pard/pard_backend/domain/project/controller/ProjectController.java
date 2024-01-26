@@ -1,10 +1,9 @@
-package com.pard.pard_backend.project.controller;
+package com.pard.pard_backend.domain.project.controller;
 
-import com.pard.pard_backend.project.dto.request.ProjectRequestDTO;
-import com.pard.pard_backend.project.dto.response.ProjectResponseDTO;
-import com.pard.pard_backend.project.service.ProjectService;
+import com.pard.pard_backend.domain.project.service.ProjectService;
+import com.pard.pard_backend.domain.project.dto.request.ProjectRequestDTO;
+import com.pard.pard_backend.domain.project.dto.response.ProjectResponseDTO;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,7 +27,6 @@ public class ProjectController {
     //프로젝트 디테일 부른느 api
     @GetMapping("/{projectId}")
     public ResponseEntity<ProjectResponseDTO.Detail> getProjectDetail(@PathVariable Long projectId){
-        ProjectResponseDTO.Detail ret = projectService.getDetail(projectId);
-        return new ResponseEntity<>(ret, HttpStatus.OK);
+        return ResponseEntity.ok(projectService.getDetail(projectId));
     }
 }

@@ -1,13 +1,11 @@
-package com.pard.pard_backend.project.dto.response;
+package com.pard.pard_backend.domain.project.dto.response;
 
-import com.pard.pard_backend.project.entity.Project;
-import com.pard.pard_backend.project.entity.Tool;
+import com.pard.pard_backend.domain.project.entity.Project;
+import com.pard.pard_backend.domain.project.entity.Tool;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
-import org.antlr.v4.runtime.misc.NotNull;
 
-import java.util.List;
 import java.util.Map;
 
 public class ProjectResponseDTO {

@@ -1,7 +1,7 @@
-package com.pard.pard_backend.project.entity;
+package com.pard.pard_backend.domain.project.entity;
 
-import com.pard.pard_backend.project.dto.request.ProjectRequestDTO;
-import com.pard.pard_backend.user.entity.User;
+import com.pard.pard_backend.domain.project.dto.request.ProjectRequestDTO;
+import com.pard.pard_backend.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;

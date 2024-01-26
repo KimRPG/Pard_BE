@@ -1,8 +1,8 @@
-package com.pard.pard_backend.user.controller;
+package com.pard.pard_backend.domain.user.controller;
 
-import com.pard.pard_backend.user.dto.request.UserRequestDTO;
-import com.pard.pard_backend.user.dto.response.UserResponseDTO;
-import com.pard.pard_backend.user.service.UserService;
+import com.pard.pard_backend.domain.user.dto.request.UserRequestDTO;
+import com.pard.pard_backend.domain.user.dto.response.UserResponseDTO;
+import com.pard.pard_backend.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;

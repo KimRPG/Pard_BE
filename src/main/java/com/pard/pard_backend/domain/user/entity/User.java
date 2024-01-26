@@ -1,8 +1,8 @@
-package com.pard.pard_backend.user.entity;
+package com.pard.pard_backend.domain.user.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.pard.pard_backend.project.entity.Project;
-import com.pard.pard_backend.user.dto.request.UserRequestDTO;
+import com.pard.pard_backend.domain.project.entity.Project;
+import com.pard.pard_backend.domain.user.dto.request.UserRequestDTO;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;

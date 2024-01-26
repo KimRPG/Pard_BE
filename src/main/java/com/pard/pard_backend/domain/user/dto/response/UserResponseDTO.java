@@ -1,6 +1,6 @@
-package com.pard.pard_backend.user.dto.response;
+package com.pard.pard_backend.domain.user.dto.response;
 
-import com.pard.pard_backend.user.entity.User;
+import com.pard.pard_backend.domain.user.entity.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;

@@ -1,7 +1,7 @@
 package com.pard.pard_backend;
 
-import com.pard.pard_backend.project.dto.request.ProjectRequestDTO;
-import com.pard.pard_backend.project.service.ProjectService;
+import com.pard.pard_backend.domain.project.dto.request.ProjectRequestDTO;
+import com.pard.pard_backend.domain.project.service.ProjectService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
