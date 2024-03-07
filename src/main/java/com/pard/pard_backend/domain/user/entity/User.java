@@ -19,16 +19,31 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "USER_ID")
     private Long userId;
+    private String part;
 
     @Column(length = 10)
     private String name;
 
+    private Role role;
+
     @Column(length = 100)
     private String email;
 
+    private String phoneNumber;
+
+    private String generation;
+
+    private String fcmToken;
+
+    private boolean isAlarm;
+
+    private float totalMinus;
+
+    private float totalBonus;
+
     private String level;
 
-    private String part;
+
 
     @JsonIgnore
     @JoinColumn(name = "PROJECT_ID")
