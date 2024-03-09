@@ -46,6 +46,27 @@ public class UserResponseDTO {
                     .generation(user.getGeneration())
                     .build();
         }
-
+    }
+    @Getter
+    @Setter
+    @Builder
+    public static class UserBonusPoint {
+        private float totalBonus;
+        public static UserBonusPoint toDto(final @NotNull User user) {
+            return UserBonusPoint.builder()
+                    .totalBonus(user.getTotalBonus())
+                    .build();
+        }
+    }
+    @Getter
+    @Setter
+    @Builder
+    public static class UserMinusPoint {
+        private float totalMinus;
+        public static UserMinusPoint toDto(final @NotNull User user) {
+            return UserMinusPoint.builder()
+                    .totalMinus(user.getTotalMinus())
+                    .build();
+        }
     }
 }
