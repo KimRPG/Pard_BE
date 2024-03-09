@@ -5,15 +5,18 @@ import com.pard.pard_backend.domain.project.entity.Project;
 import com.pard.pard_backend.domain.user.dto.request.UserRequestDTO;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import org.antlr.v4.runtime.misc.NotNull;
+import org.hibernate.annotations.ColumnDefault;
 
 @Entity
 @Getter
 @SuperBuilder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,11 +40,11 @@ public class User {
 
     private boolean isAlarm;
 
+    @ColumnDefault("0")
     private float totalMinus;
 
+    @ColumnDefault("0")
     private float totalBonus;
-
-    private String level;
 
 
 
@@ -55,7 +58,6 @@ public class User {
         return User.builder()
                 .name(request.getName())
                 .email(request.getEmail())
-                .level(request.getLevel())
                 .part(request.getPart())
                 .build();
     }
