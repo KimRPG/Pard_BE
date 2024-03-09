@@ -16,7 +16,6 @@ public class UserRequestDTO {
 
         private String name;
         private String email;
-        private String level;
         private String part;
         private Long projectId;
     }

@@ -1,5 +1,6 @@
 package com.pard.pard_backend.domain.user.dto.response;
 
+import com.pard.pard_backend.domain.user.entity.Role;
 import com.pard.pard_backend.domain.user.entity.User;
 import lombok.Builder;
 import lombok.Getter;
@@ -16,7 +17,6 @@ public class UserResponseDTO {
         private Long userId;
         private String name;
         private String email;
-        private String level;
         private String part;
 //        private Long projectId;
 
@@ -25,9 +25,27 @@ public class UserResponseDTO {
                     .userId(user.getUserId())
                     .name(user.getName())
                     .email(user.getEmail())
-                    .level(user.getLevel())
                     .part(user.getPart())
                     .build();
         }
+    }
+
+    @Getter
+    @Setter
+    @Builder
+    public static class UserInfo {
+        private String part;
+        private String name;
+        private Role role;
+        private String generation;
+        public static UserInfo toDto(final @NotNull User user) {
+            return UserInfo.builder()
+                    .part(user.getPart())
+                    .name(user.getName())
+                    .role(user.getRole())
+                    .generation(user.getGeneration())
+                    .build();
+        }
+
     }
 }
