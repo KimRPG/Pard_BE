@@ -41,6 +41,21 @@ public class MockController {
             new Date(),
             "Meeting details",
             "WEB");
+    Schedule scheduleAllPart = new Schedule(
+            1L,
+            "OT",
+            new Date(),
+            "3기 OT",
+            "ALL"
+    );
+
+    Schedule scheduleAllPart2 = new Schedule(
+            1L,
+            "OT",
+            new Date(),
+            "3기 OT 아이스크림 사와라",
+            "ALL"
+    );
 
     @GetMapping("/user/info")
     public UserResponseDTO.UserInfo getUserInfo() {
@@ -64,5 +79,48 @@ public class MockController {
                 .collect(Collectors.toCollection(ArrayList::new));
 
     }
+//    *******************************여기부터 스케쥴 목업**********************************
+//    파트 일정 중 D-Day 안지난거 가져오는 목업
+    @GetMapping("/schedule/{part}/upcomming")
+    public List<ScheduleResponseDTO> getPartScheduleUpcomming(@PathVariable String part) {
+        scheduleList.add(schedule); scheduleList.add(schedule2);
+        return scheduleList.stream()
+                .filter(schedule -> schedule.getPart().equalsIgnoreCase(part))
+                .map(ScheduleResponseDTO::new)
+                .collect(Collectors.toCollection(ArrayList::new));
+    }
+
+//    파트 일정 중 D-Day 지난거 가져오는 목업
+    @GetMapping("/schedule/{part}/passed")
+    public List<ScheduleResponseDTO> getPartSchedulePassed(@PathVariable String part) {
+        scheduleList.add(schedule); scheduleList.add(schedule2);
+        return scheduleList.stream()
+                .filter(schedule -> schedule.getPart().equalsIgnoreCase(part))
+                .map(ScheduleResponseDTO::new)
+                .collect(Collectors.toCollection(ArrayList::new));
+    }
+
+//    파트에 "전체"라고 저장되어 있는 스케쥴 중 D-Day 안지난거 가져오는 목업
+    @GetMapping("/schedule/ALL/upcomming")
+    public List<ScheduleResponseDTO> getCommonSchedule(){
+        scheduleList.add(scheduleAllPart);
+        scheduleList.add(scheduleAllPart2);
+        return scheduleList.stream()
+                .filter(schedule -> schedule.getPart().equalsIgnoreCase("ALL"))
+                .map(ScheduleResponseDTO::new)
+                .collect(Collectors.toCollection(ArrayList::new));
+    }
+//    파트에 "전체"라고 저장되어 있는 스케쥴 중 D-Day 지난거 가져오는 목업
+    @GetMapping("/schedule/ALL/passed")
+    public List<ScheduleResponseDTO> getCommonSchedulePassed(){
+        scheduleList.add(scheduleAllPart);
+        scheduleList.add(scheduleAllPart2);
+        return scheduleList.stream()
+                .filter(schedule -> schedule.getPart().equalsIgnoreCase("ALL"))
+                .map(ScheduleResponseDTO::new)
+                .collect(Collectors.toCollection(ArrayList::new));
+    }
+//    *******************************여기까지 스케쥴 목업**********************************
+
 }
 
