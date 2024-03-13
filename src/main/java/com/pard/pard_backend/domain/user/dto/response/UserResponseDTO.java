@@ -2,6 +2,7 @@ package com.pard.pard_backend.domain.user.dto.response;
 
 import com.pard.pard_backend.domain.user.entity.Role;
 import com.pard.pard_backend.domain.user.entity.User;
+import jakarta.persistence.Column;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -66,6 +67,35 @@ public class UserResponseDTO {
         public static UserMinusPoint toDto(final @NotNull User user) {
             return UserMinusPoint.builder()
                     .totalMinus(user.getTotalMinus())
+                    .build();
+        }
+    }
+
+    @Getter
+    @Setter
+    @Builder
+    public static class UserTopThree {
+        private String part;
+        private String name;
+        public static UserTopThree toDto(final @NotNull User user) {
+            return UserTopThree.builder()
+                    .part(user.getPart())
+                    .name(user.getName())
+                    .build();
+        }
+    }
+    @Getter
+    @Setter
+    @Builder
+    public static class UserGenerationAll {
+        private String part;
+        private String name;
+        private float totalBonus;
+        public static UserGenerationAll toDto(final @NotNull User user) {
+            return UserGenerationAll.builder()
+                    .part(user.getPart())
+                    .name(user.getName())
+                    .totalBonus(user.getTotalBonus())
                     .build();
         }
     }
