@@ -15,12 +15,14 @@ public class ScheduleResponseDTO {
     private Date scheduleDate;
     private String content;
     private String part;
+    private String place;
 
     public ScheduleResponseDTO(final @NotNull Schedule schedule) {
         this.title = schedule.getTitle();
         this.scheduleDate = schedule.getScheduleDate();
         this.content = schedule.getContent();
         this.part = schedule.getPart();
+        this.place = schedule.getPlace();
     }
 
 

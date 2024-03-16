@@ -28,4 +28,6 @@ public class Schedule {
     private String content;
 
     private String part;
+
+    private String place;
 }

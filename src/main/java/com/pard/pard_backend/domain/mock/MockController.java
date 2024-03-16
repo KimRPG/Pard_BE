@@ -79,18 +79,22 @@ public class MockController {
             "1차세미나",
             new Date(),
             "Meeting details",
-            "WEB");
+            "WEB",
+            "헤브론홀"
+            );
     Schedule schedule2 = new Schedule(1L,
             "2차세미나",
             new Date(),
             "Meeting details",
-            "WEB");
+            "WEB",
+            "헤브론홀");
     Schedule scheduleAllPart = new Schedule(
             1L,
             "OT",
             new Date(),
             "3기 OT",
-            "ALL"
+            "ALL",
+            "헤브론홀"
     );
 
     Schedule scheduleAllPart2 = new Schedule(
@@ -98,7 +102,8 @@ public class MockController {
             "OT",
             new Date(),
             "3기 OT 아이스크림 사와라",
-            "ALL"
+            "ALL",
+            "헤브론홀"
     );
     Set<Schedule> scheduleList = new HashSet<>();
     Reason reason = new Reason(
