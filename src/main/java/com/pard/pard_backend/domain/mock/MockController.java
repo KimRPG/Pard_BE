@@ -9,6 +9,8 @@ import com.pard.pard_backend.domain.user.entity.Role;
 import com.pard.pard_backend.domain.user.entity.User;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -82,16 +84,20 @@ public class MockController {
             "WEB",
             "헤브론홀"
             );
+    LocalDate tomorrowLocalDate = LocalDate.now().plusDays(1);
+
+    // LocalDate를 Date로 변환
+    Date tomorrowDate = Date.from(tomorrowLocalDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
     Schedule schedule2 = new Schedule(1L,
             "2차세미나",
-            new Date(),
+            tomorrowDate,
             "Meeting details",
             "WEB",
             "헤브론홀");
     Schedule scheduleAllPart = new Schedule(
             1L,
             "OT",
-            new Date(),
+            tomorrowDate,
             "3기 OT",
             "ALL",
             "헤브론홀"
