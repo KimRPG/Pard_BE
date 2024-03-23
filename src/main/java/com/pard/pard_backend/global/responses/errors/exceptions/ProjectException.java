@@ -16,5 +16,9 @@ public class ProjectException extends RuntimeException {
             super(errorCode);
         }
     }
-
+    public static class UserNotFound extends ProjectException {
+        public UserNotFound(ErrorCode errorCode) {
+            super(errorCode);
+        }
+    }
 }
