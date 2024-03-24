@@ -28,3 +28,8 @@ server:
       charset: UTF-8
       enabled: true
       force: true
+
+firebase:
+  key-path: key/pard-app.json
+  project-id: pard-app-project
+
