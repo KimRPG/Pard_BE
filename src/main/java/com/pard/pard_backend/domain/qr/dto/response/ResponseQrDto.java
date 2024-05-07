@@ -7,6 +7,6 @@ public class ResponseQrDto {
     @Getter
     @Builder
     public static class attendaceResponse{
-        private boolean isPardQr;
+        private boolean isAttended;
     }
 }

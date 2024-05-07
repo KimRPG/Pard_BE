@@ -21,4 +21,9 @@ public class ProjectException extends RuntimeException {
             super(errorCode);
         }
     }
+    public static class WrongQR extends ProjectException {
+        public WrongQR(ErrorCode errorCode) {
+            super(errorCode);
+        }
+    }
 }
