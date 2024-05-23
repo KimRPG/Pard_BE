@@ -26,4 +26,15 @@ public class ProjectException extends RuntimeException {
             super(errorCode);
         }
     }
+
+    public static class NoUserQRTime extends ProjectException {
+        public NoUserQRTime(ErrorCode errorCode) {
+            super(errorCode);
+        }
+    }
+    public static class ScheduleNotFound extends ProjectException {
+        public ScheduleNotFound(ErrorCode errorCode) {
+            super(errorCode);
+        }
+    }
 }
