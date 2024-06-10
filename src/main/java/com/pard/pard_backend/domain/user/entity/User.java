@@ -15,7 +15,7 @@ import org.hibernate.annotations.ColumnDefault;
 @Entity
 @Getter
 @SuperBuilder
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 @AllArgsConstructor
 public class User {
     @Id
@@ -61,5 +61,14 @@ public class User {
                 .part(request.getPart())
                 .build();
     }
+
+    public static User toEntity(String name, String email) {
+
+        return User.builder()
+                .name(name)
+                .email(email)
+                .build();
+    }
+
 
 }

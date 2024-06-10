@@ -1,7 +1,7 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/pardapp?serverTimezone=UTC&characterEncoding=UTF-8
+    url: jdbc:mysql://localhost:3306/pard?serverTimezone=UTC&characterEncoding=UTF-8
     username: root
     password: '1234'
   jpa:
@@ -13,6 +13,9 @@ spring:
       database: mysql
     database-platform: org.hibernate.dialect.MySQL8Dialect
     hibernate.ddl-auto: create-drop
+
+  profiles:
+    active: oauth
 logging:
   level:
     org:
@@ -22,6 +25,7 @@ logging:
           descriptor:
             sql:
               BasicBinder: trace
+
 server:
   servlet:
     encoding:
