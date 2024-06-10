@@ -19,7 +19,6 @@ public class UserController {
     @PostMapping("")
     public ResponseEntity<UserResponseDTO.Create> create(@RequestBody UserRequestDTO.Create request){
         return ResponseEntity.ok(userService.Create(request));
-
     }
 
     @DeleteMapping("")

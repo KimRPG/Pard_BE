@@ -19,7 +19,6 @@ public class UserRequestDTO {
         private String name;
         private String email;
         private String part;
-        private Long projectId;
     }
     @Getter
     @Setter

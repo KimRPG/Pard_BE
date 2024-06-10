@@ -4,10 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.pard.pard_backend.domain.project.entity.Project;
 import com.pard.pard_backend.domain.user.dto.request.UserRequestDTO;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.antlr.v4.runtime.misc.NotNull;
 import org.hibernate.annotations.ColumnDefault;
@@ -22,11 +19,14 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "USER_ID")
     private Long userId;
+
+    @Setter
     private String part;
 
     @Column(length = 10)
     private String name;
 
+    @Setter
     private Role role;
 
     @Column(length = 100)
