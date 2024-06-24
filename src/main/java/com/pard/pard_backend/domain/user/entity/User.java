@@ -27,7 +27,7 @@ public class User {
     private String name;
 
     @Setter
-    private Role role;
+    private String role;
 
     @Column(length = 100)
     private String email;
