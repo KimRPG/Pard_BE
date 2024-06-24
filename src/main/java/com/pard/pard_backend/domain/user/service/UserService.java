@@ -18,7 +18,15 @@ public class UserService {
     private final UserRepository userRepository;
 
     public UserResponseDTO.Create Create(UserRequestDTO.Create request){
-        User user = userRepository.save(User.toEntity(request));
+        User user = userRepository.findByEmail(request.getEmail());
+        if (user == null) {
+            user = userRepository.save(User.toEntity(request));
+        }
+        else {
+            user.setPart(request.getPart());
+            userRepository.save(user);
+        }
+
         return UserResponseDTO.Create.toDto(userRepository.save(user));
 
     }
