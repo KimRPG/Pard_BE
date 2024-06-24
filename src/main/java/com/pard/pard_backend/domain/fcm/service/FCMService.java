@@ -4,6 +4,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.pard.pard_backend.domain.fcm.dto.request.RequestFCMDto;
+import com.pard.pard_backend.domain.user.entity.User;
+import com.pard.pard_backend.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.*;
@@ -28,6 +30,7 @@ public class FCMService {
     private String API_URL = "https://fcm.googleapis.com/v1/projects/"+projectId+"/messages:send";
 
     private final ObjectMapper objectMapper;
+    private final UserRepository userRepository;
 
 //    파베의 AccessToken으로 FCM에 푸시 요청 보낼 때 Header에 사용 
     private String getAccessToken() throws IOException {
@@ -39,6 +42,12 @@ public class FCMService {
     }
 
 //    FCM 전송 로직 : User DB에서 token 가져와서 List로 만들고 FCM에 전송
+    public List<String> getFCMTokenList() {
+        List<User> userList = userRepository.findAll();
+        return userList.stream()
+                .map(User::getFcmToken)
+                .toList();
+    }
 
 //    기기의 token으로 메세지 만드는 메서드
     private String makeMessage(String token, String title,String body) throws JsonProcessingException {
@@ -55,6 +64,7 @@ public class FCMService {
         return objectMapper.writeValueAsString(fcmMessage);
     }
 
+//    notification push 보내는 역할하는 method
     public void sendMessageTo(String token, String title, String body) throws IOException {
         String message = makeMessage(token, title, body);
         OkHttpClient client = new OkHttpClient();
