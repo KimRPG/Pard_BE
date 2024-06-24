@@ -3,6 +3,11 @@ package com.pard.pard_backend.domain.fcm.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.auth.oauth2.GoogleCredentials;
+import com.google.firebase.FirebaseException;
+import com.google.firebase.messaging.FirebaseMessaging;
+import com.google.firebase.messaging.FirebaseMessagingException;
+import com.google.firebase.messaging.MulticastMessage;
+import com.google.firebase.messaging.Notification;
 import com.pard.pard_backend.domain.fcm.dto.request.RequestFCMDto;
 import com.pard.pard_backend.domain.user.entity.User;
 import com.pard.pard_backend.domain.user.repository.UserRepository;
@@ -49,36 +54,55 @@ public class FCMService {
                 .toList();
     }
 
-//    기기의 token으로 메세지 만드는 메서드
-    private String makeMessage(String token, String title,String body) throws JsonProcessingException {
-        RequestFCMDto.FCMRequestDTO fcmMessage = RequestFCMDto.FCMRequestDTO.builder()
-                .validate_only(false)
-                .message(RequestFCMDto.Message.builder()
-                        .notification(RequestFCMDto.Notification.builder()
-                                .title(title)
-                                .body(body)
-                                .build())
-                        .token(token)
-                        .build())
-                .build();
-        return objectMapper.writeValueAsString(fcmMessage);
+    //    단체 발송하는 fcm 메서드
+    public void sendPushs(RequestFCMDto.Notification req) throws FirebaseMessagingException{
+        List<String> targetUserTokens = getFCMTokenList();
+        FirebaseMessaging.getInstance().sendEachForMulticast(makeMessages(req.getTitle(), req.getBody(), targetUserTokens));
     }
+
+//    단체 message 만들기
+    public static MulticastMessage makeMessages(String title, String body,List<String> targetUserTokens){
+        Notification notification = Notification.builder()
+                .setTitle(title)
+                .setBody(body)
+                .build();
+
+        return MulticastMessage.builder()
+                .setNotification(notification)
+                .addAllTokens(targetUserTokens)
+                .build();
+    }
+
+//    기기의 token으로 메세지 만드는 메서드
+//    private String makeMessage(String token, String title,String body) throws JsonProcessingException {
+//        RequestFCMDto.FCMRequestDTO fcmMessage = RequestFCMDto.FCMRequestDTO.builder()
+//                .validate_only(false)
+//                .message(RequestFCMDto.Message.builder()
+//                        .notification(RequestFCMDto.Notification.builder()
+//                                .title(title)
+//                                .body(body)
+//                                .build())
+//                        .token(token)
+//                        .build())
+//                .build();
+//        return objectMapper.writeValueAsString(fcmMessage);
+//    }
 
 //    notification push 보내는 역할하는 method
-    public void sendMessageTo(String token, String title, String body) throws IOException {
-        String message = makeMessage(token, title, body);
-        OkHttpClient client = new OkHttpClient();
-
-        RequestBody requestBody = RequestBody.create(message, MediaType.get("application/json; charset=utf-8"));
-        Request request = new Request.Builder()
-                .url(API_URL)
-                .post(requestBody)
-                .addHeader(HttpHeaders.AUTHORIZATION, "Bearer " + getAccessToken())
-                .addHeader(HttpHeaders.CONTENT_TYPE, "application/json; UTF-8")
-                .build();
-
-        Response response = client.newCall(request).execute();
-
-        log.info(response.body().string());
-    }
+//    public void sendMessageTo(String token, String title, String body) throws IOException {
+//        String message = makeMessage(token, title, body);
+//        OkHttpClient client = new OkHttpClient();
+//
+//        RequestBody requestBody = RequestBody.create(message, MediaType.get("application/json; charset=utf-8"));
+//        Request request = new Request.Builder()
+//                .url(API_URL)
+//                .post(requestBody)
+//                .addHeader(HttpHeaders.AUTHORIZATION, "Bearer " + getAccessToken())
+//                .addHeader(HttpHeaders.CONTENT_TYPE, "application/json; UTF-8")
+//                .build();
+//
+//        Response response = client.newCall(request).execute();
+//
+//        log.info(response.body().string());
+//    }
 }
