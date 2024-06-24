@@ -6,21 +6,20 @@ import com.pard.pard_backend.domain.security.oauth.CustomSuccessHandler;
 import com.pard.pard_backend.domain.security.service.CustomOAuth2UserService;
 import com.pard.pard_backend.global.responses.errors.handler.AccessDeniedHandlerImpl;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
+import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.oauth2.client.web.OAuth2LoginAuthenticationFilter;
-import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 
-import java.nio.file.AccessDeniedException;
 import java.util.Collections;
 
 @Configuration
@@ -31,6 +30,13 @@ public class SecurityConfig {
     private final CustomSuccessHandler customSuccessHandler;
     private final JWTUtil jwtUtil;
     private final AccessDeniedHandlerImpl accessDeniedHandler;
+
+    @Bean
+    RoleHierarchy roleHierarchy() {
+        RoleHierarchyImpl roleHierarchyImpl = new RoleHierarchyImpl();
+        roleHierarchyImpl.setHierarchy("ROLE_ADMIN > ROLE_OB > ROLE_YB");
+        return roleHierarchyImpl;
+    }
 @Bean
 public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     http
@@ -61,7 +67,7 @@ public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
             }));
 
     http
-            .addFilterBefore(new JWTFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);
+            .addFilterAfter(new JWTFilter(jwtUtil), OAuth2LoginAuthenticationFilter.class);
 
     http
             .oauth2Login(oath2->oath2
@@ -71,9 +77,10 @@ public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
             );
     http
             .authorizeHttpRequests(auth -> auth
-                    .requestMatchers("/","/login").permitAll()
+                    .requestMatchers("/","/hihi").permitAll()
                     .requestMatchers("/v1/**").hasRole("YB")
-                    .requestMatchers("/hi").hasRole("YB")
+                    .requestMatchers("/hi/hi").hasRole("OB")
+                    .requestMatchers("/hi/hello").hasRole("YB")
                     .anyRequest().authenticated()
 
             );

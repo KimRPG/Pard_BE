@@ -4,6 +4,7 @@ import com.pard.pard_backend.domain.security.jwt.JWTUtil;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -11,14 +12,19 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class HiController {
     private final JWTUtil jwtUtil;
-    @GetMapping("/hi")
-    public String hi() {
+    @GetMapping("/hi/hello")
+    public String hi(@CookieValue(value = "Authorization") String authorization) {
+        System.out.println(jwtUtil.getRole(authorization));
         return "hi";
     }
-    @GetMapping("/login")
+    @GetMapping("/hi/hi")
+    public String hihi() {
+        return "hi";
+    }
+    @GetMapping("/hihi")
     public String hello(HttpServletResponse response) {
         String name = "hi";
-        String role = "ROLE_YB";
+        String role = "ROLE_OB";
         String email = "dshkl";
         String token = jwtUtil.createJwt(name, role, email,60*60*60L);
 
