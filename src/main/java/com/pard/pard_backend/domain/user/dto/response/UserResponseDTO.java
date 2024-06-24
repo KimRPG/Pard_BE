@@ -1,8 +1,6 @@
 package com.pard.pard_backend.domain.user.dto.response;
 
-import com.pard.pard_backend.domain.user.entity.Role;
 import com.pard.pard_backend.domain.user.entity.User;
-import jakarta.persistence.Column;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -37,7 +35,7 @@ public class UserResponseDTO {
     public static class UserInfo {
         private String part;
         private String name;
-        private Role role;
+        private String role;
         private String generation;
         public static UserInfo toDto(final @NotNull User user) {
             return UserInfo.builder()

@@ -2,7 +2,6 @@ package com.pard.pard_backend.domain.security.jwt;
 
 import com.pard.pard_backend.domain.security.dto.CustomOAuth2User;
 import com.pard.pard_backend.domain.user.dto.request.UserRequestDTO;
-import com.pard.pard_backend.domain.user.entity.Role;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
@@ -26,6 +25,7 @@ public class JWTFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
+
         Cookie[] cookies = request.getCookies();
         String authorization = Arrays.stream(cookies)
                 .filter(cookie -> cookie.getName().equals("Authorization"))
@@ -38,17 +38,29 @@ public class JWTFilter extends OncePerRequestFilter {
             return;
         }
 
-        String token = authorization;
+        String requestUri = request.getRequestURI();
 
-        if (jwtUtil.getExpired(token)) {
+        if (requestUri.matches("^/login(?:/.*)?$")) {
+
+            filterChain.doFilter(request, response);
+            return;
+        }
+        if (requestUri.matches("^/oauth2(?:/.*)?$")) {
+
+            filterChain.doFilter(request, response);
+            return;
+        }
+
+        if (jwtUtil.getExpired(authorization)) {
             System.out.println("token Expired");
             filterChain.doFilter(request, response);
             return;
         }
 
-        String name = jwtUtil.getName(token);
-        String email = jwtUtil.getEmail(token);
-        Role role = Role.valueOf(jwtUtil.getRole(token));
+
+        String name = jwtUtil.getName(authorization);
+        String email = jwtUtil.getEmail(authorization);
+        String role = jwtUtil.getRole(authorization);
 
         UserRequestDTO.Jwt userDTO = new UserRequestDTO.Jwt();
         userDTO.setName(name);
@@ -58,6 +70,7 @@ public class JWTFilter extends OncePerRequestFilter {
         CustomOAuth2User customOAuth2User = new CustomOAuth2User(userDTO);
 
         Authentication authToken = new UsernamePasswordAuthenticationToken(customOAuth2User,null,customOAuth2User.getAuthorities());
+
         SecurityContextHolder.getContext().setAuthentication(authToken);
 
         filterChain.doFilter(request, response);

@@ -1,10 +1,12 @@
-package com.pard.pard_backend.domain.security.config;
+package com.pard.pard_backend.global.config;
 
 import com.pard.pard_backend.domain.security.jwt.JWTFilter;
 import com.pard.pard_backend.domain.security.jwt.JWTUtil;
 import com.pard.pard_backend.domain.security.oauth.CustomSuccessHandler;
 import com.pard.pard_backend.domain.security.service.CustomOAuth2UserService;
+import com.pard.pard_backend.global.responses.errors.handler.AccessDeniedHandlerImpl;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,10 +14,13 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.oauth2.client.web.OAuth2LoginAuthenticationFilter;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 
+import java.nio.file.AccessDeniedException;
 import java.util.Collections;
 
 @Configuration
@@ -25,6 +30,7 @@ public class SecurityConfig {
     private final CustomOAuth2UserService customOAuth2UserService;
     private final CustomSuccessHandler customSuccessHandler;
     private final JWTUtil jwtUtil;
+    private final AccessDeniedHandlerImpl accessDeniedHandler;
 @Bean
 public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     http
@@ -47,7 +53,6 @@ public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
                     configuration.setAllowCredentials(true);
                     configuration.setAllowedHeaders(Collections.singletonList("*"));
                     configuration.setMaxAge(3600L);
-
                     configuration.setExposedHeaders(Collections.singletonList("Set-Cookie"));
                     configuration.setExposedHeaders(Collections.singletonList("Authorization"));
 
@@ -56,7 +61,7 @@ public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
             }));
 
     http
-            .addFilterAfter(new JWTFilter(jwtUtil), OAuth2LoginAuthenticationFilter.class);
+            .addFilterBefore(new JWTFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);
 
     http
             .oauth2Login(oath2->oath2
@@ -66,11 +71,19 @@ public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
             );
     http
             .authorizeHttpRequests(auth -> auth
-                    .requestMatchers("/").permitAll()
-                    .anyRequest().authenticated());
+                    .requestMatchers("/","/login").permitAll()
+                    .requestMatchers("/v1/**").hasRole("YB")
+                    .requestMatchers("/hi").hasRole("YB")
+                    .anyRequest().authenticated()
+
+            );
     http
             .sessionManagement(session -> session
                     .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+
+    http
+            .exceptionHandling(exception -> exception
+                    .accessDeniedHandler(accessDeniedHandler));
 
 
     return http.build();
