@@ -40,9 +40,11 @@ public class User {
 
     private boolean isAlarm;
 
+    @Setter
     @ColumnDefault("0")
     private float totalMinus;
 
+    @Setter
     @ColumnDefault("0")
     private float totalBonus;
 

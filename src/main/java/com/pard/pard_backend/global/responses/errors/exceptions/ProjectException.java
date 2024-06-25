@@ -37,4 +37,9 @@ public class ProjectException extends RuntimeException {
             super(errorCode);
         }
     }
+    public static class ReasonNotFound extends ProjectException {
+        public ReasonNotFound(ErrorCode errorCode) {
+            super(errorCode);
+        }
+    }
 }
