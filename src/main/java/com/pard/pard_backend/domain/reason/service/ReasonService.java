@@ -13,6 +13,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -37,6 +39,13 @@ public class ReasonService {
     }
 
     @Transactional
+    public void addSchedulePoint(ReasonRequest.SchedulePointDTO req) {
+        User user = userRepository.findByEmail(req.getEmail());
+        if (user == null) {throw new ProjectException.UserNotFound(ProjectErrorCode.USER_NOT_FOUND);}
+        user.setPangoolPoint(user.getPangoolPoint() + req.getPoint());
+    }
+
+    @Transactional
     public void deletePoint(ReasonRequest.ReasonDeleteDTO req) {
         Optional<Reason> r = reasonRepository.findById(req.getReasonId());
         if (r.isEmpty()) {throw new ProjectException.ReasonNotFound(ProjectErrorCode.REASON_NOT_FOUND);}
@@ -58,4 +67,48 @@ public class ReasonService {
         return ReasonResponseDTO.UserPoint.toDto(user);
 }
 
+    public int findRankInPart(String email,String part) {
+        List<User> users = userRepository.findUsersByPartOrderedByTotalBonus(part);
+        for (int i = 0; i < users.size(); i++) {
+            if (users.get(i).getEmail().equals(email)) {
+                return i + 1;
+            }
+        }
+        return -1;
+    }
+    public int findRankInTotal(String email,String generation) {
+        List<User> users = userRepository.findUsersByGenerationOrderedByTotalBonus(generation);
+        for (int i = 0; i < users.size(); i++) {
+            if (users.get(i).getEmail().equals(email)) {
+                return i + 1;
+            }
+        }
+        return -1;
+    }
+
+    public ReasonResponseDTO.UserRank getRank(String email) {
+        User user = userRepository.findByEmail(email);
+        if (user == null) {throw new ProjectException.UserNotFound(ProjectErrorCode.USER_NOT_FOUND);}
+        return ReasonResponseDTO.UserRank.builder()
+                .partRanking(findRankInPart(email,user.getPart()))
+                .totalRanking(findRankInTotal(email, user.getGeneration()))
+                .build();
+    }
+
+    public List<ReasonResponseDTO.RankInfo> getRankListFromGeneration(String email) {
+        User user = userRepository.findByEmail(email);
+        if (user == null) {throw new ProjectException.UserNotFound(ProjectErrorCode.USER_NOT_FOUND);}
+        List<User> users = userRepository.findUsersByGenerationOrderedByTotalBonus(user.getGeneration());
+        List<ReasonResponseDTO.RankInfo> ret = new ArrayList<>();
+        for(int i = 0; i<users.size(); i++){
+            ReasonResponseDTO.RankInfo rankInfo = ReasonResponseDTO.RankInfo.builder()
+                    .rank(i+1)
+                    .name(users.get(i).getName())
+                    .part(users.get(i).getPart())
+                    .totalBonusPoint(users.get(i).getTotalBonus())
+                    .build();
+            ret.add(rankInfo);
+        }
+        return ret;
+    }
 }

@@ -8,13 +8,15 @@ import com.pard.pard_backend.domain.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/reason")
 public class ReasonController {
     private final ReasonService reasonService;
 //    유저의 이메일로 점수 / 벌점 추가
-   @PostMapping("/point")
+   @PostMapping("")
    public void addPoint(@RequestBody ReasonRequest.ReasonRequestDTO req){
        reasonService.addPoint(req);
    }
@@ -27,21 +29,23 @@ public class ReasonController {
         reasonService.deletePoint(req);
     }
 
-//    유저의 이메일로 점수 조회
+//    유저의 이메일로 점수 조회 + 팡욱이 점수
     @GetMapping("/pardnership")
     public ReasonResponseDTO.UserPoint getPoint(@RequestParam String email){
         return reasonService.getPoint(email);
     }
 
-//    유저의 파드너쉽 점수(팡울이 계산을 위해)
-
-//    유저의 파트 내 점수
-
-//    해당 기수에서 유저의 랭킹
+//    유저의 파트,기수 내 점수
+    @GetMapping("/part/my-rank")
+    public ReasonResponseDTO.UserRank getPartPoint(@RequestParam String email){
+        return reasonService.getRank(email);
+    }
 
 //    유저의 기수에 맞는 사람들의 이름,파트, 점수
-
-//    유저의 기수에 맞는 전체 순위 조회
+    @GetMapping("/rank")
+    public List<ReasonResponseDTO.RankInfo> getRank(@RequestParam String email){
+        return reasonService.getRankListFromGeneration(email);
+    }
 
 //    top3의 이름,피트 조회
 

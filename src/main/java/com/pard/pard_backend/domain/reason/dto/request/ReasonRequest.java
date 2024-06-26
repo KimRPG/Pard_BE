@@ -15,6 +15,15 @@ public class ReasonRequest {
         private boolean isBonus;
         private String detail;
     }
+
+    @Getter
+    @Setter
+    @Builder
+    public static class SchedulePointDTO {
+        private String email;
+        private float point;
+    }
+
     @Getter
     @Setter
     @Builder

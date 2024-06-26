@@ -48,6 +48,10 @@ public class User {
     @ColumnDefault("0")
     private float totalBonus;
 
+    @Setter
+    @ColumnDefault("0")
+    private float pangoolPoint;
+
 
 
     @JsonIgnore

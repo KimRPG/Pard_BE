@@ -60,11 +60,29 @@ public class ReasonResponseDTO {
     public static class UserPoint{
         private float totalBonus;
         private float totalMinus;
+        private float pangoolPoint;
         public static UserPoint toDto(final @NotNull User user) {
             return UserPoint.builder()
                     .totalBonus(user.getTotalBonus())
                     .totalMinus(user.getTotalMinus())
+                    .pangoolPoint(user.getPangoolPoint())
                     .build();
         }
+    }
+    @Getter
+    @Setter
+    @Builder
+    public static class UserRank{
+        private Integer partRanking;
+        private Integer totalRanking;
+    }
+    @Getter
+    @Setter
+    @Builder
+    public static class RankInfo{
+        private Integer rank;
+        private String name;
+        private String part;
+        private float totalBonusPoint;
     }
 }
