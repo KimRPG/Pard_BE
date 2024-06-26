@@ -1,10 +1,9 @@
 package com.pard.pard_backend.domain.reason.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.pard.pard_backend.domain.reason.dto.request.ReasonRequest;
+import com.pard.pard_backend.domain.user.entity.User;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,7 +25,9 @@ public class Reason {
 
     private boolean isBonus;
 
-    private long userId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "email")
+    private User user;
 
     private String reason;
 
@@ -36,4 +37,13 @@ public class Reason {
     @DateTimeFormat(pattern = "MM-dd")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "MM-dd", timezone = "Asia/Seoul")
     private Date createDate;
+
+    public Reason toEntity(ReasonRequest.ReasonRequestDTO req) {
+        this.point = req.getPoint();
+        this.isBonus = req.isBonus();
+        this.reason = req.getReason();
+        this.detail = req.getDetail();
+        return this;
+    }
+
 }
