@@ -12,7 +12,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/reason")
+@RequestMapping("/v1/reason")
 public class ReasonController {
     private final ReasonService reasonService;
 //    유저의 이메일로 점수 / 벌점 추가
