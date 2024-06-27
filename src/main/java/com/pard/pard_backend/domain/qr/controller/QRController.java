@@ -6,13 +6,11 @@ import com.pard.pard_backend.domain.qr.service.QRService;
 import com.pard.pard_backend.domain.reason.dto.request.ReasonRequest;
 import com.pard.pard_backend.domain.reason.service.ReasonService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/v1")
 public class QRController {
     private final QRService qrService;
     private final ReasonService reasonService;
