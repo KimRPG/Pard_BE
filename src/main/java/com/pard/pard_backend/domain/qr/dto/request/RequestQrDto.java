@@ -14,7 +14,7 @@ public class RequestQrDto {
     @Setter
     public static class QRAttendanceRequestDTO {
         private String QRUrl;
-        private Long uid;
+        private String email;
         //        yyyymmddhmmss 형식으로 받음
         @Nullable
         @JsonDeserialize(using = CustomLocalDateTimeDeserializer.class)

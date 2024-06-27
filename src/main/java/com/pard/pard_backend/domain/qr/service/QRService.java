@@ -3,6 +3,8 @@ package com.pard.pard_backend.domain.qr.service;
 import com.google.api.client.util.DateTime;
 import com.pard.pard_backend.domain.qr.dto.request.RequestQrDto;
 import com.pard.pard_backend.domain.qr.dto.response.ResponseQrDto;
+import com.pard.pard_backend.domain.reason.dto.request.ReasonRequest;
+import com.pard.pard_backend.domain.reason.service.ReasonService;
 import com.pard.pard_backend.domain.schedule.service.ScheduleService;
 import com.pard.pard_backend.domain.user.entity.User;
 import com.pard.pard_backend.domain.user.repository.UserRepository;
@@ -26,6 +28,8 @@ public class QRService {
 
     private final ScheduleService scheduleService;
 
+    private final ReasonService reasonService;
+
 //    프런트에서 찍은 QR코드 받아서 파드 출석 QR인지 아닌지 판단 맞다면 출결 메서드 호출
     public ResponseQrDto.attendaceResponse checkQR(RequestQrDto.QRAttendanceRequestDTO qrAttendanceRequestDTO){
         String QRUrl = qrAttendanceRequestDTO.getQRUrl();
@@ -38,9 +42,10 @@ public class QRService {
 
 //    uid, qr출석 시간 받아서 출,지 결정하는 로직
     public ResponseQrDto.attendaceResponse checkQrTime(RequestQrDto.QRAttendanceRequestDTO qrAttendanceRequestDTO){
-        Long uid = qrAttendanceRequestDTO.getUid();
+        String  userEmail = qrAttendanceRequestDTO.getEmail();
         Timestamp userQrTime = qrAttendanceRequestDTO.getTime();
-        User user = userRepository.findById(uid).orElseThrow(() -> new ProjectException.UserNotFound(ProjectErrorCode.USER_NOT_FOUND));
+        User user = userRepository.findByEmail(userEmail);
+        if(user == null){throw new ProjectException.UserNotFound(ProjectErrorCode.USER_NOT_FOUND);}
 //        schedule 중에서 전체 공지(isNotice = true) 중 오늘 날짜에 해당하는 것 중(date_ 제일 빠른 일정 가져오고,
 //        그 일정시간 isBefore qrTime이면 출석, isAfter qrTime이면 지각
         Timestamp todayQRTime = scheduleService.getTodayQRTime();
@@ -55,9 +60,11 @@ public class QRService {
             log.info(String.valueOf(oneMinuteAfterTodayQRTime));
 
             if(userQrTime.after(oneMinuteAfterTodayQRTime)) { //지각
-
+                ReasonRequest.SchedulePointDTO req = ReasonRequest.SchedulePointDTO.toDto(userEmail, 4f,"지각");
+                reasonService.addSchedulePoint(req);
             } else{ //출석
-
+                ReasonRequest.SchedulePointDTO req = ReasonRequest.SchedulePointDTO.toDto(userEmail, 6f,"출석");
+                reasonService.addSchedulePoint(req);
             }
         } else {
             throw new ProjectException.NoUserQRTime(ProjectErrorCode.NoUserQRTime);

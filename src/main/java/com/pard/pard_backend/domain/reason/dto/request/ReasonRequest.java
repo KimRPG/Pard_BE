@@ -14,6 +14,7 @@ public class ReasonRequest {
         private String reason;
         private boolean isBonus;
         private String detail;
+        private boolean attendance;
     }
 
     @Getter
@@ -22,6 +23,14 @@ public class ReasonRequest {
     public static class SchedulePointDTO {
         private String email;
         private float point;
+        private String reason;
+        public static SchedulePointDTO toDto(String email, float point,String reason) {
+            return SchedulePointDTO.builder()
+                    .email(email)
+                    .point(point)
+                    .reason(reason)
+                    .build();
+        }
     }
 
     @Getter
