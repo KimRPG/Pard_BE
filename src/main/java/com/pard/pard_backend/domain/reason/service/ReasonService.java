@@ -28,14 +28,14 @@ public class ReasonService {
     public void addPoint(ReasonRequest.ReasonRequestDTO req) {
         User user = userRepository.findByEmail(req.getEmail());
         if (user == null) {throw new ProjectException.UserNotFound(ProjectErrorCode.USER_NOT_FOUND);}
-        if (req.isBonus()) {
-            user.setTotalBonus(user.getTotalBonus() + req.getPoint());
-        } else {
-            user.setTotalMinus(user.getTotalMinus() + req.getPoint());
-        }
-        Reason reason = new Reason().toEntity(req);
-        reasonRepository.save(reason);
-        userRepository.save(user);
+            if (req.isBonus()) {
+                user.setTotalBonus(user.getTotalBonus() + req.getPoint());
+            } else {
+                user.setTotalMinus(user.getTotalMinus() + req.getPoint());
+            }
+            Reason reason = new Reason().toEntity(req);
+            reasonRepository.save(reason);
+            userRepository.save(user);
     }
 
     @Transactional

@@ -7,6 +7,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -38,11 +39,15 @@ public class Reason {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "MM-dd", timezone = "Asia/Seoul")
     private Date createDate;
 
+    @ColumnDefault("false")
+    private boolean attendance;
+
     public Reason toEntity(ReasonRequest.ReasonRequestDTO req) {
         this.point = req.getPoint();
         this.isBonus = req.isBonus();
         this.reason = req.getReason();
         this.detail = req.getDetail();
+        this.attendance = req.isAttendance();
         return this;
     }
 
