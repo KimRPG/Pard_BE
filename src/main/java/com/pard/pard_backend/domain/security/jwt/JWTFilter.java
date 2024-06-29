@@ -1,6 +1,7 @@
 package com.pard.pard_backend.domain.security.jwt;
 
-import com.pard.pard_backend.domain.security.dto.CustomOAuth2User;
+import com.pard.pard_backend.domain.cookie.service.CookieService;
+import com.pard.pard_backend.domain.security.dto.CustomUserDetails;
 import com.pard.pard_backend.domain.user.dto.request.UserRequestDTO;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
@@ -20,9 +21,11 @@ import java.util.Optional;
 public class JWTFilter extends OncePerRequestFilter {
 
     private final JWTUtil jwtUtil;
+    private final CookieService cookieService;
 
-    public JWTFilter(JWTUtil jwtUtil) {
+    public JWTFilter(JWTUtil jwtUtil, CookieService cookieService) {
         this.jwtUtil = jwtUtil;
+        this.cookieService = cookieService;
     }
 
     @Override
@@ -45,12 +48,6 @@ public class JWTFilter extends OncePerRequestFilter {
         }
 
         String token = authorization.get();
-        String requestUri = request.getRequestURI();
-
-        if (requestUri.matches("^/login(?:/.*)?$") || requestUri.matches("^/oauth2(?:/.*)?$")) {
-            filterChain.doFilter(request, response);
-            return;
-        }
 
         try {
             if (jwtUtil.getExpired(token)) {
@@ -66,13 +63,14 @@ public class JWTFilter extends OncePerRequestFilter {
             userDTO.setEmail(email);
             userDTO.setRole(role);
 
-            CustomOAuth2User customOAuth2User = new CustomOAuth2User(userDTO);
+            CustomUserDetails customOAuth2User = new CustomUserDetails(userDTO);
+            System.out.println(customOAuth2User.getAuthorities());
             Authentication authToken = new UsernamePasswordAuthenticationToken(customOAuth2User, null, customOAuth2User.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authToken);
 
         } catch (ExpiredJwtException e) {
             System.out.println("Expired JWT token: " + e.getMessage());
-            clearJwtCookie(response);
+            cookieService.clearJwtCookie(response);
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "JWT token is expired");
             return;
         }
@@ -80,11 +78,5 @@ public class JWTFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 
-    private void clearJwtCookie(HttpServletResponse response) {
-        Cookie cookie = new Cookie("Authorization", null);
-        cookie.setPath("/");
-        cookie.setHttpOnly(true);
-        cookie.setMaxAge(0);
-        response.addCookie(cookie);
-    }
+
 }

@@ -3,25 +3,21 @@ package com.pard.pard_backend.domain.security.dto;
 import com.pard.pard_backend.domain.user.dto.request.UserRequestDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.oauth2.core.user.OAuth2User;
+import org.springframework.security.core.userdetails.UserDetails;
 
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Map;
 
 @RequiredArgsConstructor
-public class CustomOAuth2User implements OAuth2User {
+public class CustomUserDetails implements UserDetails {
     private final UserRequestDTO.Jwt userDTO;
-
-    @Override
-    public Map<String, Object> getAttributes() {
-        return null;
-    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Collection<GrantedAuthority> collection = new ArrayList<>();
         collection.add(new GrantedAuthority() {
+
             @Override
             public String getAuthority() {
                 return String.valueOf(userDTO.getRole());
@@ -31,11 +27,37 @@ public class CustomOAuth2User implements OAuth2User {
     }
 
     @Override
-    public String getName() {
-        return userDTO.getName();
+    public String getPassword() {
+
+        return "1234";
+    }
+    @Override
+    public String getUsername() {
+
+        return userDTO.getEmail();
     }
 
-    public String getEmail() {
-        return userDTO.getEmail();
+    @Override
+    public boolean isAccountNonExpired() {
+
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+
+        return true;
     }
 }

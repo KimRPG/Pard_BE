@@ -1,24 +1,27 @@
 package com.pard.pard_backend.global.config;
 
+import com.pard.pard_backend.domain.cookie.service.CookieService;
 import com.pard.pard_backend.domain.security.jwt.JWTFilter;
 import com.pard.pard_backend.domain.security.jwt.JWTUtil;
-import com.pard.pard_backend.domain.security.oauth.CustomSuccessHandler;
-import com.pard.pard_backend.domain.security.service.CustomOAuth2UserService;
 import com.pard.pard_backend.global.responses.errors.handler.AccessDeniedHandlerImpl;
+import com.pard.pard_backend.global.responses.errors.handler.JwtAuthenticationEntryPoint;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.oauth2.client.web.OAuth2LoginAuthenticationFilter;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Collections;
 
@@ -26,10 +29,11 @@ import java.util.Collections;
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
-    private final CustomOAuth2UserService customOAuth2UserService;
-    private final CustomSuccessHandler customSuccessHandler;
     private final JWTUtil jwtUtil;
     private final AccessDeniedHandlerImpl accessDeniedHandler;
+    private final CookieService cookieService;
+    private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+
 
     @Bean
     RoleHierarchy roleHierarchy() {
@@ -37,8 +41,10 @@ public class SecurityConfig {
         roleHierarchyImpl.setHierarchy("ROLE_ADMIN > ROLE_OB > ROLE_YB");
         return roleHierarchyImpl;
     }
-@Bean
-public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+
+
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     http
             .csrf((auth) -> auth.disable());
     http
@@ -48,41 +54,33 @@ public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
     http
             .cors(corsCustomizer -> corsCustomizer.configurationSource(new CorsConfigurationSource() {
-
                 @Override
                 public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
-
-                    CorsConfiguration configuration = new CorsConfiguration();
-
-                    configuration.setAllowedOrigins(Collections.singletonList("http://localhost:3000"));
-                    configuration.setAllowedMethods(Collections.singletonList("*"));
-                    configuration.setAllowCredentials(true);
-                    configuration.setAllowedHeaders(Collections.singletonList("*"));
-                    configuration.setMaxAge(3600L);
-                    configuration.setExposedHeaders(Collections.singletonList("Set-Cookie"));
-                    configuration.setExposedHeaders(Collections.singletonList("Authorization"));
-
-                    return configuration;
+                    return null;
+                }
+                @Bean
+                public CorsConfigurationSource configurationSource() {
+                    CorsConfiguration corsConfiguration = new CorsConfiguration();
+                    corsConfiguration.addAllowedOrigin("http://localhost:3000");
+                    corsConfiguration.addAllowedMethod("*");
+                    corsConfiguration.addAllowedHeader("*");
+                    corsConfiguration.setAllowCredentials(true);
+                    corsConfiguration.setMaxAge(3600L); //preflight 결과를 1시간동안 캐시에 저장
+                    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+                    source.registerCorsConfiguration("/**", corsConfiguration);
+                    return source;
                 }
             }));
 
     http
-            .addFilterAfter(new JWTFilter(jwtUtil), OAuth2LoginAuthenticationFilter.class);
-
-    http
-            .oauth2Login(oath2->oath2
-                    .userInfoEndpoint(userInfoEndpointConfig -> userInfoEndpointConfig
-                            .userService(customOAuth2UserService))
-                    .successHandler(customSuccessHandler)
-            );
+            .addFilterBefore(new JWTFilter(jwtUtil, cookieService), UsernamePasswordAuthenticationFilter.class);
     http
             .authorizeHttpRequests(auth -> auth
-                    .requestMatchers("/","/hihi").permitAll()
+                    .requestMatchers("/","/login","/test","/swagger-ui/**","/v3/api-docs/**").permitAll()
                     .requestMatchers("/v1/**").hasRole("YB")
                     .requestMatchers("/hi/hi").hasRole("OB")
                     .requestMatchers("/hi/hello").hasRole("YB")
                     .anyRequest().authenticated()
-
             );
     http
             .sessionManagement(session -> session
@@ -90,6 +88,7 @@ public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
     http
             .exceptionHandling(exception -> exception
+                    .authenticationEntryPoint(jwtAuthenticationEntryPoint)
                     .accessDeniedHandler(accessDeniedHandler));
 
 

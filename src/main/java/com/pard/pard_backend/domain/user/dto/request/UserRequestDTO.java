@@ -10,7 +10,6 @@ public class UserRequestDTO {
     @Setter
     @Builder
     public static class Create{
-
         private String name;
         private String email;
         private String part;
