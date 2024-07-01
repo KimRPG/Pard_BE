@@ -10,10 +10,11 @@ public class CookieService {
 
         Cookie cookie = new Cookie(key, value);
         cookie.setMaxAge(60*60);
-//        cookie.setSecure(true);
+
         cookie.setPath("/");
         cookie.setHttpOnly(true);
-
+        cookie.setAttribute("SameSite", "None");
+//        cookie.setSecure(true);
         return cookie;
     }
 

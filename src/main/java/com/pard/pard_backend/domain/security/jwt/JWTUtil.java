@@ -40,14 +40,14 @@ public class JWTUtil {
     }
 
 
-    public String createJwt(String name, String role,String email, Long expiredMs) {
+    public String createJwt(String name, String role,String email) {
 
         return Jwts.builder()
                 .claim("name", name)
                 .claim("email",email)
                 .claim("role", role)
                 .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + expiredMs))
+                .expiration(new Date(System.currentTimeMillis() + 360000L))
                 .signWith(secretKey)
                 .compact();
     }

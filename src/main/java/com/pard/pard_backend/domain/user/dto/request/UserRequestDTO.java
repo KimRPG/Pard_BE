@@ -22,4 +22,11 @@ public class UserRequestDTO {
         private String name;
         private String role;
     }
+
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    public static class Login{
+        private String email;
+    }
 }

@@ -3,7 +3,6 @@ package com.pard.pard_backend.global.responses.errors.exceptions;
 import com.pard.pard_backend.global.responses.errors.code.ErrorCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.antlr.v4.runtime.misc.NotNull;
 
 @Getter
 @RequiredArgsConstructor
@@ -42,4 +41,11 @@ public class ProjectException extends RuntimeException {
             super(errorCode);
         }
     }
+
+    public static class UserNotFoundException extends Exception {
+        public UserNotFoundException(String message) {
+            super(message);
+        }
+    }
 }
+

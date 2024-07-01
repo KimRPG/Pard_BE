@@ -28,6 +28,7 @@ public class JWTFilter extends OncePerRequestFilter {
         this.cookieService = cookieService;
     }
 
+    /*손 좀 봐야함*/
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
@@ -42,7 +43,7 @@ public class JWTFilter extends OncePerRequestFilter {
                 .map(Cookie::getValue)
                 .findFirst();
 
-        if (!authorization.isPresent()) {
+        if (authorization.isEmpty()) {
             filterChain.doFilter(request, response);
             return;
         }
