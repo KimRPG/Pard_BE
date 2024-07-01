@@ -30,6 +30,10 @@ public class UserController {
     public List<UserResponseDTO.UserInfo>readAll(){
         return userService.findAll();
     }
+    @GetMapping("/me")
+    public UserResponseDTO.UserInfo readOne(@CookieValue(value = "Authorization") String token){
+        return userFacade.findByToken(token);
+    }
 
     @DeleteMapping("")
     public ResponseEntity<?> delete(@RequestParam Long userId){
