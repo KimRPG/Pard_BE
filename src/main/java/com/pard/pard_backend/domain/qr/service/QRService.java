@@ -6,6 +6,7 @@ import com.pard.pard_backend.domain.qr.dto.response.ResponseQrDto;
 import com.pard.pard_backend.domain.reason.dto.request.ReasonRequest;
 import com.pard.pard_backend.domain.reason.service.ReasonService;
 import com.pard.pard_backend.domain.schedule.service.ScheduleService;
+import com.pard.pard_backend.domain.security.jwt.JWTUtil;
 import com.pard.pard_backend.domain.user.entity.User;
 import com.pard.pard_backend.domain.user.repository.UserRepository;
 import com.pard.pard_backend.global.responses.errors.code.ProjectErrorCode;
@@ -30,19 +31,21 @@ public class QRService {
 
     private final ReasonService reasonService;
 
+    private final JWTUtil jwtUtil;
+
 //    프런트에서 찍은 QR코드 받아서 파드 출석 QR인지 아닌지 판단 맞다면 출결 메서드 호출
-    public ResponseQrDto.attendaceResponse checkQR(RequestQrDto.QRAttendanceRequestDTO qrAttendanceRequestDTO){
+    public ResponseQrDto.attendaceResponse checkQR(RequestQrDto.QRAttendanceRequestDTO qrAttendanceRequestDTO,String token){
         String QRUrl = qrAttendanceRequestDTO.getQRUrl();
         if(QRUrl.equals("https://me-qr.com/uoN4lOs1")){
-            return this.checkQrTime(qrAttendanceRequestDTO);
+            return this.checkQrTime(qrAttendanceRequestDTO,token);
         } else {
             throw new ProjectException.WrongQR(ProjectErrorCode.WrongQR);
         }
     }
 
 //    uid, qr출석 시간 받아서 출,지 결정하는 로직
-    public ResponseQrDto.attendaceResponse checkQrTime(RequestQrDto.QRAttendanceRequestDTO qrAttendanceRequestDTO){
-        String  userEmail = qrAttendanceRequestDTO.getEmail();
+    public ResponseQrDto.attendaceResponse checkQrTime(RequestQrDto.QRAttendanceRequestDTO qrAttendanceRequestDTO,String token){
+        String  userEmail = jwtUtil.getEmail(token);
         Timestamp userQrTime = qrAttendanceRequestDTO.getTime();
         User user = userRepository.findByEmail(userEmail);
         if(user == null){throw new ProjectException.UserNotFound(ProjectErrorCode.USER_NOT_FOUND);}
@@ -60,11 +63,11 @@ public class QRService {
             log.info(String.valueOf(oneMinuteAfterTodayQRTime));
 
             if(userQrTime.after(oneMinuteAfterTodayQRTime)) { //지각
-                ReasonRequest.SchedulePointDTO req = ReasonRequest.SchedulePointDTO.toDto(userEmail, 4f,"지각");
-                reasonService.addSchedulePoint(req);
+                ReasonRequest.SchedulePointDTO req = ReasonRequest.SchedulePointDTO.toDto( 4f,"지각");
+                reasonService.addSchedulePoint(req,userEmail);
             } else{ //출석
-                ReasonRequest.SchedulePointDTO req = ReasonRequest.SchedulePointDTO.toDto(userEmail, 6f,"출석");
-                reasonService.addSchedulePoint(req);
+                ReasonRequest.SchedulePointDTO req = ReasonRequest.SchedulePointDTO.toDto( 6f,"출석");
+                reasonService.addSchedulePoint(req,userEmail);
             }
         } else {
             throw new ProjectException.NoUserQRTime(ProjectErrorCode.NoUserQRTime);

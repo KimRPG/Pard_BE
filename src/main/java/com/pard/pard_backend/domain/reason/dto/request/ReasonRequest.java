@@ -15,20 +15,44 @@ public class ReasonRequest {
         private boolean isBonus;
         private String detail;
         private boolean attendance;
+        public static ReasonRequestDTO toDto(String email,float point,String reason,boolean isBonus,String detail,boolean attendance) {
+            return ReasonRequestDTO.builder()
+                    .email(email)
+                    .point(point)
+                    .reason(reason)
+                    .isBonus(isBonus)
+                    .detail(detail)
+                    .attendance(attendance)
+                    .build();
+        }
     }
 
     @Getter
     @Setter
     @Builder
     public static class SchedulePointDTO {
-        private String email;
         private float point;
         private String reason;
-        public static SchedulePointDTO toDto(String email, float point,String reason) {
+        public static SchedulePointDTO toDto(float point,String reason) {
             return SchedulePointDTO.builder()
-                    .email(email)
                     .point(point)
                     .reason(reason)
+                    .build();
+        }
+    }
+
+    @Getter
+    @Setter
+    @Builder
+    public static class SchedulePointAdmin {
+        private float point;
+        private String reason;
+        private String email;
+        public static SchedulePointAdmin toDto(float point,String reason,String email) {
+            return SchedulePointAdmin.builder()
+                    .point(point)
+                    .reason(reason)
+                    .email(email)
                     .build();
         }
     }
