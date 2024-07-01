@@ -26,13 +26,13 @@ public class HiController {
         String name = "hi";
         String role = "ROLE_YB";
         String email = "cjh";
-        String token = jwtUtil.createJwt(name, role, email,30*60L);
+        String token = jwtUtil.createJwt(name, role, email);
 
         Cookie cookie = new Cookie("Authorization", token); // Name-Value로 쿠키를 만듦
         cookie.setPath("/"); //
         cookie.setSecure(true); //https 사용한다면 켜주세요
         cookie.setAttribute("SameSite", "None"); //이거는 나중에 설명
-        cookie.setMaxAge(30*60); //이거는 몇 초동안 쿠키를 유지할 것인지
+        cookie.setMaxAge(30*60*60*60); //이거는 몇 초동안 쿠키를 유지할 것인지
         cookie.setHttpOnly(false); // JavaScript에서 쿠키에 접근할 수 없도록 함
         System.out.println("들어옴");
 

@@ -5,6 +5,7 @@ import com.pard.pard_backend.global.responses.errors.exceptions.ProjectException
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -21,5 +22,10 @@ public class RestControllerHandler {
         log.error("Handle ['business exception'] , message: '{}'" , e.getErrorCode().getMessage());
 
         return ErrorResponse.toResponseEntity(e.getErrorCode(), request.getRequestURI());
+    }
+
+    @ExceptionHandler(ProjectException.UserNotFoundException.class)
+    public ResponseEntity<String> handleUserNotFoundException(ProjectException.UserNotFoundException e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
     }
 }

@@ -1,10 +1,10 @@
 package com.pard.pard_backend.domain.user.service;
 
-import com.pard.pard_backend.domain.security.jwt.JWTUtil;
 import com.pard.pard_backend.domain.user.dto.request.UserRequestDTO;
 import com.pard.pard_backend.domain.user.dto.response.UserResponseDTO;
 import com.pard.pard_backend.domain.user.entity.User;
 import com.pard.pard_backend.domain.user.repository.UserRepository;
+import com.pard.pard_backend.global.responses.errors.exceptions.ProjectException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -51,7 +51,12 @@ public class UserService {
                 .collect(Collectors.toList());
     }
 
+    public UserResponseDTO.UserInfo login(String email) throws ProjectException.UserNotFoundException {
+        //if문 안에 넣기
+        if (!userRepository.existsByEmail(email)) {
+        throw new ProjectException.UserNotFoundException(String.format("%s 을(를) 못 찾았어요", email));
+        }
+        return UserResponseDTO.UserInfo.toDto(userRepository.findByEmail(email));
+    }
 
-
-//    public void updateAttendance(Long userId,)
 }

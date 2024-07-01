@@ -15,4 +15,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query("SELECT u from User u WHERE u.generation =:generation ORDER BY u.totalBonus DESC ")
     List<User> findUsersByGenerationOrderedByTotalBonus(@Param("generation") String generation);
+
+    boolean existsByEmail(String email);
 }

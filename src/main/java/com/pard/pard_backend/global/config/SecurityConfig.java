@@ -76,7 +76,7 @@ public class SecurityConfig {
             .addFilterBefore(new JWTFilter(jwtUtil, cookieService), UsernamePasswordAuthenticationFilter.class);
     http
             .authorizeHttpRequests(auth -> auth
-                    .requestMatchers("/","/login","/test","/swagger-ui/**","/v3/api-docs/**").permitAll()
+                    .requestMatchers("/","/login","/test","/swagger-ui/**","/v3/api-docs/**","/v1/users/login").permitAll()
                     .requestMatchers("/v1/**").hasRole("YB")
                     .requestMatchers("/hi/hi").hasRole("OB")
                     .requestMatchers("/hi/hello").hasRole("YB")
