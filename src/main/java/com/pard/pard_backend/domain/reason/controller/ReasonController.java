@@ -31,20 +31,20 @@ public class ReasonController {
 
 //    유저의 이메일로 점수 조회 + 팡욱이 점수
     @GetMapping("/pardnership")
-    public ReasonResponseDTO.UserPoint getPoint(@RequestParam String email){
-        return reasonService.getPoint(email);
+    public ReasonResponseDTO.UserPoint getPoint(@CookieValue(value = "Authorization") String token){
+        return reasonService.getPoint(token);
     }
 
 //    유저의 파트,기수 내 점수
     @GetMapping("/part/my-rank")
-    public ReasonResponseDTO.UserRank getPartPoint(@RequestParam String email){
-        return reasonService.getRank(email);
+    public ReasonResponseDTO.UserRank getPartPoint(@CookieValue(value = "Authorization") String token){
+        return reasonService.getRank(token);
     }
 
 //    유저의 기수에 맞는 사람들의 이름,파트, 점수
     @GetMapping("/rank")
-    public List<ReasonResponseDTO.RankInfo> getRank(@RequestParam String email){
-        return reasonService.getRankListFromGeneration(email);
+    public List<ReasonResponseDTO.RankInfo> getRank(@CookieValue(value = "Authorization") String token){
+        return reasonService.getRankListFromGeneration(token);
     }
 
 //    top3의 이름,피트 조회

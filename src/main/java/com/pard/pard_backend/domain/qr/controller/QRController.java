@@ -16,12 +16,17 @@ public class QRController {
     private final ReasonService reasonService;
 
     @GetMapping("/validQR")
-    public ResponseQrDto.attendaceResponse validQR(@RequestBody RequestQrDto.QRAttendanceRequestDTO qrAttendanceRequestDTO){
-        return qrService.checkQR(qrAttendanceRequestDTO);
+    public ResponseQrDto.attendaceResponse validQR(@RequestBody RequestQrDto.QRAttendanceRequestDTO qrAttendanceRequestDTO,@CookieValue(value = "Authorization") String token){
+        return qrService.checkQR(qrAttendanceRequestDTO,token);
     }
 
     @PostMapping("/qr")
-    public void addSchedulePoint(@RequestBody ReasonRequest.SchedulePointDTO req){
-        reasonService.addSchedulePoint(req);
+    public void addSchedulePoint(@RequestBody ReasonRequest.SchedulePointDTO req,@CookieValue(value = "Authorization") String token){
+        reasonService.addSchedulePoint(req,token);
     }
+    @PostMapping("/admin-qr")
+    public void addSchedulePointAdmin(@RequestBody ReasonRequest.SchedulePointAdmin req){
+        reasonService.addSchedulePointAdmin(req);
+    }
+
 }

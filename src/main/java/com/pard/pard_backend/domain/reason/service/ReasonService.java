@@ -39,10 +39,21 @@ public class ReasonService {
     }
 
     @Transactional
-    public void addSchedulePoint(ReasonRequest.SchedulePointDTO req) {
+    public void addSchedulePoint(ReasonRequest.SchedulePointDTO req, String userEmail) {
+        User user = userRepository.findByEmail(userEmail);
+        if (user == null) {throw new ProjectException.UserNotFound(ProjectErrorCode.USER_NOT_FOUND);}
+        user.setPangoolPoint(user.getPangoolPoint() + req.getPoint());
+        ReasonRequest.ReasonRequestDTO build = ReasonRequest.ReasonRequestDTO.toDto(user.getEmail(),req.getPoint(),req.getReason(),false,"출결점수",true);
+        Reason reason = new Reason().toEntity(build);
+        reasonRepository.save(reason);
+    }
+    public void addSchedulePointAdmin(ReasonRequest.SchedulePointAdmin req) {
         User user = userRepository.findByEmail(req.getEmail());
         if (user == null) {throw new ProjectException.UserNotFound(ProjectErrorCode.USER_NOT_FOUND);}
         user.setPangoolPoint(user.getPangoolPoint() + req.getPoint());
+        ReasonRequest.ReasonRequestDTO build = ReasonRequest.ReasonRequestDTO.toDto(user.getEmail(),req.getPoint(),req.getReason(),false,"출결점수",true);
+        Reason reason = new Reason().toEntity(build);
+        reasonRepository.save(reason);
     }
 
     @Transactional
@@ -61,8 +72,8 @@ public class ReasonService {
     }
 
     @Transactional(readOnly = true)
-    public ReasonResponseDTO.UserPoint getPoint(String email) {
-        User user = userRepository.findByEmail(email);
+    public ReasonResponseDTO.UserPoint getPoint(String token) {
+        User user = userRepository.findByEmail(jwtUtil.getEmail(token));
         if (user == null) {throw new ProjectException.UserNotFound(ProjectErrorCode.USER_NOT_FOUND);}
         return ReasonResponseDTO.UserPoint.toDto(user);
 }
@@ -86,7 +97,8 @@ public class ReasonService {
         return -1;
     }
 
-    public ReasonResponseDTO.UserRank getRank(String email) {
+    public ReasonResponseDTO.UserRank getRank(String token) {
+        String email = jwtUtil.getEmail(token);
         User user = userRepository.findByEmail(email);
         if (user == null) {throw new ProjectException.UserNotFound(ProjectErrorCode.USER_NOT_FOUND);}
         return ReasonResponseDTO.UserRank.builder()
@@ -95,8 +107,8 @@ public class ReasonService {
                 .build();
     }
 
-    public List<ReasonResponseDTO.RankInfo> getRankListFromGeneration(String email) {
-        User user = userRepository.findByEmail(email);
+    public List<ReasonResponseDTO.RankInfo> getRankListFromGeneration(String token) {
+        User user = userRepository.findByEmail(jwtUtil.getEmail(token));
         if (user == null) {throw new ProjectException.UserNotFound(ProjectErrorCode.USER_NOT_FOUND);}
         List<User> users = userRepository.findUsersByGenerationOrderedByTotalBonus(user.getGeneration());
         List<ReasonResponseDTO.RankInfo> ret = new ArrayList<>();
