@@ -18,6 +18,6 @@ public interface ScheduleRepo extends JpaRepository<Schedule, Long> {
     Optional<List<Schedule>> findByDateAndNoticeIsTrue(LocalDate date);
 
     @Query("SELECT s FROM Schedule s WHERE s.part = :part")
-    Optional<List<ScheduleResponseDTO>> findAllByPart(String part);
+    Optional<List<Schedule>> findAllByPart(String part);
 }
 

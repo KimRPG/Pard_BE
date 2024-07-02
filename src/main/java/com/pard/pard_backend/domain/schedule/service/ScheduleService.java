@@ -9,6 +9,7 @@ import com.pard.pard_backend.global.responses.errors.code.ProjectErrorCode;
 import com.pard.pard_backend.global.responses.errors.exceptions.ProjectException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.swing.text.html.Option;
@@ -21,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -61,29 +63,42 @@ public class ScheduleService {
     }
 
 //    Schedule 전체
+    @Transactional
     public List<ScheduleResponseDTO> getAllSchedule(){
         List<Schedule> schedules = scheduleRepo.findAll();
         List<ScheduleResponseDTO> ret = new ArrayList<>();
         for (Schedule schedule : schedules) {
-            Date d = Date.from(schedule.getDate().atZone(ZoneId.systemDefault()).toInstant());
-            LocalDate scheduleDate = d.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-            int remainingDay = (int) ChronoUnit.DAYS.between(today, scheduleDate);
-            if (remainingDay < 0) {
-                schedule.setPastEvent(true);
+            Integer remainingDay = remainDate(schedule.getDate());
+            //스케쥴 이 지났을 경우 안함
+            if(!schedule.isPastEvent()) {
+                if (remainingDay < 0) {
+                    schedule.setPastEvent(true);
+                }
             }
-            schedule.setRemaingDay(remainingDay);
-            ret.add(new ScheduleResponseDTO(schedule));
+
+            ret.add(new ScheduleResponseDTO(schedule, remainingDay));
         }
         return ret;
     }
 
 //    Schedule 파트별 조회
+    @Transactional
     public List<ScheduleResponseDTO> getPartSchedule(String part){
-        Optional<List<ScheduleResponseDTO>> schedules = scheduleRepo.findAllByPart(part);
+        List<Schedule> schedules = scheduleRepo.findAllByPart(part).get();
         if(schedules.isEmpty()){
             throw new ProjectException.ScheduleNotFound(ProjectErrorCode.ScheduleNotFound);
         }
-        return schedules.get();
+        return schedules.stream()
+                .map(schedule -> {
+                    Integer remainDate= remainDate(schedule.getDate());
+                    if(!schedule.isPastEvent()) {
+                        if (remainDate < 0) {
+                            schedule.setPastEvent(true);
+                        }
+                    }
+                    return new ScheduleResponseDTO(schedule, remainDate);
+                })
+                .collect(Collectors.toList());
     }
 
 //    Schedule 오늘치 시간 조회(QR에 쓰는거)
@@ -96,5 +111,12 @@ public class ScheduleService {
         Schedule todaySchedule = schedules.get(0);
         LocalDateTime date= todaySchedule.getDate();
         return Timestamp.valueOf(date);
+    }
+
+    public Integer remainDate(LocalDateTime date) {
+        Date d = Date.from(date.atZone(ZoneId.systemDefault()).toInstant());
+        LocalDate scheduleDate = d.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        return (int) ChronoUnit.DAYS.between(today, scheduleDate);
+
     }
 }

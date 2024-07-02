@@ -15,6 +15,7 @@ import java.util.Date;
 @Getter
 @Setter
 public class ScheduleResponseDTO {
+    private long scheduleId;
     private String title;
     private LocalDateTime date;
     private String content;
@@ -25,14 +26,15 @@ public class ScheduleResponseDTO {
     @JsonProperty("isPastEvent")
     private boolean isPastEvent;
 
-    public ScheduleResponseDTO(final @NotNull Schedule schedule) {
+    public ScheduleResponseDTO(final @NotNull Schedule schedule, Integer remaingDay) {
+        this.scheduleId = schedule.getScheduleId();
         this.title = schedule.getTitle();
         this.date = schedule.getDate();
         this.content = schedule.getContent();
         this.part = schedule.getPart();
         this.contentsLocation = schedule.getContentsLocation();
         this.notice = schedule.isNotice();
-        this.remaingDay = schedule.getRemaingDay();
+        this.remaingDay = remaingDay;
         this.isPastEvent = schedule.isPastEvent();
     }
 
