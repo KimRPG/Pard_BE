@@ -22,8 +22,9 @@ public class UserController {
     private final UserService userService;
     private final UserFacade userFacade;
     @PostMapping("")
-    public ResponseEntity<UserResponseDTO.Create> create(@RequestBody UserRequestDTO.Create request){
-        return ResponseEntity.ok(userService.Create(request));
+    public ResponseEntity<String> create(@RequestBody List<UserRequestDTO.Create> request) {
+        userService.Create(request);
+        return ResponseEntity.ok().body("유저들 추가 완료");
     }
 
     @GetMapping("")
@@ -32,6 +33,7 @@ public class UserController {
     }
     @GetMapping("/me")
     public UserResponseDTO.UserInfo readOne(@CookieValue(value = "Authorization") String token){
+        System.out.println("천주현");
         return userFacade.findByToken(token);
     }
 
@@ -45,5 +47,6 @@ public class UserController {
     public ResponseEntity<String> login(@RequestBody UserRequestDTO.Login request, HttpServletResponse response) throws ProjectException.UserNotFoundException {
         return ResponseEntity.ok().body(userFacade.login(request, response));
     }
+
 
 }

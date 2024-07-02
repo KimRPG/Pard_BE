@@ -14,7 +14,7 @@ public class CookieService {
         cookie.setPath("/");
         cookie.setHttpOnly(true);
         cookie.setAttribute("SameSite", "None");
-//        cookie.setSecure(true);
+        cookie.setSecure(true);
         return cookie;
     }
 

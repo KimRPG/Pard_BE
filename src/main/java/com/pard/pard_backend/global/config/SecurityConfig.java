@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -76,7 +77,8 @@ public class SecurityConfig {
             .addFilterBefore(new JWTFilter(jwtUtil, cookieService), UsernamePasswordAuthenticationFilter.class);
     http
             .authorizeHttpRequests(auth -> auth
-                    .requestMatchers("/","/login","/test","/swagger-ui/**","/v3/api-docs/**","/v1/users/login").permitAll()
+                    .requestMatchers("/test","/swagger-ui/**","/v3/api-docs/**","/v1/users/login").permitAll()
+                    .requestMatchers(HttpMethod.POST,"/v1/**").hasRole("ADMIN")
                     .requestMatchers("/v1/**").hasRole("YB")
                     .requestMatchers("/hi/hi").hasRole("OB")
                     .requestMatchers("/hi/hello").hasRole("YB")

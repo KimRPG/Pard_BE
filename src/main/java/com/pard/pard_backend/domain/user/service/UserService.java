@@ -25,18 +25,13 @@ public class UserService {
     public UserResponseDTO.UserInfo findByEmail(String email) {
         return UserResponseDTO.UserInfo.toDto(userRepository.findByEmail(email));
     }
-    public UserResponseDTO.Create Create(UserRequestDTO.Create request){
+    public void Create(List<UserRequestDTO.Create> request){
+        for (UserRequestDTO.Create userRequest : request) {
+            if (!userRepository.existsByEmail(userRequest.getEmail())) {
+                userRepository.save(User.toEntity(userRequest));
+            }
 
-        User user = userRepository.findByEmail(request.getEmail());
-        if (user == null) {
-            user = userRepository.save(User.toEntity(request));
         }
-        else {
-            user.setPart(request.getPart());
-            userRepository.save(user);
-        }
-
-        return UserResponseDTO.Create.toDto(userRepository.save(user));
 
     }
 
