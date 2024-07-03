@@ -15,10 +15,7 @@ public class RequestQrDto {
     public static class QRAttendanceRequestDTO {
         private String QRUrl;
         //        yyyymmddhmmss 형식으로 받음
-        private String seminar;
-        @Nullable
-        @JsonDeserialize(using = CustomLocalDateTimeDeserializer.class)
-        private Timestamp time;
+
     }
 
 }
