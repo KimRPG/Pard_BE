@@ -13,6 +13,9 @@ public class UserRequestDTO {
         private String name;
         private String email;
         private String part;
+        private String phoneNumber;
+        private String role;
+        private String generation;
     }
     @Getter
     @Setter

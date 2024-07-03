@@ -65,6 +65,9 @@ public class User {
                 .name(request.getName())
                 .email(request.getEmail())
                 .part(request.getPart())
+                .role(request.getRole())
+                .phoneNumber(request.getPhoneNumber())
+                .generation(request.getGeneration())
                 .build();
     }
 

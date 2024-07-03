@@ -16,7 +16,6 @@ import java.time.Instant;
 @RequestMapping("/v1")
 public class QRController {
     private final QRService qrService;
-    private final ReasonService reasonService;
 
     @GetMapping("/validQR")
     public ResponseQrDto.attendaceResponse validQR(@RequestBody RequestQrDto.QRAttendanceRequestDTO qrAttendanceRequestDTO,@CookieValue(value = "Authorization") String token){
@@ -24,13 +23,6 @@ public class QRController {
         return qrService.checkQR(qrAttendanceRequestDTO,token,currentTime);
     }
 
-    @PostMapping("/qr")
-    public void addSchedulePoint(@RequestBody ReasonRequest.SchedulePointDTO req,@CookieValue(value = "Authorization") String token){
-        reasonService.addSchedulePoint(req,token);
-    }
-    @PostMapping("/admin-qr")
-    public void addSchedulePointAdmin(@RequestBody ReasonRequest.SchedulePointAdmin req){
-        reasonService.addSchedulePointAdmin(req);
-    }
+
 
 }

@@ -36,8 +36,6 @@ public class Schedule {
 
     private boolean notice;
 
-    private Integer remaingDay;
-
     private boolean isPastEvent;
 
     public static Schedule from(ScheduleRequest req){
