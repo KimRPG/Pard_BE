@@ -13,20 +13,12 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/v1")
 public class QRController {
     private final QRService qrService;
-    private final ReasonService reasonService;
 
     @GetMapping("/validQR")
     public ResponseQrDto.attendaceResponse validQR(@RequestBody RequestQrDto.QRAttendanceRequestDTO qrAttendanceRequestDTO,@CookieValue(value = "Authorization") String token){
         return qrService.checkQR(qrAttendanceRequestDTO,token);
     }
 
-    @PostMapping("/qr")
-    public void addSchedulePoint(@RequestBody ReasonRequest.SchedulePointDTO req,@CookieValue(value = "Authorization") String token){
-        reasonService.addSchedulePoint(req,token);
-    }
-    @PostMapping("/admin-qr")
-    public void addSchedulePointAdmin(@RequestBody ReasonRequest.SchedulePointAdmin req){
-        reasonService.addSchedulePointAdmin(req);
-    }
+
 
 }

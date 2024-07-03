@@ -23,7 +23,7 @@ public class UserService {
 
 
     public UserResponseDTO.UserInfo findByEmail(String email) {
-        return UserResponseDTO.UserInfo.toDto(userRepository.findByEmail(email));
+        return UserResponseDTO.UserInfo.toDto(userRepository.findByEmail(email).orElseThrow(()-> new IllegalArgumentException("Invalid user email")));
     }
     public void Create(List<UserRequestDTO.Create> request){
         for (UserRequestDTO.Create userRequest : request) {
@@ -51,7 +51,7 @@ public class UserService {
         if (!userRepository.existsByEmail(email)) {
         throw new ProjectException.UserNotFoundException(String.format("%s 을(를) 못 찾았어요", email));
         }
-        return UserResponseDTO.UserInfo.toDto(userRepository.findByEmail(email));
+        return UserResponseDTO.UserInfo.toDto(userRepository.findByEmail(email).orElseThrow());
     }
 
 }

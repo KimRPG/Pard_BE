@@ -39,15 +39,21 @@ public class Reason {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "MM-dd", timezone = "Asia/Seoul")
     private Date createDate;
 
-    @ColumnDefault("false")
-    private boolean attendance;
+
+    public Reason toEntity(ReasonRequest.ReasonRequestDTO req, User user) {
+        this.point = req.getPoint();
+        this.isBonus = req.isBonus();
+        this.reason = req.getReason();
+        this.detail = req.getDetail();
+        this.user = user;
+        return this;
+    }
 
     public Reason toEntity(ReasonRequest.ReasonRequestDTO req) {
         this.point = req.getPoint();
         this.isBonus = req.isBonus();
         this.reason = req.getReason();
         this.detail = req.getDetail();
-        this.attendance = req.isAttendance();
         return this;
     }
 

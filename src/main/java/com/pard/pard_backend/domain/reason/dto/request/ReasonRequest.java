@@ -14,7 +14,6 @@ public class ReasonRequest {
         private String reason;
         private boolean isBonus;
         private String detail;
-        private boolean attendance;
         public static ReasonRequestDTO toDto(String email,float point,String reason,boolean isBonus,String detail,boolean attendance) {
             return ReasonRequestDTO.builder()
                     .email(email)
@@ -22,7 +21,6 @@ public class ReasonRequest {
                     .reason(reason)
                     .isBonus(isBonus)
                     .detail(detail)
-                    .attendance(attendance)
                     .build();
         }
     }
