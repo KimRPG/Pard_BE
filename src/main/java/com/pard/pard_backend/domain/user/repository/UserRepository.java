@@ -18,4 +18,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     List<User> findUsersByGenerationOrderedByTotalBonus(@Param("generation") String generation);
 
     boolean existsByEmail(String email);
+
+    List<User> findByGeneration(String generation);
 }
