@@ -34,25 +34,24 @@ public class QRService {
     private final JWTUtil jwtUtil;
 
 //    프런트에서 찍은 QR코드 받아서 파드 출석 QR인지 아닌지 판단 맞다면 출결 메서드 호출
-    public ResponseQrDto.attendaceResponse checkQR(RequestQrDto.QRAttendanceRequestDTO qrAttendanceRequestDTO,String token){
+    public ResponseQrDto.attendaceResponse checkQR(RequestQrDto.QRAttendanceRequestDTO qrAttendanceRequestDTO,String token, Timestamp currentTime){
         String QRUrl = qrAttendanceRequestDTO.getQRUrl();
         if(QRUrl.equals("https://me-qr.com/uoN4lOs1")){
-            return this.checkQrTime(qrAttendanceRequestDTO,token);
+            return this.checkQrTime(qrAttendanceRequestDTO,token,currentTime);
         } else {
             throw new ProjectException.WrongQR(ProjectErrorCode.WrongQR);
         }
     }
 
 //    uid, qr출석 시간 받아서 출,지 결정하는 로직
-    public ResponseQrDto.attendaceResponse checkQrTime(RequestQrDto.QRAttendanceRequestDTO qrAttendanceRequestDTO,String token){
+    public ResponseQrDto.attendaceResponse checkQrTime(RequestQrDto.QRAttendanceRequestDTO qrAttendanceRequestDTO,String token,Timestamp currentTime){
         String  userEmail = jwtUtil.getEmail(token);
-        Timestamp userQrTime = qrAttendanceRequestDTO.getTime();
         User user = userRepository.findByEmail(userEmail);
         if(user == null){throw new ProjectException.UserNotFound(ProjectErrorCode.USER_NOT_FOUND);}
 //        schedule 중에서 전체 공지(isNotice = true) 중 오늘 날짜에 해당하는 것 중(date_ 제일 빠른 일정 가져오고,
 //        그 일정시간 isBefore qrTime이면 출석, isAfter qrTime이면 지각
         Timestamp todayQRTime = scheduleService.getTodayQRTime();
-        if (userQrTime != null) {
+        if (currentTime != null) {
             Calendar cal = Calendar.getInstance();
             cal.setTimeInMillis(todayQRTime.getTime());
 
@@ -60,9 +59,8 @@ public class QRService {
             cal.add(Calendar.MINUTE, 1);
 
             Timestamp oneMinuteAfterTodayQRTime = new Timestamp(cal.getTime().getTime());
-            log.info(String.valueOf(oneMinuteAfterTodayQRTime));
 
-            if(userQrTime.after(oneMinuteAfterTodayQRTime)) { //지각
+            if(currentTime.after(oneMinuteAfterTodayQRTime)) { //지각
                 ReasonRequest.SchedulePointDTO req = ReasonRequest.SchedulePointDTO.toDto( 4f,"지각");
                 reasonService.addSchedulePoint(req,userEmail);
             } else{ //출석

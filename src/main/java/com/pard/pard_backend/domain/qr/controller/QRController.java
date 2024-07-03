@@ -8,6 +8,9 @@ import com.pard.pard_backend.domain.reason.service.ReasonService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Timestamp;
+import java.time.Instant;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/v1")
@@ -17,7 +20,8 @@ public class QRController {
 
     @GetMapping("/validQR")
     public ResponseQrDto.attendaceResponse validQR(@RequestBody RequestQrDto.QRAttendanceRequestDTO qrAttendanceRequestDTO,@CookieValue(value = "Authorization") String token){
-        return qrService.checkQR(qrAttendanceRequestDTO,token);
+        Timestamp currentTime = Timestamp.from(Instant.now());
+        return qrService.checkQR(qrAttendanceRequestDTO,token,currentTime);
     }
 
     @PostMapping("/qr")
