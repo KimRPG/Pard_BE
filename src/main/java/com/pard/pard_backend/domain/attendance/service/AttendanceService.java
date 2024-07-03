@@ -9,6 +9,8 @@ import com.pard.pard_backend.domain.attendance.repo.AttendanceRepo;
 import com.pard.pard_backend.domain.security.jwt.JWTUtil;
 import com.pard.pard_backend.domain.user.entity.User;
 import com.pard.pard_backend.domain.user.repository.UserRepository;
+import com.pard.pard_backend.global.responses.errors.code.ProjectErrorCode;
+import com.pard.pard_backend.global.responses.errors.exceptions.ProjectException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,7 +26,7 @@ public class AttendanceService {
     private final JWTUtil jwtUtil;
     @Transactional
     public void checkAttendance(AttendanceRequestDto dto, String email) {
-        User user = userRepository.findByEmail(email).orElseThrow(()-> new IllegalArgumentException("Invalid user email"));
+        User user = userRepository.findByEmail(email).orElseThrow(()->new ProjectException.UserNotFound(ProjectErrorCode.USER_NOT_FOUND));
         user.setPangoolPoint(user.getPangoolPoint()+dto.getStatus().getPoint());
         attendanceRepo.save(Attendance.toEntity(dto, user));
     }
@@ -32,14 +34,14 @@ public class AttendanceService {
 
     @Transactional
     public void checkAdminAttendance(AttendanceAdminRequestDTO dto) {
-        User user = userRepository.findByEmail(dto.getEmail()).orElseThrow(()-> new IllegalArgumentException("Invalid user email"));
+        User user = userRepository.findByEmail(dto.getEmail()).orElseThrow(()-> new ProjectException.UserNotFound(ProjectErrorCode.USER_NOT_FOUND));
         user.setPangoolPoint(user.getPangoolPoint()+dto.getStatus().getPoint());
         attendanceRepo.save(Attendance.toEntity(dto, user));
     }
 
     @Transactional
     public void patchAttendance(AttendanceAdminRequestDTO dto) {
-        User user = userRepository.findByEmail(dto.getEmail()).orElseThrow(()-> new IllegalArgumentException("Invalid user email"));
+        User user = userRepository.findByEmail(dto.getEmail()).orElseThrow(()->new ProjectException.UserNotFound(ProjectErrorCode.USER_NOT_FOUND));
         Attendance attendance = attendanceRepo.findByUserAndSeminar(user, dto.getSeminar());
         user.setPangoolPoint(user.getPangoolPoint() - attendance.getStatus().getPoint() + dto.getStatus().getPoint());
         attendance.setStatus(dto.getStatus());
@@ -47,7 +49,7 @@ public class AttendanceService {
 
 
     public List<AttendanceResponseDTO> getAttendance(String token) {
-        User user = userRepository.findByEmail(jwtUtil.getEmail(token)).orElseThrow(()-> new IllegalArgumentException("Invalid user email"));
+        User user = userRepository.findByEmail(jwtUtil.getEmail(token)).orElseThrow(()->new ProjectException.UserNotFound(ProjectErrorCode.USER_NOT_FOUND));
         return attendanceRepo.findByUser(user).stream()
                 .map(AttendanceResponseDTO::toDTO)
                 .collect(Collectors.toList());

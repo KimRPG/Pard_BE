@@ -31,7 +31,7 @@ public class QRService {
     public ResponseQrDto.attendaceResponse checkQrTime(RequestQrDto.QRAttendanceRequestDTO qrAttendanceRequestDTO, String token){
         String userEmail = jwtUtil.getEmail(token);
         Timestamp userQrTime = qrAttendanceRequestDTO.getTime();
-        User user = userRepository.findByEmail(userEmail).orElseThrow(()-> new IllegalArgumentException("Invalid user email"));
+        User user = userRepository.findByEmail(userEmail).orElseThrow(()->new ProjectException.UserNotFound(ProjectErrorCode.USER_NOT_FOUND));
         if(user == null){throw new ProjectException.UserNotFound(ProjectErrorCode.USER_NOT_FOUND);}
 //        schedule 중에서 전체 공지(isNotice = true) 중 오늘 날짜에 해당하는 것 중(date_ 제일 빠른 일정 가져오고,
 //        그 일정시간 isBefore qrTime이면 출석, isAfter qrTime이면 지각

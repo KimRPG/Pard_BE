@@ -26,7 +26,7 @@ public class ReasonService {
 
     @Transactional
     public void addPoint(ReasonRequest.ReasonRequestDTO req) {
-        User user = userRepository.findByEmail(req.getEmail()).orElseThrow(()-> new IllegalArgumentException("Invalid user email"));
+        User user = userRepository.findByEmail(req.getEmail()).orElseThrow(()-> new ProjectException.UserNotFound(ProjectErrorCode.USER_NOT_FOUND));
         if (user == null) {throw new ProjectException.UserNotFound(ProjectErrorCode.USER_NOT_FOUND);}
             if (req.isBonus()) {
                 user.setTotalBonus(user.getTotalBonus() + req.getPoint());
@@ -43,7 +43,7 @@ public class ReasonService {
         Optional<Reason> r = reasonRepository.findById(req.getReasonId());
         if (r.isEmpty()) {throw new ProjectException.ReasonNotFound(ProjectErrorCode.REASON_NOT_FOUND);}
         Reason reason = r.get();
-        User user = userRepository.findByEmail(req.getEmail()).orElseThrow(()-> new IllegalArgumentException("Invalid user email"));
+        User user = userRepository.findByEmail(req.getEmail()).orElseThrow(()-> new ProjectException.UserNotFound(ProjectErrorCode.USER_NOT_FOUND));
         if (reason.isBonus()) {
             user.setTotalBonus(user.getTotalBonus() - reason.getPoint());
         } else {
@@ -55,8 +55,7 @@ public class ReasonService {
 
     @Transactional(readOnly = true)
     public ReasonResponseDTO.UserPoint getPoint(String token) {
-        User user = userRepository.findByEmail(jwtUtil.getEmail(token)).orElseThrow(()-> new IllegalArgumentException("Invalid user email"));
-        if (user == null) {throw new ProjectException.UserNotFound(ProjectErrorCode.USER_NOT_FOUND);}
+        User user = userRepository.findByEmail(jwtUtil.getEmail(token)).orElseThrow(()-> new ProjectException.UserNotFound(ProjectErrorCode.USER_NOT_FOUND));
         return ReasonResponseDTO.UserPoint.toDto(user);
 }
 
@@ -81,8 +80,7 @@ public class ReasonService {
 
     public ReasonResponseDTO.UserRank getRank(String token) {
         String email = jwtUtil.getEmail(token);
-        User user = userRepository.findByEmail(email).orElseThrow(()-> new IllegalArgumentException("Invalid user email"));
-        if (user == null) {throw new ProjectException.UserNotFound(ProjectErrorCode.USER_NOT_FOUND);}
+        User user = userRepository.findByEmail(email).orElseThrow(()-> new ProjectException.UserNotFound(ProjectErrorCode.USER_NOT_FOUND));
         return ReasonResponseDTO.UserRank.builder()
                 .partRanking(findRankInPart(email,user.getPart()))
                 .totalRanking(findRankInTotal(email, user.getGeneration()))
@@ -90,7 +88,7 @@ public class ReasonService {
     }
 
     public List<ReasonResponseDTO.RankInfo> getRankListFromGeneration(String token) {
-        User user = userRepository.findByEmail(jwtUtil.getEmail(token)).orElseThrow(() -> new IllegalArgumentException("Invalid user email"));
+        User user = userRepository.findByEmail(jwtUtil.getEmail(token)).orElseThrow(() -> new ProjectException.UserNotFound(ProjectErrorCode.USER_NOT_FOUND));
         if (user == null) {throw new ProjectException.UserNotFound(ProjectErrorCode.USER_NOT_FOUND);}
         List<User> users = userRepository.findUsersByGenerationOrderedByTotalBonus(user.getGeneration());
         List<ReasonResponseDTO.RankInfo> ret = new ArrayList<>();

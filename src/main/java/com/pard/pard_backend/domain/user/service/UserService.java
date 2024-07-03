@@ -4,6 +4,7 @@ import com.pard.pard_backend.domain.user.dto.request.UserRequestDTO;
 import com.pard.pard_backend.domain.user.dto.response.UserResponseDTO;
 import com.pard.pard_backend.domain.user.entity.User;
 import com.pard.pard_backend.domain.user.repository.UserRepository;
+import com.pard.pard_backend.global.responses.errors.code.ProjectErrorCode;
 import com.pard.pard_backend.global.responses.errors.exceptions.ProjectException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,7 +24,7 @@ public class UserService {
 
 
     public UserResponseDTO.UserInfo findByEmail(String email) {
-        return UserResponseDTO.UserInfo.toDto(userRepository.findByEmail(email).orElseThrow(()-> new IllegalArgumentException("Invalid user email")));
+        return UserResponseDTO.UserInfo.toDto(userRepository.findByEmail(email).orElseThrow(()-> new ProjectException.UserNotFound(ProjectErrorCode.USER_NOT_FOUND)));
     }
     public void Create(List<UserRequestDTO.Create> request){
         for (UserRequestDTO.Create userRequest : request) {
@@ -51,7 +52,7 @@ public class UserService {
         if (!userRepository.existsByEmail(email)) {
         throw new ProjectException.UserNotFoundException(String.format("%s 을(를) 못 찾았어요", email));
         }
-        return UserResponseDTO.UserInfo.toDto(userRepository.findByEmail(email).orElseThrow());
+        return UserResponseDTO.UserInfo.toDto(userRepository.findByEmail(email).orElseThrow(() -> new ProjectException.UserNotFound(ProjectErrorCode.USER_NOT_FOUND)));
     }
 
 }
