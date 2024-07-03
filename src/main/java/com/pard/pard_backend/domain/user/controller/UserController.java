@@ -33,7 +33,6 @@ public class UserController {
     }
     @GetMapping("/me")
     public UserResponseDTO.UserInfo readOne(@CookieValue(value = "Authorization") String token){
-        System.out.println("천주현");
         return userFacade.findByToken(token);
     }
 

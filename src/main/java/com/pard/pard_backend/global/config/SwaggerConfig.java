@@ -15,10 +15,12 @@ public class SwaggerConfig {
     public OpenAPI openAPI(){
         Server server = new Server();
         server.setUrl("https://we-pard.store");
+        Server server2 = new Server();
+        server2.setUrl("http://localhost:8080");
         return new OpenAPI()
                 .components(new Components())
                 .info(apiInfo())
-                .servers(List.of(server));
+                .servers(List.of(server,server2));
 
     }
 
