@@ -58,8 +58,8 @@ public class QRService {
             Timestamp oneMinuteAfterTodayQRTime = new Timestamp(cal.getTime().getTime());
 
             if(currentTime.after(oneMinuteAfterTodayQRTime)) { //지각
-                ReasonRequest.SchedulePointDTO req = ReasonRequest.SchedulePointDTO.toDto( 4f,"지각");
-                reasonService.addSchedulePoint(req,userEmail);
+                AttendanceRequestDto req = AttendanceRequestDto.toDTO("지각",qrAttendanceRequestDTO.getSeminar());
+                attendanceService.checkAttendance(req,userEmail);
             } else{ //출석
                 AttendanceRequestDto req = AttendanceRequestDto.toDTO("출석",qrAttendanceRequestDTO.getSeminar());
                 attendanceService.checkAttendance(req,userEmail);
