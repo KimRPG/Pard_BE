@@ -59,48 +59,38 @@ public class ReasonService {
         return ReasonResponseDTO.UserPoint.toDto(user);
 }
 
-    public int findRankInPart(String email,String part) {
-        List<User> users = userRepository.findUsersByPartOrderedByTotalBonus(part);
-        for (int i = 0; i < users.size(); i++) {
-            if (users.get(i).getEmail().equals(email)) {
-                return i + 1;
-            }
-        }
-        return -1;
-    }
-    public int findRankInTotal(String email,String generation) {
-        List<User> users = userRepository.findUsersByGenerationOrderedByTotalBonus(generation);
-        for (int i = 0; i < users.size(); i++) {
-            if (users.get(i).getEmail().equals(email)) {
-                return i + 1;
-            }
-        }
-        return -1;
-    }
+    public int findRankInPart(String part) {
+     return userRepository.countUsersByPart(part);
 
-    public ReasonResponseDTO.UserRank getRank(String token) {
+    }
+    public int findRankInTotal(String token) {
         String email = jwtUtil.getEmail(token);
-        User user = userRepository.findByEmail(email).orElseThrow(()-> new ProjectException.UserNotFound(ProjectErrorCode.USER_NOT_FOUND));
-        return ReasonResponseDTO.UserRank.builder()
-                .partRanking(findRankInPart(email,user.getPart()))
-                .totalRanking(findRankInTotal(email, user.getGeneration()))
-                .build();
+        return userRepository.findUserRankByGenerationAndEmail(email);
+
     }
 
-    public List<ReasonResponseDTO.RankInfo> getRankListFromGeneration(String token) {
-        User user = userRepository.findByEmail(jwtUtil.getEmail(token)).orElseThrow(() -> new ProjectException.UserNotFound(ProjectErrorCode.USER_NOT_FOUND));
-        if (user == null) {throw new ProjectException.UserNotFound(ProjectErrorCode.USER_NOT_FOUND);}
-        List<User> users = userRepository.findUsersByGenerationOrderedByTotalBonus(user.getGeneration());
-        List<ReasonResponseDTO.RankInfo> ret = new ArrayList<>();
-        for(int i = 0; i<users.size(); i++){
-            ReasonResponseDTO.RankInfo rankInfo = ReasonResponseDTO.RankInfo.builder()
-                    .rank(i+1)
-                    .name(users.get(i).getName())
-                    .part(users.get(i).getPart())
-                    .totalBonusPoint(users.get(i).getTotalBonus())
-                    .build();
-            ret.add(rankInfo);
-        }
-        return ret;
-    }
+//    public ReasonResponseDTO.UserRank getRank(String token) {
+//        String email = jwtUtil.getEmail(token);
+//        User user = userRepository.findByEmail(email).orElseThrow(()-> new ProjectException.UserNotFound(ProjectErrorCode.USER_NOT_FOUND));
+//        return ReasonResponseDTO.UserRank.builder()
+//                .partRanking(findRankInPart(user.getPart()))
+//                .totalRanking(findRankInTotal(email).build());
+//    }
+
+//    public List<ReasonResponseDTO.RankInfo> getRankListFromGeneration(String token) {
+//        User user = userRepository.findByEmail(jwtUtil.getEmail(token)).orElseThrow(() -> new ProjectException.UserNotFound(ProjectErrorCode.USER_NOT_FOUND));
+//        if (user == null) {throw new ProjectException.UserNotFound(ProjectErrorCode.USER_NOT_FOUND);}
+//        List<User> users = userRepository.findUsersByGenerationOrderedByTotalBonus(user.getGeneration());
+//        List<ReasonResponseDTO.RankInfo> ret = new ArrayList<>();
+//        for(int i = 0; i<users.size(); i++){
+//            ReasonResponseDTO.RankInfo rankInfo = ReasonResponseDTO.RankInfo.builder()
+//                    .rank(i+1)
+//                    .name(users.get(i).getName())
+//                    .part(users.get(i).getPart())
+//                    .totalBonusPoint(users.get(i).getTotalBonus())
+//                    .build();
+//            ret.add(rankInfo);
+//        }
+//        return ret;
+//    }
 }

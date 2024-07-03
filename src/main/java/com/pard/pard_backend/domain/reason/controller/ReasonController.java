@@ -36,15 +36,15 @@ public class ReasonController {
     }
 
 //    유저의 파트,기수 내 점수
-    @GetMapping("/part/my-rank")
-    public ReasonResponseDTO.UserRank getPartPoint(@CookieValue(value = "Authorization") String token){
-        return reasonService.getRank(token);
-    }
+//    @GetMapping("/part/my-rank")
+//    public ReasonResponseDTO.UserRank getPartPoint(@CookieValue(value = "Authorization") String token){
+//        return reasonService.getRank(token);
+//    }
 
 //    유저의 기수에 맞는 사람들의 이름,파트, 점수
     @GetMapping("/rank")
-    public List<ReasonResponseDTO.RankInfo> getRank(@CookieValue(value = "Authorization") String token){
-        return reasonService.getRankListFromGeneration(token);
+    public Integer getRank(@CookieValue(value = "Authorization") String token){
+        return reasonService.findRankInTotal(token);
     }
 
 //    top3의 이름,피트 조회

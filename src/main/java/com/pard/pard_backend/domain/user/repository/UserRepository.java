@@ -11,11 +11,11 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByEmail(String email);
 
-    @Query("SELECT u FROM User u WHERE u.part = :part ORDER BY u.totalBonus DESC")
-    List<User> findUsersByPartOrderedByTotalBonus(@Param("part") String part);
+    @Query("SELECT COUNT(u) FROM User u WHERE u.part = :part")
+    Integer countUsersByPart(@Param("part") String part);
 
-    @Query("SELECT u from User u WHERE u.generation =:generation ORDER BY u.totalBonus DESC ")
-    List<User> findUsersByGenerationOrderedByTotalBonus(@Param("generation") String generation);
+    @Query(value = "SELECT r.rank FROM (SELECT u.*, RANK() OVER (ORDER BY u.total_bonus DESC) AS rank FROM users u WHERE u.generation = (SELECT generation FROM users WHERE email = :email)) r WHERE r.email = :email", nativeQuery = true)
+    Integer findUserRankByGenerationAndEmail(@Param("email") String email);
 
     boolean existsByEmail(String email);
 
