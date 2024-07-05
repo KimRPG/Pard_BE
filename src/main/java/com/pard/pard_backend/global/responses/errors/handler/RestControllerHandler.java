@@ -10,7 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import java.nio.file.AccessDeniedException;
+import java.sql.SQLIntegrityConstraintViolationException;
 
 @Slf4j
 @RestControllerAdvice
@@ -36,8 +36,15 @@ public class RestControllerHandler {
     }
 
     @ExceptionHandler(IllegalAccessError.class)
-    public ResponseEntity<String> illegalAccesError(IllegalAccessError   ex) {
+    public ResponseEntity<String> illegalAccessError(IllegalAccessError   ex) {
         String errorMessage = "A null pointer exception occurred. Please check your request and try again.";
+        return new ResponseEntity<>(errorMessage, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(SQLIntegrityConstraintViolationException.class)
+    public ResponseEntity<String> handleSQLIntegrityConstraintViolationException(SQLIntegrityConstraintViolationException ex) {
+        // 예외 메시지를 사용자에게 반환
+        String errorMessage = "이미 출석 체크 된 세미나 입니다.";
         return new ResponseEntity<>(errorMessage, HttpStatus.BAD_REQUEST);
     }
 }

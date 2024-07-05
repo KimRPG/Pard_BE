@@ -4,21 +4,15 @@ import com.pard.pard_backend.domain.attendance.dto.AttendanceRequestDto;
 import com.pard.pard_backend.domain.attendance.service.AttendanceService;
 import com.pard.pard_backend.domain.qr.dto.request.RequestQrDto;
 import com.pard.pard_backend.domain.qr.dto.response.ResponseQrDto;
-import com.pard.pard_backend.domain.reason.service.ReasonService;
-import com.pard.pard_backend.domain.schedule.service.ScheduleService;
 import com.pard.pard_backend.domain.security.jwt.JWTUtil;
-import com.pard.pard_backend.domain.user.entity.User;
-import com.pard.pard_backend.domain.user.repository.UserRepository;
 import com.pard.pard_backend.global.responses.errors.code.ProjectErrorCode;
 import com.pard.pard_backend.global.responses.errors.exceptions.ProjectException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.Calendar;
 
 @Service
 @Slf4j
@@ -29,15 +23,6 @@ public class QRService {
 
 
 
-    //    프런트에서 찍은 QR코드 받아서 파드 출석 QR인지 아닌지 판단 맞다면 출결 메서드 호출
-    public ResponseQrDto.attendaceResponse checkQR(RequestQrDto.QRAttendanceRequestDTO qrAttendanceRequestDTO, String token, Timestamp currentTime) {
-        String QRUrl = qrAttendanceRequestDTO.getQRUrl();
-        if (QRUrl.equals("https://me-qr.com/uoN4lOs1")) {
-            return this.checkQrTime(qrAttendanceRequestDTO, token );
-        } else {
-            throw new ProjectException.WrongQR(ProjectErrorCode.WrongQR);
-        }
-    }
 
     //    uid, qr출석 시간 받아서 출,지 결정하는 로직
     public ResponseQrDto.attendaceResponse checkQrTime(RequestQrDto.QRAttendanceRequestDTO qrAttendanceRequestDTO, String token) {
@@ -60,11 +45,43 @@ public class QRService {
 
     //    프런트에서 찍은 QR코드 받아서 파드 출석 QR인지 아닌지 판단 맞다면 출결 메서드 호출
     public ResponseQrDto.attendaceResponse checkQR(RequestQrDto.QRAttendanceRequestDTO qrAttendanceRequestDTO, String token) {
-        String QRUrl = qrAttendanceRequestDTO.getQRUrl();
-        if (QRUrl.equals("https://me-qr.com/uoN4lOs1")) {
-            return checkQrTime(qrAttendanceRequestDTO, token);
-        } else {
-            throw new ProjectException.WrongQR(ProjectErrorCode.WrongQR);
+        String QRUrl = qrAttendanceRequestDTO.getQrUrl();
+        switch (QRUrl) {
+            case "https://me-qr.com/uoN4lOs1": //OT
+                qrAttendanceRequestDTO.setSeminar("OT");
+                return this.checkQrTime(qrAttendanceRequestDTO, token);
+            case "https://me-qr.com/1":
+                qrAttendanceRequestDTO.setSeminar("1차_세미나");
+                return this.checkQrTime(qrAttendanceRequestDTO, token);
+            case "https://me-qr.com/2":
+                qrAttendanceRequestDTO.setSeminar("2차_세미나");
+                return this.checkQrTime(qrAttendanceRequestDTO, token);
+            case "https://me-qr.com/3":
+                qrAttendanceRequestDTO.setSeminar("3차_세미나");
+                return this.checkQrTime(qrAttendanceRequestDTO, token);
+            case "https://me-qr.com/4":
+                qrAttendanceRequestDTO.setSeminar("4차_세미나");
+                return this.checkQrTime(qrAttendanceRequestDTO, token);
+            case "https://me-qr.com/5":
+                qrAttendanceRequestDTO.setSeminar("5차_세미나");
+                return this.checkQrTime(qrAttendanceRequestDTO, token);
+            case "https://me-qr.com/6":
+                qrAttendanceRequestDTO.setSeminar("6차_세미나");
+                return this.checkQrTime(qrAttendanceRequestDTO, token);
+            case "https://me-qr.com/7":
+                qrAttendanceRequestDTO.setSeminar("연합_세미나");
+                return this.checkQrTime(qrAttendanceRequestDTO, token);
+            case "https://me-qr.com/8":
+                qrAttendanceRequestDTO.setSeminar("연합_세미나2");
+                return this.checkQrTime(qrAttendanceRequestDTO, token);
+            case "https://me-qr.com/9":
+                qrAttendanceRequestDTO.setSeminar("아이디어_피칭");
+                return this.checkQrTime(qrAttendanceRequestDTO, token);
+            case "https://me-qr.com/10":
+                qrAttendanceRequestDTO.setSeminar("종강총회");
+                return this.checkQrTime(qrAttendanceRequestDTO, token);
+            default:
+                throw new ProjectException.WrongQR(ProjectErrorCode.WrongQR);
         }
     }
 

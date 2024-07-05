@@ -36,7 +36,7 @@ public class AttendanceRequestDto {
             case "5차_세미나" -> Seminar.SEMINAR_5;
             case "6차_세미나" -> Seminar.SEMINAR_6;
             case "연합_세미나" -> Seminar.UNION_SEMINAR_1;
-            case "연합_세미나_2" -> Seminar.UNION_SEMINAR_2;
+            case "연합_세미나2" -> Seminar.UNION_SEMINAR_2;
             case "아이디어_피칭" -> Seminar.IDEA_PITCH;
             case "종강_총회" -> Seminar.FINAL_MEETING;
             default -> throw new IllegalArgumentException("Unknown seminar: " + seminar);

@@ -17,10 +17,9 @@ import java.time.Instant;
 public class QRController {
     private final QRService qrService;
 
-    @GetMapping("/validQR")
+    @PostMapping("/validQR")
     public ResponseQrDto.attendaceResponse validQR(@RequestBody RequestQrDto.QRAttendanceRequestDTO qrAttendanceRequestDTO,@CookieValue(value = "Authorization") String token){
-        Timestamp currentTime = Timestamp.from(Instant.now());
-        return qrService.checkQR(qrAttendanceRequestDTO,token,currentTime);
+        return qrService.checkQR(qrAttendanceRequestDTO,token);
     }
 
 
