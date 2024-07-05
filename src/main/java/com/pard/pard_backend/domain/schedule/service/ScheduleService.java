@@ -101,17 +101,6 @@ public class ScheduleService {
                 .collect(Collectors.toList());
     }
 
-//    Schedule 오늘치 시간 조회(QR에 쓰는거)
-    public Timestamp getTodayQRTime(){
-        Optional<List<Schedule>> s = scheduleRepo.findByDateAndNoticeIsTrue(today);
-        if(s.isEmpty()){
-            throw new ProjectException.ScheduleNotFound(ProjectErrorCode.ScheduleNotFound);
-        }
-        List<Schedule> schedules = s.get();
-        Schedule todaySchedule = schedules.get(0);
-        LocalDateTime date= todaySchedule.getDate();
-        return Timestamp.valueOf(date);
-    }
 
     public Integer remainDate(LocalDateTime date) {
         Date d = Date.from(date.atZone(ZoneId.systemDefault()).toInstant());

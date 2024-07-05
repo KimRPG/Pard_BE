@@ -1,7 +1,6 @@
 package com.pard.pard_backend.domain.reason.service;
 
 import com.pard.pard_backend.domain.reason.dto.request.ReasonRequest;
-import com.pard.pard_backend.domain.reason.dto.response.RankingResponseDTO;
 import com.pard.pard_backend.domain.reason.dto.response.ReasonResponseDTO;
 import com.pard.pard_backend.domain.reason.entity.Reason;
 import com.pard.pard_backend.domain.reason.repository.ReasonRepository;
@@ -58,15 +57,19 @@ public class ReasonService {
         userRepository.save(user);
     }
 
-    @Transactional(readOnly = true)
-    public ReasonResponseDTO.UserPoint getPoint(String token) {
+//    @Transactional(readOnly = true)
+//    public ReasonResponseDTO.UserPoint getPoint(String token) {
+//        User user = userRepository.findByEmail(jwtUtil.getEmail(token)).orElseThrow(() -> new ProjectException.UserNotFound(ProjectErrorCode.USER_NOT_FOUND));
+//        return ReasonResponseDTO.UserPoint.toDto(user);
+//    }
+
+    public List<ReasonResponseDTO.ReasonBonus> getReason(String token) {
         User user = userRepository.findByEmail(jwtUtil.getEmail(token)).orElseThrow(() -> new ProjectException.UserNotFound(ProjectErrorCode.USER_NOT_FOUND));
-        return ReasonResponseDTO.UserPoint.toDto(user);
+        return reasonRepository.findByUser(user)
+                .stream()
+                .map(ReasonResponseDTO.ReasonBonus::toDto)
+                .collect(Collectors.toList());
+
     }
 
-    public List<RankingResponseDTO> ranking() {
-        return userRepository.findAllByOrderByTotalBonusDesc().stream()
-                .map(RankingResponseDTO::toDTO)
-                .collect(Collectors.toList());
-    }
 }

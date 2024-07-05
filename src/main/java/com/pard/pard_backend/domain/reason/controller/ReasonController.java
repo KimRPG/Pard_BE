@@ -1,18 +1,10 @@
 package com.pard.pard_backend.domain.reason.controller;
 
 import com.pard.pard_backend.domain.reason.dto.request.ReasonRequest;
-import com.pard.pard_backend.domain.reason.dto.response.RankingResponseDTO;
 import com.pard.pard_backend.domain.reason.dto.response.ReasonResponseDTO;
-import com.pard.pard_backend.domain.reason.entity.Reason;
 import com.pard.pard_backend.domain.reason.service.ReasonService;
-import com.pard.pard_backend.domain.user.dto.request.UserRequestDTO;
-import com.pard.pard_backend.domain.user.dto.request.UserTESTDTO;
-import com.pard.pard_backend.domain.user.entity.User;
 import com.pard.pard_backend.domain.user.repository.UserJDBC;
-import com.pard.pard_backend.global.responses.errors.exceptions.ProjectException;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -39,10 +31,11 @@ public class ReasonController {
     }
 
 //    유저의 이메일로 점수 조회 + 팡욱이 점수
-    @GetMapping("/pardnership")
-    public ReasonResponseDTO.UserPoint getPoint(@CookieValue(value = "Authorization") String token){
-        return reasonService.getPoint(token);
+    @GetMapping("")
+    public List<ReasonResponseDTO.ReasonBonus> getPoint(@CookieValue(value = "Authorization") String token){
+        return reasonService.getReason(token);
     }
+
 
 //    유저의 파트,기수 내 점수
 //    @GetMapping("/part/my-rank")
@@ -51,15 +44,7 @@ public class ReasonController {
 //    }
 
 //    유저의 기수에 맞는 사람들의 이름,파트, 점수
-    @GetMapping("/my-rank")
-    public UserTESTDTO getRank(@CookieValue(value = "Authorization") String token){
-        return userJDBC.check(token);
-    }
 
-    @GetMapping("/total-rank")
-    public ResponseEntity<List<RankingResponseDTO>> login() {
-        return ResponseEntity.ok().body(reasonService.ranking());
-   }
 
 //    top3의 이름,피트 조회
 
