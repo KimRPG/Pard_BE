@@ -55,4 +55,6 @@ public class UserService {
         return UserResponseDTO.UserInfo.toDto(userRepository.findByEmail(email).orElseThrow(() -> new ProjectException.UserNotFound(ProjectErrorCode.USER_NOT_FOUND)));
     }
 
+
+
 }

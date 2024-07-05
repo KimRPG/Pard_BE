@@ -58,7 +58,7 @@ public class ReasonResponseDTO {
     @Setter
     @Builder
     public static class UserPoint{
-        private float totalBonus;
+        private Integer totalBonus;
         private float totalMinus;
         private float pangoolPoint;
         public static UserPoint toDto(final @NotNull User user) {
@@ -83,6 +83,6 @@ public class ReasonResponseDTO {
         private Integer rank;
         private String name;
         private String part;
-        private float totalBonusPoint;
+        private Integer totalBonusPoint;
     }
 }

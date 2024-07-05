@@ -37,12 +37,19 @@ public class UserResponseDTO {
         private String name;
         private String role;
         private String generation;
+        private Integer totalBonus;
+        private float totalMinus;
+        private float pangoolPoint;
+
         public static UserInfo toDto(final @NotNull User user) {
             return UserInfo.builder()
                     .part(user.getPart())
                     .name(user.getName())
                     .role(user.getRole())
                     .generation(user.getGeneration())
+                    .totalBonus(user.getTotalBonus())
+                    .totalMinus(user.getTotalMinus())
+                    .pangoolPoint(user.getPangoolPoint())
                     .build();
         }
     }
