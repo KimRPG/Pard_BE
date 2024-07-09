@@ -23,7 +23,7 @@ public class UserJDBC {
         User user = userRepository.findByEmail(myEmail).orElseThrow(()->new ProjectException.UserNotFound(ProjectErrorCode.USER_NOT_FOUND));
         String part = user.getPart();
         String generation = user.getGeneration();
-        Integer totalBonus = user.getTotalBonus();
+        Integer totalBonus = (int)user.getTotalBonus();
         float totalMinus = user.getTotalBonus();
         UserTESTDTO userTESTDTO = new UserTESTDTO();
 

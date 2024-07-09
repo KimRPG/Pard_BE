@@ -17,7 +17,7 @@ public class RankingResponseDTO {
         return RankingResponseDTO.builder()
                 .name(user.getName())
                 .part(user.getPart())
-                .totalBonus(user.getTotalBonus())
+                .totalBonus((int)user.getTotalBonus())
                 .build();
     }
 

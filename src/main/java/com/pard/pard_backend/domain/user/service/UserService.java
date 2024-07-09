@@ -36,14 +36,14 @@ public class UserService {
 
     }
 
-    public void deleteById(Long userId){
-        userRepository.deleteById(userId);
+    public void deleteByEmail(String email){
+        userRepository.deleteByEmail(email);
     };
 
-    public List<UserResponseDTO.UserInfo> findAll() {
-        return userRepository.findAll()
+    public List<UserResponseDTO.UserInfoAdmin> findByGeneration(String generation) {
+        return userRepository.findByGeneration(generation)
                 .stream()
-                .map(UserResponseDTO.UserInfo::toDto)
+                .map(UserResponseDTO.UserInfoAdmin::toDto)
                 .collect(Collectors.toList());
     }
 

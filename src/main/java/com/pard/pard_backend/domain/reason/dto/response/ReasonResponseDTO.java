@@ -63,7 +63,7 @@ public class ReasonResponseDTO {
         private float pangoolPoint;
         public static UserPoint toDto(final @NotNull User user) {
             return UserPoint.builder()
-                    .totalBonus(user.getTotalBonus())
+                    .totalBonus((int)user.getTotalBonus())
                     .totalMinus(user.getTotalMinus())
                     .pangoolPoint(user.getPangoolPoint())
                     .build();

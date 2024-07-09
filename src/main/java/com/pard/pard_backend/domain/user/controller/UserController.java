@@ -2,7 +2,6 @@ package com.pard.pard_backend.domain.user.controller;
 
 import com.pard.pard_backend.domain.user.dto.request.UserRequestDTO;
 import com.pard.pard_backend.domain.user.dto.response.UserResponseDTO;
-import com.pard.pard_backend.domain.user.repository.UserJDBC;
 import com.pard.pard_backend.domain.user.service.UserFacade;
 import com.pard.pard_backend.domain.user.service.UserService;
 import com.pard.pard_backend.global.responses.errors.exceptions.ProjectException;
@@ -28,9 +27,9 @@ public class UserController {
         return ResponseEntity.ok().body("유저들 추가 완료");
     }
 
-    @GetMapping("")
-    public List<UserResponseDTO.UserInfo>readAll(){
-        return userService.findAll();
+    @GetMapping("/{generation}")
+    public List<UserResponseDTO.UserInfoAdmin>readAll(@PathVariable String generation){
+        return userService.findByGeneration(generation);
     }
     @GetMapping("/me")
     public UserResponseDTO.UserInfo readOne(@CookieValue(value = "Authorization") String token){
@@ -38,8 +37,8 @@ public class UserController {
     }
 
     @DeleteMapping("")
-    public ResponseEntity<?> delete(@RequestParam Long userId){
-        userService.deleteById(userId);
+    public ResponseEntity<?> delete(@RequestParam String email){
+        userService.deleteByEmail(email);
         return ResponseEntity.ok().build();
     }
 

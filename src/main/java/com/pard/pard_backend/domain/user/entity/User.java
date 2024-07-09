@@ -46,7 +46,7 @@ public class User {
 
     @Setter
     @ColumnDefault("0")
-    private Integer totalBonus;
+    private float totalBonus;
 
     @Setter
     @ColumnDefault("0")

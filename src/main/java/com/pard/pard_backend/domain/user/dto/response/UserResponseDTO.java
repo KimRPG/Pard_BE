@@ -47,9 +47,38 @@ public class UserResponseDTO {
                     .name(user.getName())
                     .role(user.getRole())
                     .generation(user.getGeneration())
-                    .totalBonus(user.getTotalBonus())
+                    .totalBonus((int)user.getTotalBonus())
                     .totalMinus(user.getTotalMinus())
                     .pangoolPoint(user.getPangoolPoint())
+                    .build();
+        }
+    }
+
+    @Getter
+    @Setter
+    @Builder
+    public static class UserInfoAdmin {
+        private String part;
+        private String name;
+        private String role;
+        private String generation;
+        private Integer totalBonus;
+        private float totalMinus;
+        private float pangoolPoint;
+        private String userEmail;
+        private String phoneNumber;
+
+        public static UserInfoAdmin toDto(final @NotNull User user) {
+            return UserInfoAdmin.builder()
+                    .part(user.getPart())
+                    .name(user.getName())
+                    .role(user.getRole())
+                    .generation(user.getGeneration())
+                    .totalBonus((int)user.getTotalBonus())
+                    .totalMinus(user.getTotalMinus())
+                    .pangoolPoint(user.getPangoolPoint())
+                    .userEmail(user.getEmail())
+                    .phoneNumber(user.getPhoneNumber())
                     .build();
         }
     }

@@ -34,9 +34,9 @@ public class AttendanceController {
     }
 
     //admin으로 박아놓기
-    @GetMapping("/all")
-    public List<UserAttendanceResponseDTO> checkAllAttendance(@RequestBody UserGeneration generation) {
-        return attendanceService.getAllAttendance(generation.getGeneration());
+    @GetMapping("/all/{generation}")
+    public List<UserAttendanceResponseDTO> checkAllAttendance(@PathVariable String generation) {
+        return attendanceService.getAllAttendance(generation);
     }
 
 }
