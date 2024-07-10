@@ -2,6 +2,7 @@ package com.pard.pard_backend.domain.user.controller;
 
 import com.pard.pard_backend.domain.user.dto.request.UserRequestDTO;
 import com.pard.pard_backend.domain.user.dto.response.UserResponseDTO;
+import com.pard.pard_backend.domain.user.repository.UserJDBC;
 import com.pard.pard_backend.domain.user.service.UserFacade;
 import com.pard.pard_backend.domain.user.service.UserService;
 import com.pard.pard_backend.global.responses.errors.exceptions.ProjectException;
@@ -21,6 +22,7 @@ public class UserController {
 
     private final UserService userService;
     private final UserFacade userFacade;
+    private final UserJDBC userJDBC;
     @PostMapping("")
     public ResponseEntity<String> create(@RequestBody List<UserRequestDTO.Create> request) {
         userService.Create(request);
@@ -38,7 +40,7 @@ public class UserController {
 
     @DeleteMapping("")
     public ResponseEntity<?> delete(@RequestParam String email){
-        userService.deleteByEmail(email);
+        userService.deleteUser(email);
         return ResponseEntity.ok().build();
     }
 

@@ -1,7 +1,6 @@
 package com.pard.pard_backend.domain.reason.dto.response;
 
 import com.pard.pard_backend.domain.reason.entity.Reason;
-import com.pard.pard_backend.domain.user.dto.response.UserResponseDTO;
 import com.pard.pard_backend.domain.user.entity.User;
 import lombok.Builder;
 import lombok.Getter;
@@ -21,6 +20,7 @@ public class ReasonResponseDTO {
         private String reason;
         private boolean isBonus;
         private String detail;
+        private String total;
         private Date createAt;
         public static ReasonMinus toDto(final @NotNull Reason reason) {
             return ReasonMinus.builder()
@@ -36,19 +36,21 @@ public class ReasonResponseDTO {
     @Getter
     @Setter
     @Builder
-    public static class ReasonBonus {
+    public static class ReasonDTO {
         private long reasonId;
         private float point;
         private String reason;
         private boolean isBonus;
+        private String title;
         private String detail;
         private Date createAt;
-        public static ReasonBonus toDto(final @NotNull Reason reason) {
-            return ReasonBonus.builder()
+        public static ReasonDTO toDto(final @NotNull Reason reason) {
+            return ReasonDTO.builder()
                     .reasonId(reason.getReasonId())
                     .point(reason.getPoint())
                     .reason(reason.getReason())
                     .isBonus(reason.isBonus())
+                    .title(reason.getTitle())
                     .detail(reason.getDetail())
                     .createAt(reason.getCreateDate())
                     .build();

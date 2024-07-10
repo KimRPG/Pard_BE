@@ -1,8 +1,6 @@
 package com.pard.pard_backend.domain.reason.dto.request;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 public class ReasonRequest {
     @Getter
@@ -13,13 +11,15 @@ public class ReasonRequest {
         private float point;
         private String reason;
         private boolean isBonus;
+        private String title;
         private String detail;
-        public static ReasonRequestDTO toDto(String email,Integer point,String reason,boolean isBonus,String detail,boolean attendance) {
+        public static ReasonRequestDTO toDto(String email,Integer point,String reason,boolean isBonus,String detail,String title) {
             return ReasonRequestDTO.builder()
                     .email(email)
                     .point(point)
                     .reason(reason)
                     .isBonus(isBonus)
+                    .title(title)
                     .detail(detail)
                     .build();
         }
@@ -40,9 +40,9 @@ public class ReasonRequest {
     }
     @Getter
     @Setter
-    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
     public static class ReasonDeleteDTO {
-        private String email;
         private long reasonId;
     }
 }

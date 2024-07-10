@@ -42,12 +42,9 @@ public class ReasonService {
 
     @Transactional
     public void deletePoint(ReasonRequest.ReasonDeleteDTO req) {
-        Optional<Reason> r = reasonRepository.findById(req.getReasonId());
-        if (r.isEmpty()) {
-            throw new ProjectException.ReasonNotFound(ProjectErrorCode.REASON_NOT_FOUND);
-        }
-        Reason reason = r.get();
-        User user = userRepository.findByEmail(req.getEmail()).orElseThrow(() -> new ProjectException.UserNotFound(ProjectErrorCode.USER_NOT_FOUND));
+        Reason reason = reasonRepository.findById(req.getReasonId())
+                .orElseThrow(()-> new ProjectException.ReasonNotFound(ProjectErrorCode.REASON_NOT_FOUND));
+        User user = reason.getUser();
         if (reason.isBonus()) {
             user.setTotalBonus(user.getTotalBonus() - (int)reason.getPoint());
         } else {
@@ -63,11 +60,12 @@ public class ReasonService {
 //        return ReasonResponseDTO.UserPoint.toDto(user);
 //    }
 
-    public List<ReasonResponseDTO.ReasonBonus> getReason(String token) {
-        User user = userRepository.findByEmail(jwtUtil.getEmail(token)).orElseThrow(() -> new ProjectException.UserNotFound(ProjectErrorCode.USER_NOT_FOUND));
+    public List<ReasonResponseDTO.ReasonDTO> getReason(String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new ProjectException.UserNotFound(ProjectErrorCode.USER_NOT_FOUND));
         return reasonRepository.findByUser(user)
                 .stream()
-                .map(ReasonResponseDTO.ReasonBonus::toDto)
+                .map(ReasonResponseDTO.ReasonDTO::toDto)
                 .collect(Collectors.toList());
 
     }

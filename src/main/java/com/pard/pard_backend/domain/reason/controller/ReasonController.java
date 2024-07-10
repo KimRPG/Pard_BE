@@ -3,6 +3,7 @@ package com.pard.pard_backend.domain.reason.controller;
 import com.pard.pard_backend.domain.reason.dto.request.ReasonRequest;
 import com.pard.pard_backend.domain.reason.dto.response.ReasonResponseDTO;
 import com.pard.pard_backend.domain.reason.service.ReasonService;
+import com.pard.pard_backend.domain.security.jwt.JWTUtil;
 import com.pard.pard_backend.domain.user.repository.UserJDBC;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -14,7 +15,7 @@ import java.util.List;
 @RequestMapping("/v1/reason")
 public class ReasonController {
     private final ReasonService reasonService;
-    private final UserJDBC userJDBC;
+    private final JWTUtil jwtUtil;
 
 //    유저의 이메일로 점수 / 벌점 추가
    @PostMapping("")
@@ -32,8 +33,13 @@ public class ReasonController {
 
 //    유저의 이메일로 점수 조회 + 팡욱이 점수
     @GetMapping("")
-    public List<ReasonResponseDTO.ReasonBonus> getPoint(@CookieValue(value = "Authorization") String token){
-        return reasonService.getReason(token);
+    public List<ReasonResponseDTO.ReasonDTO> getPoint(@CookieValue(value = "Authorization") String token){
+        return reasonService.getReason(jwtUtil.getEmail(token));
+    }
+
+    @GetMapping("/admin")
+    public List<ReasonResponseDTO.ReasonDTO> getUserPoint(@RequestParam String email) {
+        return reasonService.getReason(email);
     }
 
 

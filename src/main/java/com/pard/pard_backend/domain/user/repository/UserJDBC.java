@@ -8,6 +8,7 @@ import com.pard.pard_backend.global.responses.errors.exceptions.ProjectException
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -57,4 +58,13 @@ public class UserJDBC {
         userTESTDTO.setTotalMinus(totalMinus);
         return userTESTDTO;
     }
+
+    @Transactional
+    public void deleteUserAttendance(final Long userId) {
+        jdbcTemplate.update(
+                "DELETE FROM attendance WHERE user_id = ?",
+                userId
+        );
+    }
+
 }

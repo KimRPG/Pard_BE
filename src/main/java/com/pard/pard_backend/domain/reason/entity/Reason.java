@@ -32,6 +32,8 @@ public class Reason {
 
     private String reason;
 
+    private String title;
+
     private String detail;
 
     @CreationTimestamp
@@ -44,6 +46,7 @@ public class Reason {
         this.point = req.getPoint();
         this.isBonus = req.isBonus();
         this.reason = req.getReason();
+        this.title = req.getTitle();
         this.detail = req.getDetail();
         this.user = user;
         return this;
