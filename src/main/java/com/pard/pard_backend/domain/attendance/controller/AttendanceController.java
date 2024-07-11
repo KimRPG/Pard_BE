@@ -23,8 +23,8 @@ public class AttendanceController {
     }
 
     @PatchMapping("/patch")
-    public String patchAttendance(@RequestBody AttendanceAdminRequestDTO dto) {
-        attendanceService.patchAttendance(dto);
+    public String patchAttendance(@RequestBody List<AttendanceAdminRequestDTO> dto) {
+        attendanceService.patchListAttendance(dto);
         return "출첵 변경";
     }
 

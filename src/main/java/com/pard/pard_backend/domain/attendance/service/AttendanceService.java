@@ -40,6 +40,11 @@ public class AttendanceService {
     }
 
     @Transactional
+    public void patchListAttendance(List<AttendanceAdminRequestDTO> dto) {
+        dto.forEach(this::patchAttendance);
+    }
+
+    @Transactional
     public void patchAttendance(AttendanceAdminRequestDTO dto) {
         User user = userRepository.findByEmail(dto.getEmail()).orElseThrow(()->new ProjectException.UserNotFound(ProjectErrorCode.USER_NOT_FOUND));
         Attendance attendance = attendanceRepo.findByUserAndSeminar(user, dto.getSeminar());
