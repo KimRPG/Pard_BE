@@ -11,4 +11,6 @@ public interface AttendanceRepo extends JpaRepository<Attendance, Integer> {
     Attendance findByUserAndSeminar(User user, Seminar seminar);
 
     List<Attendance> findByUser(User user);
+
+    boolean existsByUserAndSeminar(User user, Seminar seminar);
 }

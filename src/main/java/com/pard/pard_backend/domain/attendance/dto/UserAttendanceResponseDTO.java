@@ -12,9 +12,12 @@ import java.util.List;
 @AllArgsConstructor
 public class UserAttendanceResponseDTO {
     private String userEmail;
+    private String name;
+    private String part;
+    private String role;
     private List<AttendanceResponseDTO> attendances;
 
     public static UserAttendanceResponseDTO toDTO(User user, List<AttendanceResponseDTO> attendances) {
-        return new UserAttendanceResponseDTO(user.getEmail(), attendances);
+        return new UserAttendanceResponseDTO(user.getEmail(),user.getName(), user.getPart(), user.getRole(), attendances);
     }
 }

@@ -55,6 +55,7 @@ public class UserService {
         return UserResponseDTO.UserInfo.toDto(userRepository.findByEmail(email).orElseThrow(() -> new ProjectException.UserNotFound(ProjectErrorCode.USER_NOT_FOUND)));
     }
 
+    @Transactional
     public void deleteUser(String email) {
         Long userId = userRepository.findByEmail(email)
                 .orElseThrow(() -> new ProjectException.UserNotFound(ProjectErrorCode.USER_NOT_FOUND))

@@ -33,15 +33,23 @@ public class AttendanceService {
 
 
     @Transactional
-    public void checkAdminAttendance(AttendanceAdminRequestDTO dto) {
-        User user = userRepository.findByEmail(dto.getEmail()).orElseThrow(()-> new ProjectException.UserNotFound(ProjectErrorCode.USER_NOT_FOUND));
+    public void checkAdminAttendance(AttendanceAdminRequestDTO dto, User user) {
         user.setPangoolPoint(user.getPangoolPoint()+dto.getStatus().getPoint());
         attendanceRepo.save(Attendance.toEntity(dto, user));
     }
 
     @Transactional
-    public void patchListAttendance(List<AttendanceAdminRequestDTO> dto) {
-        dto.forEach(this::patchAttendance);
+    public void postListAttendance(List<AttendanceAdminRequestDTO> dto) {
+        dto.forEach(attendance->{
+            User user = userRepository.findByEmail(attendance.getEmail())
+                    .orElseThrow(()->new ProjectException.UserNotFound(ProjectErrorCode.USER_NOT_FOUND));
+            if(attendanceRepo.existsByUserAndSeminar(user,attendance.getSeminar())){
+                patchAttendance(attendance);
+            }else {
+                checkAdminAttendance(attendance, user);
+            }
+                }
+        );
     }
 
     @Transactional
