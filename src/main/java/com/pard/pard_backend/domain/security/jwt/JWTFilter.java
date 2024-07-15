@@ -28,7 +28,7 @@ public class JWTFilter extends OncePerRequestFilter {
         this.cookieService = cookieService;
     }
 
-    /*손 좀 봐야함*/
+    /*손 좀 봐야함ㅋ*/
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
