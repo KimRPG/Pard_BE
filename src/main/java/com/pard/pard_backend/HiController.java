@@ -1,6 +1,7 @@
 package com.pard.pard_backend;
 
 import com.pard.pard_backend.domain.security.jwt.JWTUtil;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -14,15 +15,20 @@ import org.springframework.web.bind.annotation.RestController;
 public class HiController {
     private final JWTUtil jwtUtil;
     @GetMapping("/hi/hello")
+    @Operation(summary = "쿠키 유효성 검사", description = "입력한 쿠키의 유효성을 확인합니다.")
     public String hi(@CookieValue(value = "Authorization") String authorization) {
         System.out.println(jwtUtil.getEmail(authorization));
         return "hi";
     }
+
     @GetMapping("/hi/hi")
+    @Operation(summary = "테스트 코드", description = "구현된게 없어서 403 반환합니다.")
     public String hihi() {
         return "hi";
     }
+
     @PostMapping("/test")
+    @Operation(summary = "JWT 생성, 쿠키 설정 후, hello 반환", description = "name, role, email 기반으로 JWT를 생성하고, 여러 쿠키 속성을 설정해줍니다.")
     public String hello(HttpServletResponse response) {
         String name = "hi";
         String role = "ROLE_YB";
