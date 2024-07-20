@@ -28,4 +28,9 @@ public class UserFacade {
         return token;
     }
 
+    public void deleteByToken(String token) {
+        String email = jwtUtil.getEmail(token);
+        userService.deleteUser(email);
+    }
+
 }

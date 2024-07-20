@@ -39,7 +39,10 @@ public class UserController {
     }
 
     @DeleteMapping("")
-    public ResponseEntity<?> delete(@RequestParam String email){
+    public ResponseEntity<?> delete(@RequestParam(required = false) String email,@CookieValue(value = "Authorization") String token){
+        if (email == null) {
+            userFacade.deleteByToken(token);
+        }
         userService.deleteUser(email);
         return ResponseEntity.ok().build();
     }

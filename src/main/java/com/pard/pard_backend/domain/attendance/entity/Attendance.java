@@ -14,9 +14,6 @@ import org.antlr.v4.runtime.misc.NotNull;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"user_id", "seminar"})
-})
 //접근시 불가능이라고 띄우기
 public class Attendance {
     @Id

@@ -40,3 +40,4 @@ src/main/resources/key/
 src/test/
 .DS_Store
 *.yml
+**/*.log
