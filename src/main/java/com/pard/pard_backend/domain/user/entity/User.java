@@ -1,6 +1,7 @@
 package com.pard.pard_backend.domain.user.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.pard.pard_backend.domain.attendance.entity.Attendance;
 import com.pard.pard_backend.domain.project.entity.Project;
 import com.pard.pard_backend.domain.user.dto.request.UserRequestDTO;
 import jakarta.persistence.*;
@@ -8,6 +9,8 @@ import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.antlr.v4.runtime.misc.NotNull;
 import org.hibernate.annotations.ColumnDefault;
+
+import java.util.List;
 
 @Entity
 @Getter
@@ -58,6 +61,12 @@ public class User {
     @JoinColumn(name = "PROJECT_ID")
     @ManyToOne (fetch = FetchType.LAZY,cascade=CascadeType.ALL)
     private Project project;
+
+
+    @JsonIgnore
+    @OneToMany (mappedBy = "user",cascade=CascadeType.ALL, orphanRemoval = true)
+    private List<Attendance> attendances;
+
 
     public static User toEntity(final @NotNull UserRequestDTO.Create request) {
 

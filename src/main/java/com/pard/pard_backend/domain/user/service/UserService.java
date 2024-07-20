@@ -61,7 +61,6 @@ public class UserService {
                 .orElseThrow(() -> new ProjectException.UserNotFound(ProjectErrorCode.USER_NOT_FOUND))
                 .getUserId();
 
-        userJDBC.deleteUserAttendance(userId);
 
         userRepository.deleteById(userId);
     }
