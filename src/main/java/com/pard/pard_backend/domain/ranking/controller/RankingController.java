@@ -5,6 +5,7 @@ import com.pard.pard_backend.domain.ranking.dto.response.RankingResponseDTO;
 import com.pard.pard_backend.domain.ranking.dto.response.Top3RankingDTO;
 import com.pard.pard_backend.domain.user.dto.request.UserTESTDTO;
 import com.pard.pard_backend.domain.user.repository.UserJDBC;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CookieValue;
@@ -22,16 +23,19 @@ public class RankingController {
     private final UserJDBC userJDBC;
 
     @GetMapping("/me")
+    @Operation(summary = "해당 유저의 랭킹 정보를 가져옵니다.", description = "토큰을 입력하면 해당 토큰의 사용자의 랭킹 정보를 반환해줍니다.")
     public UserTESTDTO getRank(@CookieValue(value = "Authorization") String token){
         return userJDBC.check(token);
     }
 
     @GetMapping("/total")
+    @Operation(summary = "모든 사용자의 랭킹 정보를 가져옵니다.", description = "이름과, 파트, 총 보너스의 정보를 반환해줍니다.")
     public ResponseEntity<List<RankingResponseDTO>> totalRank() {
         return ResponseEntity.ok().body(rankingService.ranking());
     }
 
     @GetMapping("/top3")
+    @Operation(summary = "탑 3 랭킹의 사용자 정보를 가져옵니다.", description = "이름과, 파트 정보를 반환해줍니다.")
     public ResponseEntity<List<Top3RankingDTO>> top3Rank() {
         return ResponseEntity.ok().body(rankingService.top3Rank());
     }

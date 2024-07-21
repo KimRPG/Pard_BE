@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1/fcm")
 @RequiredArgsConstructor
 public class FCMController {
+    // 파이어 베이스 코드로 보여짐
     private final FCMService fcmService;
     @Value("${firebase.project-id}")
     String projectId;
