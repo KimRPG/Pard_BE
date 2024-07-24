@@ -63,10 +63,6 @@ public class User {
     private Project project;
 
 
-    @JsonIgnore
-    @OneToMany (mappedBy = "user",cascade=CascadeType.ALL, orphanRemoval = true)
-    private List<Attendance> attendances;
-
 
     public static User toEntity(final @NotNull UserRequestDTO.Create request) {
 

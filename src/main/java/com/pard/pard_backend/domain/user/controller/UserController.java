@@ -45,9 +45,9 @@ public class UserController {
 
     @DeleteMapping("")
     @Operation(summary = "유저 정보를 이메일 주소로 삭제합니다.", description = "유저의 이메일을 입력하면 해당 유저의 정보를 삭제합니다.")
-    public ResponseEntity<?> delete(@RequestParam(required = false) String email,@CookieValue(value = "Authorization") String token){
+    public ResponseEntity<?> delete(@RequestParam(required = false) String email,@CookieValue(value = "Authorization") String token, HttpServletResponse response){
         if (email == null) {
-            userFacade.deleteByToken(token);
+            userFacade.deleteByToken(token, response);
         }
         userService.deleteUser(email);
         return ResponseEntity.ok().build();

@@ -67,4 +67,12 @@ public class UserJDBC {
         );
     }
 
+    @Transactional
+    public void deleteUserReason(final Long userId) {
+        jdbcTemplate.update(
+                "DELETE FROM reason WHERE email = ?",
+                userId
+        );
+    }
+
 }

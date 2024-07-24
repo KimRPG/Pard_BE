@@ -22,13 +22,14 @@ public class UserFacade {
 
     public String login(UserRequestDTO.Login dto, HttpServletResponse response) throws ProjectException.UserNotFoundException {
         String email = dto.getEmail();
-        UserResponseDTO.UserInfo userInfo = userService.login(email);
+        UserResponseDTO.UserInfo userInfo = userService.login(email, response);
         String token = jwtUtil.createJwt(userInfo.getName(), userInfo.getRole(), email);
         response.addCookie(cookieService.createCookie("Authorization", token));
         return token;
     }
 
-    public void deleteByToken(String token) {
+    public void deleteByToken(String token, HttpServletResponse response) {
+        cookieService.clearJwtCookie(response);
         String email = jwtUtil.getEmail(token);
         userService.deleteUser(email);
     }
