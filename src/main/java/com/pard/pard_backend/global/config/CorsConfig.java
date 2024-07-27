@@ -12,7 +12,7 @@ public class CorsConfig implements WebMvcConfigurer {
         registry.addMapping("/**")
                 .allowedOrigins("http://localhost:3000","https://we-pard.store")
                 .allowedMethods("GET", "POST","DELETE","PATCH")
-                .allowedHeaders("*")
+                .allowedHeaders("Authorization")
                 .allowCredentials(true);
     }
 }
