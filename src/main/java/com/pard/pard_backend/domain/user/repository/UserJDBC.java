@@ -30,7 +30,7 @@ public class UserJDBC {
 
         // 첫 번째 쿼리: PARTITION BY를 사용한 랭킹
         jdbcTemplate.query(
-                "SELECT email, RANK() OVER (PARTITION BY 'dfdf' ORDER BY total_bonus DESC) AS ranking FROM user WHERE generation = ? AND part = ?;",
+                "SELECT email, RANK() OVER (PARTITION BY part ORDER BY total_bonus DESC) AS ranking FROM user WHERE generation = ? AND part = ?;",
                 new Object[]{generation,part},
                 (rs, rowNum) -> {
                     String email = rs.getString("email");
@@ -43,7 +43,7 @@ public class UserJDBC {
 
         // 두 번째 쿼리: 전체 랭킹
         jdbcTemplate.query(
-                "SELECT email, RANK() OVER (ORDER BY total_bonus DESC) AS ranking FROM user WHERE generation=?;",
+                "SELECT email, RANK() OVER (PARTITION BY generation ORDER BY total_bonus DESC) AS ranking FROM user WHERE generation=?;",
                 new Object[]{generation},
                 (rs, rowNum) -> {
                     String email = rs.getString("email");

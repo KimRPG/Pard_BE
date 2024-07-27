@@ -8,10 +8,7 @@ import com.pard.pard_backend.domain.user.repository.UserJDBC;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CookieValue;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -30,13 +27,13 @@ public class RankingController {
 
     @GetMapping("/total")
     @Operation(summary = "모든 사용자의 랭킹 정보를 가져옵니다.", description = "이름과, 파트, 총 보너스의 정보를 반환해줍니다.")
-    public ResponseEntity<List<RankingResponseDTO>> totalRank() {
-        return ResponseEntity.ok().body(rankingService.ranking());
+    public ResponseEntity<List<RankingResponseDTO>> totalRank(@RequestParam String generation) {
+        return ResponseEntity.ok().body(rankingService.ranking(generation));
     }
 
     @GetMapping("/top3")
     @Operation(summary = "탑 3 랭킹의 사용자 정보를 가져옵니다.", description = "이름과, 파트 정보를 반환해줍니다.")
-    public ResponseEntity<List<Top3RankingDTO>> top3Rank() {
-        return ResponseEntity.ok().body(rankingService.top3Rank());
+    public ResponseEntity<List<Top3RankingDTO>> top3Rank(@RequestParam String generation) {
+        return ResponseEntity.ok().body(rankingService.top3Rank(generation));
     }
 }
