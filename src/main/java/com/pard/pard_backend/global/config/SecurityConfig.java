@@ -43,6 +43,44 @@ public class SecurityConfig {
         return roleHierarchyImpl;
     }
 
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration corsConfiguration = new CorsConfiguration();
+        corsConfiguration.addAllowedOrigin("http://localhost:3000");
+        corsConfiguration.addAllowedOrigin("https://pard-app-project.web.app/");
+        corsConfiguration.addAllowedMethod(HttpMethod.GET);
+        corsConfiguration.addAllowedMethod(HttpMethod.POST);
+        corsConfiguration.addAllowedMethod(HttpMethod.PATCH);
+        corsConfiguration.addAllowedMethod(HttpMethod.DELETE);
+        corsConfiguration.addAllowedMethod(HttpMethod.OPTIONS);
+        corsConfiguration.addAllowedHeader("Authorization");
+        corsConfiguration.addAllowedHeader("Origin");
+        corsConfiguration.addAllowedHeader("Accept");
+        corsConfiguration.addAllowedHeader("X-Requested-With");
+        corsConfiguration.addAllowedHeader("X-Content-Type-Options");
+        corsConfiguration.addAllowedHeader("X-XSS-Protection");
+        corsConfiguration.addAllowedHeader("X-Frame-Options");
+        corsConfiguration.addAllowedHeader("Cache-Control");
+        corsConfiguration.addAllowedHeader("Content-Type");
+        corsConfiguration.addAllowedHeader("Date");
+        corsConfiguration.addAllowedHeader("Content-Length");
+        corsConfiguration.addAllowedHeader("Keep-Alive");
+        corsConfiguration.addAllowedHeader("Connection");
+        corsConfiguration.addAllowedHeader("Expires");
+        corsConfiguration.addAllowedHeader("Set-Cookie");
+        corsConfiguration.addAllowedHeader("Pragma");
+        corsConfiguration.addAllowedHeader("Vary");
+        corsConfiguration.addAllowedHeader("Access-Control-Request-Method");
+        corsConfiguration.addAllowedHeader("Access-Control-Allow-Credentials");
+        corsConfiguration.addAllowedHeader("Access-Control-Request-Headers");
+        corsConfiguration.setAllowCredentials(true);
+        corsConfiguration.setMaxAge(3600L); // preflight 결과를 1시간동안 캐시에 저장
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", corsConfiguration);
+        return source;
+    }
+
+    //일단 다 때려박음 * 이거 CORS오류 떠서
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -54,26 +92,9 @@ public class SecurityConfig {
             .httpBasic(auth -> auth.disable());
 
     http
-            .cors(corsCustomizer -> corsCustomizer.configurationSource(new CorsConfigurationSource() {
-                @Override
-                public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
-                    return null;
-                }
-                @Bean
-                public CorsConfigurationSource configurationSource() {
-                    CorsConfiguration corsConfiguration = new CorsConfiguration();
-                    corsConfiguration.addAllowedOrigin("http://localhost:3000");
-                    corsConfiguration.addAllowedMethod("*");
-                    corsConfiguration.addAllowedHeader("*");
-                    corsConfiguration.setAllowCredentials(true);
-                    corsConfiguration.setMaxAge(3600L); //preflight 결과를 1시간동안 캐시에 저장
-                    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-                    source.registerCorsConfiguration("/**", corsConfiguration);
-                    return source;
-                }
-            }));
+            .cors(corsCustomizer -> corsCustomizer.configurationSource(corsConfigurationSource()));
 
-    http
+        http
             .addFilterBefore(new JWTFilter(jwtUtil, cookieService), UsernamePasswordAuthenticationFilter.class);
     http
             .authorizeHttpRequests(auth -> auth

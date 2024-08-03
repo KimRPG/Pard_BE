@@ -27,7 +27,7 @@ public class HiController {
         return "hi";
     }
 
-    @PostMapping("/test")
+    @GetMapping("/test")
     @Operation(summary = "JWT 생성, 쿠키 설정 후, hello 반환", description = "name, role, email 기반으로 JWT를 생성하고, 여러 쿠키 속성을 설정해줍니다.")
     public String hello(HttpServletResponse response) {
         String name = "hi";
@@ -46,4 +46,5 @@ public class HiController {
         response.addCookie(cookie);
         return "hello";
     }
+
 }

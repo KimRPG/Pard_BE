@@ -31,7 +31,8 @@ public class JWTFilter extends OncePerRequestFilter {
     /*손 좀 봐야함*/
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-
+        //여기다가 cache-control 하는 response 만들어 버림 배포하고 안되면 다시 설정
+//        response.setHeader("Cache-Control","max-age=86400, must-revalidate");
         Cookie[] cookies = request.getCookies();
         if (cookies == null) {
             filterChain.doFilter(request, response);
