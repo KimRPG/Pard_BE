@@ -8,6 +8,7 @@ import com.pard.pard_backend.domain.schedule.repo.ScheduleRepo;
 import com.pard.pard_backend.global.responses.errors.code.ProjectErrorCode;
 import com.pard.pard_backend.global.responses.errors.exceptions.ProjectException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -62,22 +63,33 @@ public class ScheduleService {
         scheduleRepo.deleteById(scheduleId);
     }
 
+    @Transactional
+    @Scheduled(cron = "0 0 0 * * ?", zone = "Asia/Seoul") //한국시간 기준 매일 00:00에 실행됨
+    public void markPastEvents() {
+        scheduleRepo.markPastEvents();
+    }
+
+
 //    Schedule 전체
     @Transactional
     public List<ScheduleResponseDTO> getAllSchedule(){
-        List<Schedule> schedules = scheduleRepo.findAll();
-        List<ScheduleResponseDTO> ret = new ArrayList<>();
-        for (Schedule schedule : schedules) {
-            Integer remainingDay = remainDate(schedule.getDate());
-            //스케쥴 이 지났을 경우 안함
-            if(!schedule.isPastEvent()) {
-                if (remainingDay < 0) {
-                    schedule.setPastEvent(true);
-                }
-            }
+        List<Schedule> pastSchedules = scheduleRepo.findPastSchedulesOrderByDate(); //일정 지나고 최신가 제일 가까운 순
+        List<Schedule> commingSchedules = scheduleRepo.findActiveSchedules(); //일정 안지난 것들
 
+//        List<Schedule> schedules = scheduleRepo.findAll();
+        List<ScheduleResponseDTO> ret = new ArrayList<>();
+
+        for (Schedule schedule : commingSchedules) {
+            Integer remainingDay = remainDate(schedule.getDate());
             ret.add(new ScheduleResponseDTO(schedule, remainingDay));
         }
+
+        ret.addAll(
+                pastSchedules.stream()
+                        .map(schedule -> new ScheduleResponseDTO(schedule, 0))
+                        .toList()
+        );
+
         return ret;
     }
 
@@ -106,6 +118,5 @@ public class ScheduleService {
         Date d = Date.from(date.atZone(ZoneId.systemDefault()).toInstant());
         LocalDate scheduleDate = d.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         return (int) ChronoUnit.DAYS.between(today, scheduleDate);
-
     }
 }
