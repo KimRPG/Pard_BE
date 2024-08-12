@@ -17,17 +17,17 @@ import java.util.List;
 @RestController
 public class RankingController {
     private final RankingService rankingService;
-    private final UserJDBC userJDBC;
+
 
     @GetMapping("/me")
     @Operation(summary = "해당 유저의 랭킹 정보를 가져옵니다.", description = "토큰을 입력하면 해당 토큰의 사용자의 랭킹 정보를 반환해줍니다.")
     public UserTESTDTO getRank(@CookieValue(value = "Authorization") String token){
-        return userJDBC.check(token);
+        return rankingService.checkRank(token);
     }
 
     @GetMapping("/total")
     @Operation(summary = "모든 사용자의 랭킹 정보를 가져옵니다.", description = "이름과, 파트, 총 보너스의 정보를 반환해줍니다.")
-    public ResponseEntity<List<RankingResponseDTO>> totalRank(@RequestParam String generation) {
+    public ResponseEntity<List<RankingResponseDTO>> totalRank(@RequestParam Integer generation) {
         return ResponseEntity.ok().body(rankingService.ranking(generation));
     }
 

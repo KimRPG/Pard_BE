@@ -1,5 +1,6 @@
 package com.pard.pard_backend.domain.user.repository;
 
+import com.pard.pard_backend.domain.ranking.dto.response.RankingResponseDTO;
 import com.pard.pard_backend.domain.security.jwt.JWTUtil;
 import com.pard.pard_backend.domain.user.dto.request.UserTESTDTO;
 import com.pard.pard_backend.domain.user.entity.User;
@@ -10,6 +11,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -30,7 +32,10 @@ public class UserJDBC {
 
         // 첫 번째 쿼리: PARTITION BY를 사용한 랭킹
         jdbcTemplate.query(
-                "SELECT email, RANK() OVER (PARTITION BY part ORDER BY total_bonus DESC) AS ranking FROM user WHERE generation = ? AND part = ?;",
+                "SELECT email, RANK() OVER " +
+                        "(PARTITION BY part ORDER BY total_bonus DESC) " +
+                        "AS ranking FROM user WHERE generation = ? AND part = ? AND  " +
+                        "role != 'ROLE_ADMIN';",
                 new Object[]{generation,part},
                 (rs, rowNum) -> {
                     String email = rs.getString("email");
@@ -43,7 +48,7 @@ public class UserJDBC {
 
         // 두 번째 쿼리: 전체 랭킹
         jdbcTemplate.query(
-                "SELECT email, RANK() OVER (PARTITION BY generation ORDER BY total_bonus DESC) AS ranking FROM user WHERE generation=?;",
+                "SELECT email, RANK() OVER (PARTITION BY generation ORDER BY total_bonus DESC) AS ranking FROM user WHERE generation=? AND role != 'ROLE_ADMIN';",
                 new Object[]{generation},
                 (rs, rowNum) -> {
                     String email = rs.getString("email");
@@ -58,6 +63,33 @@ public class UserJDBC {
         userTESTDTO.setTotalMinus(totalMinus);
         return userTESTDTO;
     }
+
+    public List<RankingResponseDTO> checkUsersByGeneration(Integer generation) {
+
+        // List to store the result
+        List<RankingResponseDTO> userTestDTOList = new ArrayList<>();
+
+        jdbcTemplate.query(
+                "SELECT email, part, total_bonus, name, RANK() OVER (PARTITION BY generation ORDER BY total_bonus DESC) AS ranking FROM user WHERE generation=? AND role != 'ROLE_ADMIN';",
+                new Object[]{generation},
+                (rs, rowNum) -> {
+                    String email = rs.getString("email");
+                    RankingResponseDTO rankingResponseDTO = new RankingResponseDTO();
+                    rankingResponseDTO.setName(rs.getString("name"));
+                    rankingResponseDTO.setPart(rs.getString("part"));
+                    rankingResponseDTO.setRanking(rs.getInt("ranking"));
+                    rankingResponseDTO.setTotalBonus(rs.getInt("total_bonus"));
+
+                    userTestDTOList.add(rankingResponseDTO);
+                    return rankingResponseDTO;
+                }
+        );
+
+        return userTestDTOList;
+    }
+
+
+
 
     @Transactional
     public void deleteUserAttendance(final Long userId) {
