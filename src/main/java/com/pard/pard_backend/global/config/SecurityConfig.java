@@ -48,6 +48,7 @@ public class SecurityConfig {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
         corsConfiguration.addAllowedOrigin("http://localhost:3000");
         corsConfiguration.addAllowedOrigin("https://pard-app-project.web.app/");
+        corsConfiguration.addAllowedOrigin("https://we-pard.store");
         corsConfiguration.addAllowedMethod(HttpMethod.GET);
         corsConfiguration.addAllowedMethod(HttpMethod.POST);
         corsConfiguration.addAllowedMethod(HttpMethod.PATCH);
