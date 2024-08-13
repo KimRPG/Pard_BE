@@ -36,6 +36,11 @@ public class UserService {
         for (UserRequestDTO.Create userRequest : request) {
             if (!userRepository.existsByEmail(userRequest.getEmail())) {
                 userRepository.save(User.toEntity(userRequest));
+            } else{
+                User existingUser =  userRepository.findByEmail(userRequest.getEmail()).orElseThrow(()->new ProjectException.UserNotFound(ProjectErrorCode.USER_NOT_FOUND));
+                User patchUser = User.patchUser(existingUser, userRequest);
+
+                userRepository.save(patchUser);
             }
 
         }

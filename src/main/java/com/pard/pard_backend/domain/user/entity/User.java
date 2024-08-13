@@ -62,7 +62,16 @@ public class User {
     @ManyToOne (fetch = FetchType.LAZY,cascade=CascadeType.ALL)
     private Project project;
 
-
+    public static User patchUser(User existingUser, UserRequestDTO.Create userRequest){
+        return User.builder()
+                .userId(existingUser.userId)
+                .email(userRequest.getEmail() != null  ? userRequest.getEmail() : existingUser.email)
+                .phoneNumber(userRequest.getPhoneNumber() != null ? userRequest.getPhoneNumber() : existingUser.getPhoneNumber())
+                .generation(userRequest.getGeneration() != null ? userRequest.getGeneration() : existingUser.getGeneration())
+                .role(userRequest.getRole() != null ? userRequest.getRole() : existingUser.getRole())
+                .part(userRequest.getPart() != null ? userRequest.getPart() : existingUser.getPart())
+                .build();
+    }
 
     public static User toEntity(final @NotNull UserRequestDTO.Create request) {
 
