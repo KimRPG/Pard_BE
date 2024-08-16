@@ -22,10 +22,8 @@ public class RankingService {
         return userJDBC.checkUsersByGeneration(generation);
     }
 
-    public List<Top3RankingDTO> top3Rank(String generation) {
-        return userRepository.findTop3ByGenerationOrderByTotalBonusDesc(generation).stream()
-                .map(Top3RankingDTO::toDTO)
-                .collect(Collectors.toList());
+    public List<RankingResponseDTO> top3Rank(Integer generation) {
+        return userJDBC.top3Ranking(generation);
     }
 
     public UserTESTDTO checkRank(String token) {

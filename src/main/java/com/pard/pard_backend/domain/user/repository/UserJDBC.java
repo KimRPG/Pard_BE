@@ -48,7 +48,7 @@ public class UserJDBC {
 
         // 두 번째 쿼리: 전체 랭킹
         jdbcTemplate.query(
-                "SELECT email, RANK() OVER (PARTITION BY generation ORDER BY total_bonus DESC) AS ranking FROM user WHERE generation=? AND role != 'ROLE_ADMIN';",
+                "SELECT email, ROW_NUMBER() OVER (PARTITION BY generation ORDER BY total_bonus DESC) AS ranking FROM user WHERE generation=? AND role != 'ROLE_ADMIN';",
                 new Object[]{generation},
                 (rs, rowNum) -> {
                     String email = rs.getString("email");
@@ -70,7 +70,7 @@ public class UserJDBC {
         List<RankingResponseDTO> userTestDTOList = new ArrayList<>();
 
         jdbcTemplate.query(
-                "SELECT email, part, total_bonus, name, RANK() OVER (PARTITION BY generation ORDER BY total_bonus DESC) AS ranking FROM user WHERE generation=? AND role != 'ROLE_ADMIN';",
+                "SELECT email, part, total_bonus, name, ROW_NUMBER() OVER (PARTITION BY generation ORDER BY total_bonus DESC) AS ranking FROM user WHERE generation=? AND role != 'ROLE_ADMIN';",
                 new Object[]{generation},
                 (rs, rowNum) -> {
                     String email = rs.getString("email");
@@ -87,6 +87,31 @@ public class UserJDBC {
 
         return userTestDTOList;
     }
+
+    public List<RankingResponseDTO> top3Ranking(Integer generation) {
+
+        // List to store the result
+        List<RankingResponseDTO> userTestDTOList = new ArrayList<>();
+
+        jdbcTemplate.query(
+                "SELECT email, part, total_bonus, name, ROW_NUMBER() OVER (PARTITION BY generation ORDER BY total_bonus DESC) AS ranking FROM user WHERE generation=? AND role != 'ROLE_ADMIN'  LIMIT 3;",
+                new Object[]{generation},
+                (rs, rowNum) -> {
+                    String email = rs.getString("email");
+                    RankingResponseDTO rankingResponseDTO = new RankingResponseDTO();
+                    rankingResponseDTO.setName(rs.getString("name"));
+                    rankingResponseDTO.setPart(rs.getString("part"));
+                    rankingResponseDTO.setRanking(rs.getInt("ranking"));
+                    rankingResponseDTO.setTotalBonus(rs.getInt("total_bonus"));
+
+                    userTestDTOList.add(rankingResponseDTO);
+                    return rankingResponseDTO;
+                }
+        );
+
+        return userTestDTOList;
+    }
+
 
 
 

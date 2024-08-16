@@ -33,7 +33,7 @@ public class RankingController {
 
     @GetMapping("/top3")
     @Operation(summary = "탑 3 랭킹의 사용자 정보를 가져옵니다.", description = "이름과, 파트 정보를 반환해줍니다.")
-    public ResponseEntity<List<Top3RankingDTO>> top3Rank(@RequestParam String generation) {
+    public ResponseEntity<List<RankingResponseDTO>> top3Rank(@RequestParam Integer generation) {
         return ResponseEntity.ok().body(rankingService.top3Rank(generation));
     }
 }
