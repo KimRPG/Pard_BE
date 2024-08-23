@@ -17,6 +17,5 @@ public enum Seminar {
     UNION_SEMINAR_2("연합 세미나2"),
     IDEA_PITCH("아이디어 피칭"),
     FINAL_MEETING("종강총회");
-
     private final String description;
 }

@@ -65,6 +65,7 @@ public class User {
     public static User patchUser(User existingUser, UserRequestDTO.Create userRequest){
         return User.builder()
                 .userId(existingUser.userId)
+                .name(userRequest.getName()!= null ? userRequest.getName() : existingUser.getName())
                 .email(userRequest.getEmail() != null  ? userRequest.getEmail() : existingUser.email)
                 .phoneNumber(userRequest.getPhoneNumber() != null ? userRequest.getPhoneNumber() : existingUser.getPhoneNumber())
                 .generation(userRequest.getGeneration() != null ? userRequest.getGeneration() : existingUser.getGeneration())
