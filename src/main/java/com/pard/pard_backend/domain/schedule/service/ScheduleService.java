@@ -81,7 +81,7 @@ public class ScheduleService {
 
         for (Schedule schedule : commingSchedules) {
             Integer remainingDay = remainDate(schedule.getDate());
-            ret.add(new ScheduleResponseDTO(schedule, remainingDay));
+            ret.add(new ScheduleResponseDTO(schedule, remainingDay-1));
         }
 
         ret.addAll(
@@ -108,7 +108,7 @@ public class ScheduleService {
                             schedule.setPastEvent(true);
                         }
                     }
-                    return new ScheduleResponseDTO(schedule, remainDate);
+                    return new ScheduleResponseDTO(schedule, remainDate-1);
                 })
                 .collect(Collectors.toList());
     }
