@@ -31,7 +31,7 @@ public class QRService {
 //        그 일정시간 isBefore qrTime이면 출석, isAfter qrTime이면 지각
 
         LocalDateTime currentTime = LocalDateTime.now();
-        LocalTime cutOffTime = LocalTime.of(4, 1);
+        LocalTime cutOffTime = LocalTime.of(13, 1);
         if (currentTime.toLocalTime().isAfter(cutOffTime)) {
             AttendanceRequestDto req = AttendanceRequestDto.toDTO("지각", qrAttendanceRequestDTO.getSeminar());
             attendanceService.checkAttendance(req, userEmail);
