@@ -38,7 +38,8 @@ public class AttendanceRequestDto {
             case "연합_세미나" -> Seminar.UNION_SEMINAR_1;
             case "연합_세미나2" -> Seminar.UNION_SEMINAR_2;
             case "아이디어_피칭" -> Seminar.IDEA_PITCH;
-            case "종강_총회" -> Seminar.FINAL_MEETING;
+            case "종강총회" -> Seminar.FINAL_MEETING;
+            case "롱커톤" -> Seminar.LONGKERTON;
             default -> throw new IllegalArgumentException("Unknown seminar: " + seminar);
         };
     }

@@ -47,31 +47,31 @@ public class QRService {
     public ResponseQrDto.attendaceResponse checkQR(RequestQrDto.QRAttendanceRequestDTO qrAttendanceRequestDTO, String token) {
         String QRUrl = qrAttendanceRequestDTO.getQrUrl();
         switch (QRUrl) {
-            case "https://me-qr.com/uoN4lOs1": //OT
+            case "https://m.site.naver.com/1tv2A": //OT
                 qrAttendanceRequestDTO.setSeminar("OT");
                 return this.checkQrTime(qrAttendanceRequestDTO, token);
-            case "https://me-qr.com/1":
+            case "https://m.site.naver.com/1tv11":
                 qrAttendanceRequestDTO.setSeminar("1차_세미나");
                 return this.checkQrTime(qrAttendanceRequestDTO, token);
-            case "https://me-qr.com/2":
+            case "https://m.site.naver.com/1tv1w":
                 qrAttendanceRequestDTO.setSeminar("2차_세미나");
                 return this.checkQrTime(qrAttendanceRequestDTO, token);
-            case "https://me-qr.com/3":
+            case "https://m.site.naver.com/1tv1S":
                 qrAttendanceRequestDTO.setSeminar("3차_세미나");
                 return this.checkQrTime(qrAttendanceRequestDTO, token);
-            case "https://me-qr.com/4":
+            case "https://m.site.naver.com/1tv29":
                 qrAttendanceRequestDTO.setSeminar("4차_세미나");
                 return this.checkQrTime(qrAttendanceRequestDTO, token);
-            case "https://me-qr.com/5":
+            case "https://m.site.naver.com/1tv3r":
                 qrAttendanceRequestDTO.setSeminar("5차_세미나");
                 return this.checkQrTime(qrAttendanceRequestDTO, token);
-            case "https://me-qr.com/6":
+            case "https://m.site.naver.com/1tv3C":
                 qrAttendanceRequestDTO.setSeminar("6차_세미나");
                 return this.checkQrTime(qrAttendanceRequestDTO, token);
-            case "https://me-qr.com/7":
+            case "https://m.site.naver.com/1tv3L":
                 qrAttendanceRequestDTO.setSeminar("연합_세미나");
                 return this.checkQrTime(qrAttendanceRequestDTO, token);
-            case "https://me-qr.com/8":
+            case "https://m.site.naver.com/1tv47":
                 qrAttendanceRequestDTO.setSeminar("연합_세미나2");
                 return this.checkQrTime(qrAttendanceRequestDTO, token);
             case "https://me-qr.com/9":
@@ -79,6 +79,9 @@ public class QRService {
                 return this.checkQrTime(qrAttendanceRequestDTO, token);
             case "https://me-qr.com/10":
                 qrAttendanceRequestDTO.setSeminar("종강총회");
+                return this.checkQrTime(qrAttendanceRequestDTO, token);
+            case "https://me-qr.com/11":
+                qrAttendanceRequestDTO.setSeminar("롱커톤");
                 return this.checkQrTime(qrAttendanceRequestDTO, token);
             default:
                 throw new ProjectException.WrongQR(ProjectErrorCode.WrongQR);
