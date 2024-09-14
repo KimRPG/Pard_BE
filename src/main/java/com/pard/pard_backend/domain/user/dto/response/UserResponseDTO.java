@@ -67,6 +67,7 @@ public class UserResponseDTO {
         private float pangoolPoint;
         private String userEmail;
         private String phoneNumber;
+        private String birthDay;
 
         public static UserInfoAdmin toDto(final @NotNull User user) {
             return UserInfoAdmin.builder()
@@ -79,6 +80,7 @@ public class UserResponseDTO {
                     .pangoolPoint(user.getPangoolPoint())
                     .userEmail(user.getEmail())
                     .phoneNumber(user.getPhoneNumber())
+                    .birthDay(user.getBirthDay())
                     .build();
         }
     }
