@@ -12,7 +12,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     boolean existsByEmail(String email);
 
-    List<User> findByGeneration(String generation);
+    List<User> findByGenerationOrderByNameDesc(String generation);
 
     List<User> findByGenerationOrderByTotalBonusDesc(String generation);
     List<User> findTop3ByGenerationOrderByTotalBonusDesc(String generation);

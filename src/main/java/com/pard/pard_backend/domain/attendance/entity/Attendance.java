@@ -15,6 +15,7 @@ import org.antlr.v4.runtime.misc.NotNull;
 @NoArgsConstructor
 @AllArgsConstructor
 //접근시 불가능이라고 띄우기
+@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"USER_ID", "SEMINAR"})})
 public class Attendance {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

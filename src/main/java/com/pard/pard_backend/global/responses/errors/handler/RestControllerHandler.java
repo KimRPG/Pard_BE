@@ -32,7 +32,7 @@ public class RestControllerHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<String> handleException(Exception ex, HttpServletRequest request) {
         // 예외 로그 찍기
 //        slackErrorLogger.sendSlackAlertErrorLog(ex.getMessage() + " 공습경보!!",request );
-        return new ResponseEntity<>("공습경보 공습경보!!", HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>("이미 공습경보 공습경보!!", HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
 

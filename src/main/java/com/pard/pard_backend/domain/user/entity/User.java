@@ -43,6 +43,8 @@ public class User {
 
     private boolean isAlarm;
 
+    private String birthDay;
+
     @Setter
     @ColumnDefault("0")
     private float totalMinus;
@@ -71,6 +73,7 @@ public class User {
                 .generation(userRequest.getGeneration() != null ? userRequest.getGeneration() : existingUser.getGeneration())
                 .role(userRequest.getRole() != null ? userRequest.getRole() : existingUser.getRole())
                 .part(userRequest.getPart() != null ? userRequest.getPart() : existingUser.getPart())
+                .birthDay(userRequest.getBirthDay()!=null ? userRequest.getBirthDay() : existingUser.getBirthDay())
                 .build();
     }
 
@@ -83,14 +86,7 @@ public class User {
                 .role(request.getRole())
                 .phoneNumber(request.getPhoneNumber())
                 .generation(request.getGeneration())
-                .build();
-    }
-
-    public static User toEntity(String name, String email) {
-
-        return User.builder()
-                .name(name)
-                .email(email)
+                .birthDay(request.getBirthDay())
                 .build();
     }
 

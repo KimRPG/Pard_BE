@@ -70,7 +70,7 @@ public class AttendanceService {
 
     public List<UserAttendanceResponseDTO> getAllAttendance(String generation) {
         // 모든 사용자에 대한 출석 정보 조회
-        List<User> users = userRepository.findByGeneration(generation);
+        List<User> users = userRepository.findByGenerationOrderByNameDesc(generation);
 
         // 각 사용자에 대한 출석 정보를 포함하는 DTO 리스트 생성
         return users.stream()

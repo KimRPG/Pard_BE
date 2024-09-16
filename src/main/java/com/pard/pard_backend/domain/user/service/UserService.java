@@ -1,6 +1,5 @@
 package com.pard.pard_backend.domain.user.service;
 
-import com.pard.pard_backend.domain.attendance.repo.AttendanceRepo;
 import com.pard.pard_backend.domain.cookie.service.CookieService;
 import com.pard.pard_backend.domain.user.dto.request.UserRequestDTO;
 import com.pard.pard_backend.domain.user.dto.response.UserResponseDTO;
@@ -49,7 +48,7 @@ public class UserService {
 
 
     public List<UserResponseDTO.UserInfoAdmin> findByGeneration(String generation) {
-        return userRepository.findByGeneration(generation)
+        return userRepository.findByGenerationOrderByNameDesc(generation)
                 .stream()
                 .map(UserResponseDTO.UserInfoAdmin::toDto)
                 .collect(Collectors.toList());
