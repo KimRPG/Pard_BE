@@ -20,7 +20,7 @@ public interface ScheduleRepo extends JpaRepository<Schedule, Long> {
     @Query("UPDATE Schedule s SET s.isPastEvent = true WHERE s.date < CURRENT_DATE AND s.isPastEvent = false")
     void markPastEvents();
 
-    @Query("SELECT s FROM Schedule s WHERE s.isPastEvent = false")
+    @Query("SELECT s FROM Schedule s WHERE s.isPastEvent = false ORDER BY s.date ASC")
     List<Schedule> findActiveSchedules();
 
     @Query("select s FROM Schedule s WHERE s.isPastEvent=true ORDER BY s.date DESC ")
