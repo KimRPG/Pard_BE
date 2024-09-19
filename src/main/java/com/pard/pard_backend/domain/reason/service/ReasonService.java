@@ -27,9 +27,6 @@ public class ReasonService {
     @Transactional
     public void addPoint(ReasonRequest.ReasonRequestDTO req) {
         User user = userRepository.findByEmail(req.getEmail()).orElseThrow(() -> new ProjectException.UserNotFound(ProjectErrorCode.USER_NOT_FOUND));
-        if (user == null) {
-            throw new ProjectException.UserNotFound(ProjectErrorCode.USER_NOT_FOUND);
-        }
         if (req.isBonus()) {
             user.setTotalBonus(user.getTotalBonus() + (int)req.getPoint());
         } else {
