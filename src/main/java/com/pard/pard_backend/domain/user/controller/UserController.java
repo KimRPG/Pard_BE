@@ -11,8 +11,11 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Slf4j
@@ -57,6 +60,12 @@ public class UserController {
     @Operation(summary = "이메일을 입력하고 토큰을 받아옵니다.", description = "유저의 이메일을 입력하면, 해당 유저의 servlet response에 토큰을 발급해줍니다.")
     public ResponseEntity<String> login(@RequestBody UserRequestDTO.Login request, HttpServletResponse response) throws ProjectException.UserNotFoundException {
         return ResponseEntity.ok().body(userFacade.login(request, response));
+    }
+
+    @Scheduled(cron = "1 0 0 * * *")
+    public void schedule() {
+        String now = LocalDate.now().format(DateTimeFormatter.ofPattern("MMdd"));
+        userFacade.happyBirthDayUser(now);
     }
 
 

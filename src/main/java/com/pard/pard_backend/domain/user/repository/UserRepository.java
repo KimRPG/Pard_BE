@@ -17,5 +17,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     List<User> findByGenerationOrderByTotalBonusDesc(String generation);
     List<User> findTop3ByGenerationOrderByTotalBonusDesc(String generation);
 
+    List<User> findByBirthDay(String birthDay);
     void deleteByEmail(String email);
 }

@@ -34,7 +34,7 @@ public class ReasonService {
         }
         Reason reason = new Reason().toEntity(req, user);
         reasonRepository.save(reason);
-        userRepository.save(user);
+//        userRepository.save(user);
     }
 
     @Transactional

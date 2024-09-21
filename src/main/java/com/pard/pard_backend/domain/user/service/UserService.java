@@ -74,5 +74,9 @@ public class UserService {
         userRepository.deleteById(userId);
     }
 
+    public List<User> happyBirthDayUser(String now){
+        return userRepository.findByBirthDay(now);
+    }
+
 
 }

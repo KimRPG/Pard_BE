@@ -4,6 +4,7 @@ import com.pard.pard_backend.domain.cookie.service.CookieService;
 import com.pard.pard_backend.domain.security.jwt.JWTUtil;
 import com.pard.pard_backend.domain.user.dto.request.UserRequestDTO;
 import com.pard.pard_backend.domain.user.dto.response.UserResponseDTO;
+import com.pard.pard_backend.global.responses.errors.SlackMessage;
 import com.pard.pard_backend.global.responses.errors.exceptions.ProjectException;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,7 @@ public class UserFacade {
     private final JWTUtil jwtUtil;
     private final UserService userService;
     private final CookieService cookieService;
+    private final SlackMessage slackMessage;
 
     public UserResponseDTO.UserInfo findByToken(String token) {
         return userService.findByEmail(jwtUtil.getEmail(token));
@@ -32,6 +34,11 @@ public class UserFacade {
         cookieService.clearJwtCookie(response);
         String email = jwtUtil.getEmail(token);
         userService.deleteUser(email);
+    }
+
+    public void happyBirthDayUser(String now){
+        userService.happyBirthDayUser(now)
+                .forEach(user -> slackMessage.sendSlackMessage(user.getName(),user.getPart(),now));
     }
 
 }
