@@ -4,7 +4,7 @@ import com.pard.pard_backend.domain.cookie.service.CookieService;
 import com.pard.pard_backend.domain.security.jwt.JWTUtil;
 import com.pard.pard_backend.domain.user.dto.request.UserRequestDTO;
 import com.pard.pard_backend.domain.user.dto.response.UserResponseDTO;
-import com.pard.pard_backend.global.responses.errors.SlackMessage;
+import com.pard.pard_backend.domain.slack.service.SlackMessage;
 import com.pard.pard_backend.global.responses.errors.exceptions.ProjectException;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;

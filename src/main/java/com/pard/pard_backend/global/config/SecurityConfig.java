@@ -99,7 +99,7 @@ public class SecurityConfig {
             .addFilterBefore(new JWTFilter(jwtUtil, cookieService), UsernamePasswordAuthenticationFilter.class);
     http
             .authorizeHttpRequests(auth -> auth
-                    .requestMatchers("/test","/swagger-ui/**","/v3/api-docs/**","/v1/users/login","/error").permitAll()
+                    .requestMatchers("/test","/swagger-ui/**","/v3/api-docs/**","/v1/users/login","/error","/slack/**").permitAll()
                     .requestMatchers("/v1/validQR").hasRole("YB")
                     .requestMatchers(HttpMethod.POST,"/v1/**").hasRole("ADMIN")
                     .requestMatchers(HttpMethod.DELETE,"/v1/**").hasRole("ADMIN")

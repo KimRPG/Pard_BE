@@ -1,4 +1,4 @@
-package com.pard.pard_backend.global.responses.errors;
+package com.pard.pard_backend.domain.slack.service;
 
 import com.slack.api.Slack;
 import com.slack.api.model.Attachment;
@@ -25,13 +25,13 @@ public class SlackMessage {
 
     private final Slack slackClient = Slack.getInstance();
 
-    @Value("${webhook-uri}")
+    @Value("${slack.bot.webhook-uri-talk}")
     private String webhookUrl;
 
-
+//    @Value("${webhook-uri}")
+//    private String webhookUrl;
     public void sendSlackMessage(String name, String part, String now) {
         try {
-
             slackClient.send(webhookUrl, payload(p -> p
                     .text("🎉 *Happy Birthday, " + name + "!* 🎉")
                     .attachments(
@@ -56,7 +56,7 @@ public class SlackMessage {
                 .ts(String.valueOf(System.currentTimeMillis() / 1000))
                 .imageUrl("https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExY2J4cDY4czAxaGFyb3p3YTA5bXFvZ3FoeXhvd2pod3FscmpxNmhjbCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/g5R9dok94mrIvplmZd/giphy.webp")
                 .fields(List.of(
-                        generateSlackField("생일 축하", name),
+                        generateSlackField("생일 축하", name+ "님, *생일* 진심으로 축하합니다!\n*행복한 하루* 되세요~!!"),
                         generateSlackField("축하 메시지",
                                 "⋆⸜⊹₊ \uD835\uDC07\uD835\uDC1A\uD835\uDC29\uD835\uDC29\uD835\uDC32 \uD835\uDC01\uD835\uDC22\uD835\uDC2B\uD835\uDC2D\uD835\uDC21\uD835\uDC1D\uD835\uDC1A\uD835\uDC32 ¨̮⑅*⸝⋆\n" +
                                         "( * ॑꒳ ॑*)ﾉ\"┌iiii┐ヾ(* ॑꒳ ॑* )")
