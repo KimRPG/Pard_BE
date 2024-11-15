@@ -27,7 +27,7 @@ public class ProjectController {
     public ResponseEntity<List<ProjectResponseDTO.Home>> getProjectPages(@RequestParam(value = "page") int pageNumber){
         return ResponseEntity.ok(projectService.getList(pageNumber));
     }
-    //프로젝트 디테일 부른느 api
+    //프로젝트 디테일 부르는 api
     @GetMapping("/{projectId}")
     @Operation(summary = "지정한 프로젝트의 세부 정보를 불러옵니다.", description = "보내준 프로젝 id의 약식 프로젝트 정보를 포함한 세부 정보를 전부 불러옵니다.")
     public ResponseEntity<ProjectResponseDTO.Detail> getProjectDetail(@PathVariable Long projectId){

@@ -63,7 +63,7 @@ public class UserController {
     }
 
     @Scheduled(cron = "1 0 0 * * *")
-//    @Scheduled(cron = "* * * * * *")
+//    @Scheduled(cron = "* * * * * *")ㅂ
     public void schedule() {
         String now = LocalDate.now().format(DateTimeFormatter.ofPattern("MMdd"));
         userFacade.happyBirthDayUser(now);
