@@ -115,12 +115,12 @@ public class ScheduleService {
 
 
     public Integer remainDate(LocalDateTime date) {
-//        Date d = Date.from(date.atZone(ZoneId.systemDefault()).toInstant());
-//        LocalDate scheduleDate = d.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-//        return (int) ChronoUnit.DAYS.between(today, scheduleDate);
-
-        LocalDate scheduleDate = date.toLocalDate(); // 직접 LocalDate로 변환
-        LocalDate today = LocalDate.now();          // 오늘 날짜 가져오기
+        Date d = Date.from(date.atZone(ZoneId.systemDefault()).toInstant());
+        LocalDate scheduleDate = d.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         return (int) ChronoUnit.DAYS.between(today, scheduleDate);
+
+//        LocalDate scheduleDate = date.toLocalDate(); // 직접 LocalDate로 변환
+//        LocalDate today = LocalDate.now();          // 오늘 날짜 가져오기
+//        return (int) ChronoUnit.DAYS.between(today, scheduleDate);
     }
 }
