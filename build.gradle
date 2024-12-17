@@ -36,6 +36,7 @@ dependencies {
     implementation("com.slack.api:bolt-servlet:1.43.1")
     implementation("com.slack.api:bolt-jetty:1.43.1")
     implementation("org.slf4j:slf4j-simple:1.7.36")
+    implementation 'com.google.firebase:firebase-admin:9.2.0'
 }
 
 test {
