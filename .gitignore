@@ -36,8 +36,10 @@ out/
 ### VS Code ###
 .vscode/
 ~
-src/main/resources/key/
+src/main/resources/
 src/test/
 .DS_Store
 *.yml
 **/*.log
+
+google-services.json
