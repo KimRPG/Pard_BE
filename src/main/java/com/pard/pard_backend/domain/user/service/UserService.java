@@ -54,12 +54,14 @@ public class UserService {
                 .collect(Collectors.toList());
     }
 
-    public UserResponseDTO.UserInfo login(String email, HttpServletResponse response) throws ProjectException.UserNotFoundException {
+    public UserResponseDTO.UserInfo login(String email, String deviceToken, HttpServletResponse response) throws ProjectException.UserNotFoundException {
         //if문 안에 넣기
         if (!userRepository.existsByEmail(email)) {
             cookieService.clearJwtCookie(response);
-        throw new ProjectException.UserNotFoundException(String.format("%s 을(를) 못 찾았어요", email));
+            throw new ProjectException.UserNotFoundException(String.format("%s 을(를) 못 찾았어요", email));
         }
+        User user = userRepository.findByEmail(email).get();
+
         return UserResponseDTO.UserInfo.toDto(userRepository.findByEmail(email).orElseThrow(() -> new ProjectException.UserNotFound(ProjectErrorCode.USER_NOT_FOUND)));
     }
 

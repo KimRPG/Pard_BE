@@ -5,6 +5,7 @@ import com.pard.pard_backend.domain.security.jwt.JWTUtil;
 import com.pard.pard_backend.domain.user.dto.request.UserRequestDTO;
 import com.pard.pard_backend.domain.user.dto.response.UserResponseDTO;
 import com.pard.pard_backend.domain.slack.service.SlackMessage;
+import com.pard.pard_backend.domain.user.repository.UserRepository;
 import com.pard.pard_backend.global.responses.errors.exceptions.ProjectException;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +25,8 @@ public class UserFacade {
 
     public String login(UserRequestDTO.Login dto, HttpServletResponse response) throws ProjectException.UserNotFoundException {
         String email = dto.getEmail();
-        UserResponseDTO.UserInfo userInfo = userService.login(email, response);
+        String deviceToken = dto.getDeviceToken();
+        UserResponseDTO.UserInfo userInfo = userService.login(email, deviceToken, response);
         String token = jwtUtil.createJwt(userInfo.getName(), userInfo.getRole(), email);
         response.addCookie(cookieService.createCookie("Authorization", token));
         return token;
