@@ -38,6 +38,8 @@ public class Schedule {
 
     private boolean isPastEvent;
 
+    private long generation;
+
     public static Schedule from(ScheduleRequest req){
         return Schedule.builder()
                 .title(req.getTitle())
@@ -46,6 +48,7 @@ public class Schedule {
                 .part(req.getPart())
                 .contentsLocation(req.getContentsLocation())
                 .notice(req.isNotice())
+                .generation(req.getGeneration())
                 .build();
     }
 }

@@ -24,4 +24,6 @@ public class ScheduleRequest {
     private Integer remaingDay;
     @Nullable
     private boolean isPastEvent;
+
+    private long generation;
 }
