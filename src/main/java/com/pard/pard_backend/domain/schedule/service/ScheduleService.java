@@ -50,6 +50,7 @@ public class ScheduleService {
         if(req.getPart()!=null){schedule.setPart(req.getPart());}
         if(req.getContentsLocation()!=null){schedule.setContentsLocation(req.getContentsLocation());}
         if(req.getDate()!=null){schedule.setDate(req.getDate());}
+        schedule.setGeneration(req.getGeneration());
         schedule.setNotice(req.isNotice());
         scheduleRepo.save(schedule);
     }

@@ -25,6 +25,7 @@ public class ScheduleResponseDTO {
     private Integer remaingDay;
     @JsonProperty("isPastEvent")
     private boolean isPastEvent;
+    private long generation;
 
     public ScheduleResponseDTO(final @NotNull Schedule schedule, Integer remaingDay) {
         this.scheduleId = schedule.getScheduleId();
@@ -36,6 +37,7 @@ public class ScheduleResponseDTO {
         this.notice = schedule.isNotice();
         this.remaingDay = remaingDay;
         this.isPastEvent = schedule.isPastEvent();
+        this.generation = schedule.getGeneration();
     }
 
 
