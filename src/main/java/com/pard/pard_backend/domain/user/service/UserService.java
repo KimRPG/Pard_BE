@@ -56,17 +56,18 @@ public class UserService {
     }
 
     public UserResponseDTO.UserInfo login(String email, String deviceToken, HttpServletResponse response) throws ProjectException.UserNotFoundException {
-        //if문 안에 넣기
-        Optional<User> userOp = userRepository.findByEmail(email);
-        if (!userOp.isPresent()) {
-            cookieService.clearJwtCookie(response);
-            throw new ProjectException.UserNotFoundException(String.format("%s 을(를) 못 찾았어요", email));
-        } else {
-            User user = userOp.get();
-            user.updateFCMToken(deviceToken);
-            userRepository.save(user);
-            return UserResponseDTO.UserInfo.toDto(userRepository.findByEmail(email).orElseThrow(() -> new ProjectException.UserNotFound(ProjectErrorCode.USER_NOT_FOUND)));
+        if (deviceToken != null) {
+            Optional<User> userOp = userRepository.findByEmail(email);
+            if (!userOp.isPresent()) {
+                cookieService.clearJwtCookie(response);
+                throw new ProjectException.UserNotFoundException(String.format("%s 을(를) 못 찾았어요", email));
+            } else {
+                User user = userOp.get();
+                user.updateFCMToken(deviceToken);
+                userRepository.save(user);
+            }
         }
+        return UserResponseDTO.UserInfo.toDto(userRepository.findByEmail(email).orElseThrow(() -> new ProjectException.UserNotFound(ProjectErrorCode.USER_NOT_FOUND)));
     }
 
     @Transactional
