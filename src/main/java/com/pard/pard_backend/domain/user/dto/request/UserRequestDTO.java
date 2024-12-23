@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.lang.Nullable;
 
 public class UserRequestDTO {
     @Getter
@@ -32,6 +33,7 @@ public class UserRequestDTO {
     @NoArgsConstructor
     public static class Login{
         private String email;
+        @Nullable
         private String deviceToken;
     }
 }
