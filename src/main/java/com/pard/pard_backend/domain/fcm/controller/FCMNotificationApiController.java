@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/v1/notification")
-public class FCMNotificatoinApiController {
+public class FCMNotificationApiController {
     private final FCMNotificationService fcmNotificationService;
 
     @Operation(summary = "FCM 알림")
