@@ -17,12 +17,15 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.json.JsonParseException;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpHeaders;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
+@Component
 @RequiredArgsConstructor
 @Service
 public class FCMNotificationService {
@@ -113,4 +116,8 @@ public class FCMNotificationService {
         return googleCredentials.getAccessToken().getTokenValue();
     }
 
+    @Scheduled(cron = "0 32 15 * * *")
+    private void sendNotification() throws IOException{
+        sendMessageTo("eyBvXg-AQBCdTiXmU79yA6:APA91bHlDrUX6Zf3VL60ImcKlLfsElc6K9X5gVUUEJn3akIOcTpjrreuk-50sb1qLscO3JRVEgghYXh11E-_85BwMvujLkuUTP3CPejosbqEu2u-WicNtKo" , "테스트", "잘 가냐?");
+    }
 }
