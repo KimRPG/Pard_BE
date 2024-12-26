@@ -10,15 +10,30 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.IOException;
+
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/v1/notification")
 public class FCMNotificationApiController {
     private final FCMNotificationService fcmNotificationService;
 
-    @Operation(summary = "FCM 알림")
-    @PostMapping("")
-    public ResponseEntity<?> sendNotificationByToken(@RequestBody FCMNotificationRequestDto requestDto) {
-        return ResponseEntity.ok(fcmNotificationService.sendNotificationByToken(requestDto));
+//    @Operation(summary = "FCM 알림")
+//    @PostMapping("")
+//    public ResponseEntity<?> sendNotificationByToken(@RequestBody FCMNotificationRequestDto requestDto) {
+//        return ResponseEntity.ok(fcmNotificationService.sendNotificationByToken(requestDto));
+//    }
+
+    @PostMapping("/fcmtest")
+    public ResponseEntity<?> sendNotificationByTokenTest(@RequestBody FCMNotificationRequestDto requestDto) throws IOException {
+        System.out.println(requestDto.getTargetUserId() + " "
+                +requestDto.getTitle() + " " + requestDto.getBody());
+
+        fcmNotificationService.sendMessageTo(
+                requestDto.getTargetToken(),
+                requestDto.getTitle(),
+                requestDto.getBody()
+                );
+        return ResponseEntity.ok().build();
     }
 }

@@ -1,15 +1,26 @@
 package com.pard.pard_backend.domain.fcm.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.auth.oauth2.GoogleCredentials;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingException;
 import com.google.firebase.messaging.Message;
 import com.google.firebase.messaging.Notification;
 import com.pard.pard_backend.domain.fcm.dto.FCMNotificationRequestDto;
+import com.pard.pard_backend.domain.fcm.dto.FcmMessage;
 import com.pard.pard_backend.domain.user.entity.User;
 import com.pard.pard_backend.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import okhttp3.*;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.json.JsonParseException;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -52,4 +63,54 @@ public class FCMNotificationService {
                     + requestDto.getTargetUserId();
         }
     }
+
+
+    private final String API_URL = "https://fcm.googleapis.com/v1/projects/android-****/messages:send";
+    private final ObjectMapper objectMapper;
+    @Value("${firebase.config.path}")
+    private String fuckingpath;
+
+    public void sendMessageTo(String targetToken, String title, String body) throws IOException {
+        String message = makeMessage(targetToken, title, body);
+
+        OkHttpClient client = new OkHttpClient();
+        RequestBody requestBody = RequestBody.create(message,
+                MediaType.get("application/json; charset=utf-8"));
+        Request request = new Request.Builder()
+                .url(API_URL)
+                .post(requestBody)
+                .addHeader(HttpHeaders.AUTHORIZATION, "Bearer " + getAccessToken())
+                .addHeader(HttpHeaders.CONTENT_TYPE, "application/json; UTF-8")
+                .build();
+
+        Response response = client.newCall(request).execute();
+
+        System.out.println(response.body().string());
+    }
+
+    private String makeMessage(String targetToken, String title, String body) throws JsonParseException, JsonProcessingException {
+        FcmMessage fcmMessage = FcmMessage.builder()
+                .message(FcmMessage.Message.builder()
+                        .token(targetToken)
+                        .notification(FcmMessage.Notification.builder()
+                                .title(title)
+                                .body(body)
+                                .image(null)
+                                .build()
+                        ).build()).validateOnly(false).build();
+
+        return objectMapper.writeValueAsString(fcmMessage);
+    }
+
+    private String getAccessToken() throws IOException {
+        String firebaseConfigPath = fuckingpath;
+
+        GoogleCredentials googleCredentials = GoogleCredentials
+                .fromStream(new ClassPathResource(firebaseConfigPath).getInputStream())
+                .createScoped(List.of("https://www.googleapis.com/auth/cloud-platform"));
+
+        googleCredentials.refreshIfExpired();
+        return googleCredentials.getAccessToken().getTokenValue();
+    }
+
 }
