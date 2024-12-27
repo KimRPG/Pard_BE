@@ -26,46 +26,46 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Service
 public class FCMNotificationService {
-    private final FirebaseMessaging firebaseMessaging;
-    private final UserRepository userRepository;
+//    private final FirebaseMessaging firebaseMessaging;
+//    private final UserRepository userRepository;
 
     // 얘는 하나만 보내는 거
-    public String sendNotificationByToken(FCMNotificationRequestDto requestDto) {
-        Optional<User> user = userRepository.findById(requestDto.getTargetUserId());
+//    public String sendNotificationByToken(FCMNotificationRequestDto requestDto) {
+//        Optional<User> user = userRepository.findById(requestDto.getTargetUserId());
+//
+//        if (user.isPresent()) {
+//            if (user.get().getFcmToken() != null) {
+//                Notification notification = Notification.builder()
+//                        .setTitle(requestDto.getTitle())
+//                        .setBody(requestDto.getBody())
+//                        .build();
+//
+//                Message message = Message.builder()
+//                        .setToken(user.get().getFcmToken())
+//                        .setNotification(notification)
+//                        .build();
+//
+//                try {
+//                    firebaseMessaging.send(message);
+//                    return "알림을 성공적으로 전달했습니다. targetId = "
+//                            + requestDto.getTargetUserId();
+//                } catch (FirebaseMessagingException e) {
+//                    e.printStackTrace();
+//                    return "알람 보내기를 실패했습니다. targetId = "
+//                            + requestDto.getTargetUserId() + ", " + e.getMessage();
+//                }
+//            } else {
+//                return "서버에 저장된 해당 유저의 FirebaseToken이 존재하지 않습니다. targetId = "
+//                        + requestDto.getTargetUserId();
+//            }
+//        } else {
+//            return "해당 유저가 존재하지 않습니다. targetId = "
+//                    + requestDto.getTargetUserId();
+//        }
+//    }
 
-        if (user.isPresent()) {
-            if (user.get().getFcmToken() != null) {
-                Notification notification = Notification.builder()
-                        .setTitle(requestDto.getTitle())
-                        .setBody(requestDto.getBody())
-                        .build();
 
-                Message message = Message.builder()
-                        .setToken(user.get().getFcmToken())
-                        .setNotification(notification)
-                        .build();
-
-                try {
-                    firebaseMessaging.send(message);
-                    return "알림을 성공적으로 전달했습니다. targetId = "
-                            + requestDto.getTargetUserId();
-                } catch (FirebaseMessagingException e) {
-                    e.printStackTrace();
-                    return "알람 보내기를 실패했습니다. targetId = "
-                            + requestDto.getTargetUserId() + ", " + e.getMessage();
-                }
-            } else {
-                return "서버에 저장된 해당 유저의 FirebaseToken이 존재하지 않습니다. targetId = "
-                        + requestDto.getTargetUserId();
-            }
-        } else {
-            return "해당 유저가 존재하지 않습니다. targetId = "
-                    + requestDto.getTargetUserId();
-        }
-    }
-
-
-    private final String API_URL = "https://fcm.googleapis.com/v1/projects/android-****/messages:send";
+    private final String API_URL = "https://fcm.googleapis.com/v1/projects/pard-app-project/messages:send";
     private final ObjectMapper objectMapper;
     @Value("${firebase.config.path}")
     private String fuckingpath;
