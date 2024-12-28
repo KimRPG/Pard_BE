@@ -9,8 +9,6 @@ import com.google.firebase.messaging.Message;
 import com.google.firebase.messaging.Notification;
 import com.pard.pard_backend.domain.fcm.dto.FCMNotificationRequestDto;
 import com.pard.pard_backend.domain.fcm.dto.FcmMessage;
-import com.pard.pard_backend.domain.user.entity.User;
-import com.pard.pard_backend.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import okhttp3.*;
 import org.springframework.beans.factory.annotation.Value;
@@ -22,6 +20,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -116,8 +115,16 @@ public class FCMNotificationService {
         return googleCredentials.getAccessToken().getTokenValue();
     }
 
-    @Scheduled(cron = "0 32 15 * * *")
+    // 아래는 매일 8시에 스케쥴을 확인하고 fcm으로 알람을 보내는 코드임.
+    @Scheduled(cron = "0 7 16 * * *")
     private void sendNotification() throws IOException{
-        sendMessageTo("eyBvXg-AQBCdTiXmU79yA6:APA91bHlDrUX6Zf3VL60ImcKlLfsElc6K9X5gVUUEJn3akIOcTpjrreuk-50sb1qLscO3JRVEgghYXh11E-_85BwMvujLkuUTP3CPejosbqEu2u-WicNtKo" , "테스트", "잘 가냐?");
+        List<String> reqlist = new ArrayList<>();
+        reqlist.add("eyBvXg-AQBCdTiXmU79yA6:APA91bHlDrUX6Zf3VL60ImcKlLfsElc6K9X5gVUUEJn3akIOcTpjrreuk-50sb1qLscO3JRVEgghYXh11E-_85BwMvujLkuUTP3CPejosbqEu2u-WicNtKo");
+        reqlist.add("eyBvXg-AQBCdTiXmU79yA6:APA91bHlDrUX6Zf3VL60ImcKlLfsElc6K9X5gVUUEJn3akIOcTpjrreuk-50sb1qLscO3JRVEgghYXh11E-_85BwMvujLkuUTP3CPejosbqEu2u-WicNtKo");
+
+        sendMessageTo("eyBvXg-AQBCdTiXmU79yA6:APA91bHlDrUX6Zf3VL60ImcKlLfsElc6K9X5gVUUEJn3akIOcTpjrreuk-50sb1qLscO3JRVEgghYXh11E-_85BwMvujLkuUTP3CPejosbqEu2u-WicNtKo", "야", "되냐?");
+        sendMessageTo("eyBvXg-AQBCdTiXmU79yA6:APA91bHlDrUX6Zf3VL60ImcKlLfsElc6K9X5gVUUEJn3akIOcTpjrreuk-50sb1qLscO3JRVEgghYXh11E-_85BwMvujLkuUTP3CPejosbqEu2u-WicNtKo", "야2", "되냐?2");
+
+
     }
 }
