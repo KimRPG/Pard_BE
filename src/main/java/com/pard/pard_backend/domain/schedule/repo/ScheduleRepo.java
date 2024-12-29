@@ -25,5 +25,7 @@ public interface ScheduleRepo extends JpaRepository<Schedule, Long> {
 
     @Query("select s FROM Schedule s WHERE s.isPastEvent=true ORDER BY s.date DESC ")
     List<Schedule> findPastSchedulesOrderByDate();
+
+    List<Schedule> findByDate(LocalDate date);
 }
 

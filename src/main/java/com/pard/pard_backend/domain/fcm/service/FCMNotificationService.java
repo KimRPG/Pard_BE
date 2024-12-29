@@ -9,6 +9,8 @@ import com.google.firebase.messaging.Message;
 import com.google.firebase.messaging.Notification;
 import com.pard.pard_backend.domain.fcm.dto.FCMNotificationRequestDto;
 import com.pard.pard_backend.domain.fcm.dto.FcmMessage;
+import com.pard.pard_backend.domain.schedule.entity.Schedule;
+import com.pard.pard_backend.domain.schedule.repo.ScheduleRepo;
 import lombok.RequiredArgsConstructor;
 import okhttp3.*;
 import org.springframework.beans.factory.annotation.Value;
@@ -20,6 +22,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -66,6 +69,7 @@ public class FCMNotificationService {
 //        }
 //    }
 
+    private final ScheduleRepo scheduleRepo;
 
     private final String API_URL = "https://fcm.googleapis.com/v1/projects/pard-app-project/messages:send";
     private final ObjectMapper objectMapper;
@@ -118,13 +122,23 @@ public class FCMNotificationService {
     // 아래는 매일 8시에 스케쥴을 확인하고 fcm으로 알람을 보내는 코드임.
     @Scheduled(cron = "0 7 16 * * *")
     private void sendNotification() throws IOException{
+        List<Schedule> scheduleList = findSchedulesByDate();
+        for (Schedule schedule : scheduleList) {
+
+        }
+
         List<String> reqlist = new ArrayList<>();
         reqlist.add("eyBvXg-AQBCdTiXmU79yA6:APA91bHlDrUX6Zf3VL60ImcKlLfsElc6K9X5gVUUEJn3akIOcTpjrreuk-50sb1qLscO3JRVEgghYXh11E-_85BwMvujLkuUTP3CPejosbqEu2u-WicNtKo");
         reqlist.add("eyBvXg-AQBCdTiXmU79yA6:APA91bHlDrUX6Zf3VL60ImcKlLfsElc6K9X5gVUUEJn3akIOcTpjrreuk-50sb1qLscO3JRVEgghYXh11E-_85BwMvujLkuUTP3CPejosbqEu2u-WicNtKo");
 
         sendMessageTo("eyBvXg-AQBCdTiXmU79yA6:APA91bHlDrUX6Zf3VL60ImcKlLfsElc6K9X5gVUUEJn3akIOcTpjrreuk-50sb1qLscO3JRVEgghYXh11E-_85BwMvujLkuUTP3CPejosbqEu2u-WicNtKo", "야", "되냐?");
         sendMessageTo("eyBvXg-AQBCdTiXmU79yA6:APA91bHlDrUX6Zf3VL60ImcKlLfsElc6K9X5gVUUEJn3akIOcTpjrreuk-50sb1qLscO3JRVEgghYXh11E-_85BwMvujLkuUTP3CPejosbqEu2u-WicNtKo", "야2", "되냐?2");
+    }
 
+    private List<Schedule> findSchedulesByDate(){
+        LocalDate today = LocalDate.now();
+        today = today.plusDays(1);
 
+        return scheduleRepo.findByDate(today);
     }
 }
