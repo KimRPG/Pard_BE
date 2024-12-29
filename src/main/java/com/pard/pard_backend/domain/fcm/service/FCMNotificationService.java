@@ -11,6 +11,8 @@ import com.pard.pard_backend.domain.fcm.dto.FCMNotificationRequestDto;
 import com.pard.pard_backend.domain.fcm.dto.FcmMessage;
 import com.pard.pard_backend.domain.schedule.entity.Schedule;
 import com.pard.pard_backend.domain.schedule.repo.ScheduleRepo;
+import com.pard.pard_backend.domain.user.entity.User;
+import com.pard.pard_backend.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import okhttp3.*;
 import org.springframework.beans.factory.annotation.Value;
@@ -70,6 +72,7 @@ public class FCMNotificationService {
 //    }
 
     private final ScheduleRepo scheduleRepo;
+    private final UserRepository userRepository;
 
     private final String API_URL = "https://fcm.googleapis.com/v1/projects/pard-app-project/messages:send";
     private final ObjectMapper objectMapper;
@@ -120,19 +123,26 @@ public class FCMNotificationService {
     }
 
     // 아래는 매일 8시에 스케쥴을 확인하고 fcm으로 알람을 보내는 코드임.
-    @Scheduled(cron = "0 7 16 * * *")
+    @Scheduled(cron = "0 0 20 * * *")
     private void sendNotification() throws IOException{
         List<Schedule> scheduleList = findSchedulesByDate();
         for (Schedule schedule : scheduleList) {
-
+            String title;
+            String body;
+            List<User> userList = new ArrayList<>();
+            if (schedule.isNotice()) { // 전체 공지일 경우
+                title = "[" + schedule.getTitle() + "]";
+                body = "내일은 " + schedule.getContentsLocation() + "에서 " + schedule.getTitle() + "이 진행됩니다. 잊지 말고 내일 만나요!";
+                userList = userRepository.findByGeneration(Long.toString(schedule.getGeneration()));
+            } else { // 파트별 과제일 경우
+                title = "[" + schedule.getPart() + "] " + schedule.getTitle();
+                body = "'" + schedule.getContent() + "' 제출 마감까지 하루 남았습니다";
+                userList = userRepository.findByGenerationAndPart(Long.toString(schedule.getGeneration()), schedule.getPart());
+            }
+            for (User user : userList) {
+                sendMessageTo(user.getFcmToken(), title, body);
+            }
         }
-
-        List<String> reqlist = new ArrayList<>();
-        reqlist.add("eyBvXg-AQBCdTiXmU79yA6:APA91bHlDrUX6Zf3VL60ImcKlLfsElc6K9X5gVUUEJn3akIOcTpjrreuk-50sb1qLscO3JRVEgghYXh11E-_85BwMvujLkuUTP3CPejosbqEu2u-WicNtKo");
-        reqlist.add("eyBvXg-AQBCdTiXmU79yA6:APA91bHlDrUX6Zf3VL60ImcKlLfsElc6K9X5gVUUEJn3akIOcTpjrreuk-50sb1qLscO3JRVEgghYXh11E-_85BwMvujLkuUTP3CPejosbqEu2u-WicNtKo");
-
-        sendMessageTo("eyBvXg-AQBCdTiXmU79yA6:APA91bHlDrUX6Zf3VL60ImcKlLfsElc6K9X5gVUUEJn3akIOcTpjrreuk-50sb1qLscO3JRVEgghYXh11E-_85BwMvujLkuUTP3CPejosbqEu2u-WicNtKo", "야", "되냐?");
-        sendMessageTo("eyBvXg-AQBCdTiXmU79yA6:APA91bHlDrUX6Zf3VL60ImcKlLfsElc6K9X5gVUUEJn3akIOcTpjrreuk-50sb1qLscO3JRVEgghYXh11E-_85BwMvujLkuUTP3CPejosbqEu2u-WicNtKo", "야2", "되냐?2");
     }
 
     private List<Schedule> findSchedulesByDate(){

@@ -19,4 +19,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     List<User> findByBirthDay(String birthDay);
     void deleteByEmail(String email);
+
+    List<User> findByGeneration(String generation);
+    List<User> findByGenerationAndPart(String generation, String part);
+
+
 }

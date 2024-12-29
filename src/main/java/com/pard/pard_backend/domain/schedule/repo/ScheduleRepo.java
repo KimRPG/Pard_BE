@@ -4,6 +4,7 @@ import com.pard.pard_backend.domain.schedule.entity.Schedule;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
@@ -26,6 +27,7 @@ public interface ScheduleRepo extends JpaRepository<Schedule, Long> {
     @Query("select s FROM Schedule s WHERE s.isPastEvent=true ORDER BY s.date DESC ")
     List<Schedule> findPastSchedulesOrderByDate();
 
-    List<Schedule> findByDate(LocalDate date);
+    @Query("SELECT s FROM Schedule s WHERE DATE(s.date) = :date")
+    List<Schedule> findByDate(@Param("date") LocalDate date);
 }
 
