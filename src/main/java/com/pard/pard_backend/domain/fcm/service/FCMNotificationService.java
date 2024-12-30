@@ -132,11 +132,11 @@ public class FCMNotificationService {
             List<User> userList = new ArrayList<>();
             if (schedule.isNotice()) { // 전체 공지일 경우
                 title = "[" + schedule.getTitle() + "]";
-                body = "내일은 " + schedule.getContentsLocation() + "에서 " + schedule.getTitle() + "이 진행됩니다. 잊지 말고 내일 만나요!";
+                body = schedule.getContentsLocation() + "에서 내일 만나요 🌊";
                 userList = userRepository.findByGeneration(Long.toString(schedule.getGeneration()));
             } else { // 파트별 과제일 경우
-                title = "[" + schedule.getPart() + "] " + schedule.getTitle();
-                body = "'" + schedule.getContent() + "' 제출 마감까지 하루 남았습니다";
+                title = "[" + schedule.getPart() + " " + schedule.getTitle() + "]";
+                body = schedule.getContent() + " 제출 마감 D-1";
                 userList = userRepository.findByGenerationAndPart(Long.toString(schedule.getGeneration()), schedule.getPart());
             }
             for (User user : userList) {
