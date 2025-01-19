@@ -71,13 +71,13 @@ public class QRService {
             case "https://m.site.naver.com/1tv3L":
                 qrAttendanceRequestDTO.setSeminar("연합_세미나");
                 return this.checkQrTime(qrAttendanceRequestDTO, token);
-            case "https://m.site.naver.com/1tv47":
+            case "https://me-qr.com/9":
                 qrAttendanceRequestDTO.setSeminar("연합_세미나2");
                 return this.checkQrTime(qrAttendanceRequestDTO, token);
-            case "https://me-qr.com/9":
+            case "https://me-qr.com/10":
                 qrAttendanceRequestDTO.setSeminar("아이디어_피칭");
                 return this.checkQrTime(qrAttendanceRequestDTO, token);
-            case "https://me-qr.com/10":
+            case "https://m.site.naver.com/1tv47":
                 qrAttendanceRequestDTO.setSeminar("종강총회");
                 return this.checkQrTime(qrAttendanceRequestDTO, token);
             case "https://me-qr.com/11":
