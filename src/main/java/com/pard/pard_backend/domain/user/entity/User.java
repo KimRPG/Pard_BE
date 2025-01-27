@@ -1,7 +1,7 @@
 package com.pard.pard_backend.domain.user.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.pard.pard_backend.domain.project.entity.Project;
+//import com.fasterxml.jackson.annotation.JsonIgnore;
+//import com.pard.pard_backend.domain.project.entity.Project;
 import com.pard.pard_backend.domain.user.dto.request.UserRequestDTO;
 import jakarta.persistence.*;
 import lombok.*;
@@ -55,12 +55,14 @@ public class User {
     private float pangoolPoint;
 
 
-
+    /* 
     @JsonIgnore
     @JoinColumn(name = "PROJECT_ID")
     @ManyToOne (fetch = FetchType.LAZY,cascade=CascadeType.ALL)
     private Project project;
+    */
 
+    
     public static User patchUser(User existingUser, UserRequestDTO.Create userRequest){
         return User.builder()
                 .userId(existingUser.userId)
