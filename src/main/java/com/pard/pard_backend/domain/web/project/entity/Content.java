@@ -21,10 +21,10 @@ public class Content {
     private Project project;
 
     @Column
-    private String apiType;  // "WEB" or "MOBILE"
+    private String apiType;  // WEB" or APP
 
     @Column
-    private String contentType;  // "ONE_SENTENCE", "OVERVIEW", "DEFINITION", "DESCRIPTION"
+    private String contentType;  // ONE_SENTENCE, OVERVIEW, DEFINITION, DESCRIPTION
 
     @Column
     private String content;

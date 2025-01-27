@@ -17,7 +17,7 @@ public class Project {
     private String generation; // 1기, 2기
 
     @Column
-    private String platform;  // "WEB", "APP"
+    private String platform;  // WEB, APP
 
     @Column
     private String award; //1기롱커톤 대상, 2기롱커톤

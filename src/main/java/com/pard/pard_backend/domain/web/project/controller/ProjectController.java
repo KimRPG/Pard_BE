@@ -16,8 +16,7 @@ public class ProjectController {
     private final ProjectService projectService;
 
     @Operation(
-            summary = "프로젝트 상세 조회",
-            description = "프로젝트 ID를 통해 상세 정보를 조회합니다."
+            summary = "프로젝트 상세 조회"
     )
     @GetMapping("/{projectId}")
     public ResponseEntity<ProjectDetailResponseDto> getProjectDetail(
@@ -27,8 +26,7 @@ public class ProjectController {
 
     // 모바일 상세조회
     @Operation(
-            summary = "프로젝트 상세 조회 (모바일)",
-            description = "프로젝트 ID를 통해 상세 정보를 조회합니다. (모바일용)"
+            summary = "프로젝트 상세 조회 (모바일)"
     )
     @GetMapping("/mobile/{projectId}")
     public ResponseEntity<ProjectDetailResponseDto> getProjectDetailMobile(
@@ -38,8 +36,7 @@ public class ProjectController {
 
     // 전체 프로젝트 목록 조회
     @Operation(
-            summary = "전체 프로젝트 목록 조회",
-            description = "전체 프로젝트 목록을 조회합니다."
+            summary = "전체 프로젝트 목록 조회"
     )
     @GetMapping("/projects/all") // 전체 프로젝트 목록 조회 (WEB용)
     public ResponseEntity<Page<ProjectListResponseDto>> getAllProjects(
@@ -49,8 +46,7 @@ public class ProjectController {
 
     // 전체 프로젝트 목록 모바일 조회
     @Operation(
-            summary = "전체 프로젝트 목록 조회 (모바일)",
-            description = "전체 프로젝트 목록을 조회합니다. (모바일용)"
+            summary = "전체 프로젝트 목록 조회 (모바일)"
     )
     @GetMapping("/mobile/projects/all") // 전체 프로젝트 목록 모바일 조회 (APP용)
     public ResponseEntity<Page<ProjectListResponseDto>> getAllProjectsMobile(
@@ -60,8 +56,7 @@ public class ProjectController {
 
     // 웹 프로젝트 목록 조회
     @Operation(
-            summary = "웹 프로젝트 목록 조회",
-            description = "웹 프로젝트 목록을 조회합니다."
+            summary = "웹 프로젝트 목록 조회"
     )
     @GetMapping("/projects/web")
     public ResponseEntity<Page<ProjectListResponseDto>> getWebProjects(
@@ -71,8 +66,7 @@ public class ProjectController {
 
     // 웹 프로젝트 목록 모바일 조회
     @Operation(
-            summary = "웹 프로젝트 목록 조회 (모바일)",
-            description = "웹 프로젝트 목록을 조회합니다. (모바일용)"
+            summary = "웹 프로젝트 목록 조회 (모바일)"
     )
     @GetMapping("/mobile/projects/web")
     public ResponseEntity<Page<ProjectListResponseDto>> getWebProjectsMobile(
@@ -82,8 +76,7 @@ public class ProjectController {
 
     // 앱 프로젝트 목록 조회
     @Operation(
-            summary = "앱 프로젝트 목록 조회",
-            description = "앱 프로젝트 목록을 조회합니다."
+            summary = "앱 프로젝트 목록 조회"
     )
     @GetMapping("/projects/app")
     public ResponseEntity<Page<ProjectListResponseDto>> getAppProjects(
@@ -93,8 +86,7 @@ public class ProjectController {
 
     // 앱 프로젝트 목록 모바일 조회
     @Operation(
-            summary = "앱 프로젝트 목록 조회 (모바일)",
-            description = "앱 프로젝트 목록을 조회합니다. (모바일용)"
+            summary = "앱 프로젝트 목록 조회 (모바일)"
     )
     @GetMapping("/mobile/projects/app")
     public ResponseEntity<Page<ProjectListResponseDto>> getAppProjectsMobile(

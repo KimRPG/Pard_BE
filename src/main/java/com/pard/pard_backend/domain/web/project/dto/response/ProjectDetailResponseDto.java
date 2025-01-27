@@ -15,7 +15,7 @@ import java.util.List;
 public class ProjectDetailResponseDto {
     private Long id;
     private String generation; //1기, 2기
-    private String platform;  // "WEB", "APP"
+    private String platform;  // WEB, APP
     private String award; //1기 롱커톤 대상
     private String serviceName;// 나노플랜
     private String teamName; //단무지
@@ -42,8 +42,8 @@ public class ProjectDetailResponseDto {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class TechStackDto {
-        private String category;  // "PLANNING", "DEVELOPMENT", "DESIGN"
-        private String tech;  // "FIGMA", "NOTION", "JAVA"
+        private String category;
+        private String tech;
     }
 
     @Getter
@@ -71,7 +71,7 @@ public class ProjectDetailResponseDto {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class ImageDto {
-        private String type;  // "THUMBNAIL", "LOGO", "AWARD"
+        private String type;  // THUMBNAIL, LOGO, AWARD
         private String url;
     }
 
@@ -80,7 +80,7 @@ public class ProjectDetailResponseDto {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class LinkDto {
-        private String linkType;  // "GITHUB", "FIGMA"
+        private String linkType;  // GITHUB, FIGMA
         private String url;
     }
 

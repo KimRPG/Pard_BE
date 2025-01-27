@@ -14,10 +14,10 @@ public class TechStack {
     private Long id;
 
     @Column
-    private String category;  // "PLANNING", "DEVELOPMENT", "DESIGN"
+    private String category;  // 개발,기획,디자인
 
     @Column
-    private String tech;  // "FIGMA", "NOTION", "JAVA"
+    private String tech;  // FIGMA, NOTION, JAVA
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "project_id")

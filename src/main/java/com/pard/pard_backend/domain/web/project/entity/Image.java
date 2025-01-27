@@ -18,7 +18,7 @@ public class Image {
     private Project project;
 
     @Column
-    private String imageType;  // "LOGO", "AWARD", "THUMBNAIL"
+    private String imageType;  // LOGO, AWARD, THUMBNAIL
 
     @Column
     private  String apiType; //WEB, APP

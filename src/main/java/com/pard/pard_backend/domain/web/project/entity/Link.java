@@ -18,7 +18,7 @@ public class Link {
     private Project project;
 
     @Column
-    private String linkType;  // "GITHUB", "FIGMA"
+    private String linkType;  // GITHUB, FIGMA
 
     @Column
     private String url;
